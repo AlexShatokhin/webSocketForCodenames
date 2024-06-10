@@ -8,12 +8,35 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
+const createRoom = require('./utils/createRoom');
+
+let rooms = [];
+
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 });
 
+app.get("/create-room", (req, res) => {
+    rooms.push(createRoom());
+})
+
 io.on('connection', (socket) => {
-  console.log('a user connected');
+    console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
+    socket.emit("connected", rooms);
+
+    socket.on("join-room", (roomId) => {
+        socket.join(roomId);
+        console.log(`User ${socket.id} joined room ${roomId}`);
+
+        const roomSize = io.sockets.adapter.rooms.get(roomId).size;
+        const totalUsers = io.engine.clientsCount;
+        socket.emit("joined-room", roomId, roomSize, totalUsers);
+    })
+
+    socket.on("create-room", () => {
+        rooms.push(createRoom());
+        io.emit("connected", rooms);
+    })
 });
 
 server.listen(process.env.PORT, () => {

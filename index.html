@@ -7,9 +7,32 @@
 </head>
 <body>
     <h1>Hello world!</h1>
+    <button onclick="socket.emit('create-room')">New Room</button>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
+
+    socket.on("connected", (data) => {
+        data.forEach((room) => {
+            const button = document.createElement("button");
+            button.innerText = room;
+            button.onclick = () => {
+                socket.emit("join-room", room)
+            }
+            document.body.appendChild(button);
+        })
+    })
+
+    socket.on("joined-room", (roomId, usersCount, usersAll) => {
+        document.body.innerHTML = "";
+        document.body.innerHTML = `
+            <h1 align = "center">Room ${roomId}</h1>
+            <br>
+            <p>Connected users: ${usersCount}</p>
+            <br>
+            <p>Users: ${usersAll}</p>
+        `;
+    })
 </script>
 </html>
