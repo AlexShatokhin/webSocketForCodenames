@@ -8,10 +8,10 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-const createRoom = require('./utils/createRoom');
-const getUniqueWords = require('./utils/words/getUniqueWords');
-const convertWords = require('./utils/words/convertWords');
-const shuffleWords = require('./utils/words/shuffleWords')
+const createRoom = require('./utils/room/createRoom');
+const getRoomIndexById = require('./utils/room/getRoomIndexById');
+
+const getWordSet = require('./utils/words/getWordSet');
 
 let rooms = [];
 
@@ -25,9 +25,6 @@ app.get("/create-room", (req, res) => {
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
-    const uniqueWords = getUniqueWords(9);
-    const convertedWords = convertWords(uniqueWords)
-    console.log(shuffleWords(convertedWords));
     socket.emit("connected", rooms);
 
     socket.on("join-room", (roomId) => {
@@ -42,6 +39,15 @@ io.on('connection', (socket) => {
     socket.on("create-room", () => {
         rooms.push(createRoom());
         io.emit("connected", rooms);
+    })
+
+    socket.on("get-cards", (roomId) => {
+        const wordset = getWordSet();
+        const roomIndex = getRoomIndexById(roomId, rooms);
+        console.log(rooms, roomIndex);
+        rooms[roomIndex].cardset = wordset;
+
+        io.in(roomId).emit("send-cards", wordset);
     })
 });
 

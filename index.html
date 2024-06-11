@@ -14,11 +14,11 @@
     const socket = io();
 
     socket.on("connected", (data) => {
-        data.forEach((room) => {
+        data.forEach(({id}) => {
             const button = document.createElement("button");
-            button.innerText = room;
+            button.innerText = id;
             button.onclick = () => {
-                socket.emit("join-room", room)
+                socket.emit("join-room", id)
             }
             document.body.appendChild(button);
         })
@@ -32,7 +32,13 @@
             <p>Connected users: ${usersCount}</p>
             <br>
             <p>Users: ${usersAll}</p>
+            <br>
+            <button onclick="socket.emit('get-cards', '${roomId}')">Get card set</button>
         `;
+    })
+
+    socket.on('send-cards', (words) => {
+        console.log(words);
     })
 </script>
 </html>
