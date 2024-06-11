@@ -9,6 +9,9 @@ const server = createServer(app);
 const io = new Server(server);
 
 const createRoom = require('./utils/createRoom');
+const getUniqueWords = require('./utils/words/getUniqueWords');
+const convertWords = require('./utils/words/convertWords');
+const shuffleWords = require('./utils/words/shuffleWords')
 
 let rooms = [];
 
@@ -22,6 +25,9 @@ app.get("/create-room", (req, res) => {
 
 io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
+    const uniqueWords = getUniqueWords(9);
+    const convertedWords = convertWords(uniqueWords)
+    console.log(shuffleWords(convertedWords));
     socket.emit("connected", rooms);
 
     socket.on("join-room", (roomId) => {
