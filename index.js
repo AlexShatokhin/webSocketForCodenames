@@ -8,47 +8,26 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-const createRoom = require('./utils/room/createRoom');
-const getRoomIndexById = require('./utils/room/getRoomIndexById');
+let rooms = require('./roomsData');
 
-const getWordSet = require('./utils/words/getWordSet');
-
-let rooms = [];
+const RoomController = require("./controllers/RoomController");
+const CardsController = require("./controllers/CardsController");
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-app.get("/create-room", (req, res) => {
-    rooms.push(createRoom());
-})
-
 io.on('connection', (socket) => {
+    const userRoomController = new RoomController(io, socket);
+    const userCardsController = new CardsController(io);
+
     console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
     socket.emit("connected", rooms);
 
-    socket.on("join-room", (roomId) => {
-        socket.join(roomId);
-        console.log(`User ${socket.id} joined room ${roomId}`);
+    socket.on("create-room", userRoomController.createRoom)
+    socket.on("join-room", userRoomController.joinRoom)
 
-        const roomSize = io.sockets.adapter.rooms.get(roomId).size;
-        const totalUsers = io.engine.clientsCount;
-        socket.emit("joined-room", roomId, roomSize, totalUsers);
-    })
-
-    socket.on("create-room", () => {
-        rooms.push(createRoom());
-        io.emit("connected", rooms);
-    })
-
-    socket.on("get-cards", (roomId) => {
-        const wordset = getWordSet();
-        const roomIndex = getRoomIndexById(roomId, rooms);
-        console.log(rooms, roomIndex);
-        rooms[roomIndex].cardset = wordset;
-
-        io.in(roomId).emit("send-cards", wordset);
-    })
+    socket.on("get-cards", userCardsController.getCards)
 });
 
 server.listen(process.env.PORT, () => {
