@@ -1,7 +1,7 @@
 const getRandomNumberFromRange = require('./getRandomNumberFromRange');
 const words = require('../../words');
 
-module.exports = (count) => {
+export default (count : number) => {
     const uniqueWords = new Set();
     const maxRange = words.length - 1;
     

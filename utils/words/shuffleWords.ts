@@ -1,6 +1,7 @@
+import Wordset from "../../classes/Wordset";
 const getRandomNumberFromRange = require("./getRandomNumberFromRange")
 
-module.exports = (words) => {
+module.exports = (words : Wordset[]) => {
     const shuffleResult = [...words];
     const maxRange = shuffleResult.length - 1;
 

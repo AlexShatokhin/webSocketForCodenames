@@ -1,23 +1,24 @@
 require('dotenv').config();
 
-const express = require('express');
-const { createServer } = require('node:http');
-const { Server } = require('socket.io');
+import express, { Express, Request, Response } from "express";
+import { Socket, Server } from "socket.io";
+import { createServer } from "http";
 
-const app = express();
+import CardsController from "./controllers/CardsController";
+
+const app : Express = express();
 const server = createServer(app);
 const io = new Server(server);
 
 let rooms = require('./roomsData');
 
 const RoomController = require("./controllers/RoomController");
-const CardsController = require("./controllers/CardsController");
 
-app.get('/', (req, res) => {
+app.get('/', (req : Request, res : Response) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', (socket) => {
+io.on('connection', (socket : Socket) => {
     const userRoomController = new RoomController(io, socket);
     const userCardsController = new CardsController(io);
 

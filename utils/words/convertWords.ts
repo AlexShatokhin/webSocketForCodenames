@@ -1,27 +1,24 @@
-module.exports = (words) => {
+import Wordset from "../../classes/Wordset";
+module.exports = (words : string[]) => {
     const wordsCountInTeam = Math.ceil((words.length-1) / 3);
     let wordsCountInRedTeam = 0;
     let wordsCountInBlueTeam = 0;
 
     return words.map((word, index) => {
         if(index === 0)
-            return createWordObject(word, "black");
+            return new Wordset(word, "black");
 
         if(wordsCountInRedTeam < wordsCountInTeam){
             wordsCountInRedTeam++;
-            return createWordObject(word, "red");
+            return new Wordset(word, "red");
         }
 
         if(wordsCountInBlueTeam < wordsCountInTeam){
             wordsCountInBlueTeam++;
-            return createWordObject(word, "blue");
+            return new Wordset(word, "blue");
         }
 
-        return createWordObject(word, "neutral");
+        return new Wordset(word, "neutral");
 
     })
-}
-
-function createWordObject(word, teamName){
-    return {word, team: teamName, isClicked: false}
 }

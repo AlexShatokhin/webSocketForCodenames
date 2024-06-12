@@ -1,3 +1,3 @@
 const Room = require("../../controllers/Room");
 
-module.exports = () => new Room();
+export default () => new Room();

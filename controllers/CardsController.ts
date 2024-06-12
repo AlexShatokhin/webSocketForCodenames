@@ -1,20 +1,19 @@
+import { Server } from "socket.io";
 let rooms = require("../roomsData");
 
 const getWordSet = require("../utils/words/getWordSet");
 const getRoomIndexById = require("../utils/room/getRoomIndexById");
 
 class CardsController {
-    constructor(io){
-        this.io = io;
-    }
+    constructor(private io : Server){}
 
-    getCards = (roomId) => {
+    getCards = (roomId : number) => {
         const wordset = getWordSet();
         const roomIndex = getRoomIndexById(roomId, rooms);
         rooms[roomIndex].cardset = wordset;
 
-        this.io.in(roomId).emit("send-cards", wordset);
+        this.io.in(roomId.toString()).emit("send-cards", wordset);
     }
 }
 
-module.exports = CardsController;
+export default CardsController
