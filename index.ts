@@ -5,14 +5,14 @@ import { Socket, Server } from "socket.io";
 import { createServer } from "http";
 
 import CardsController from "./controllers/CardsController";
+import RoomController from "./controllers/RoomController";
+
+import rooms from "./roomsData"
 
 const app : Express = express();
 const server = createServer(app);
 const io = new Server(server);
 
-let rooms = require('./roomsData');
-
-const RoomController = require("./controllers/RoomController");
 
 app.get('/', (req : Request, res : Response) => {
     res.sendFile(__dirname + '/index.html');

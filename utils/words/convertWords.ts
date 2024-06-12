@@ -1,5 +1,5 @@
 import Wordset from "../../classes/Wordset";
-module.exports = (words : string[]) => {
+export default (words : string[]) => {
     const wordsCountInTeam = Math.ceil((words.length-1) / 3);
     let wordsCountInRedTeam = 0;
     let wordsCountInBlueTeam = 0;

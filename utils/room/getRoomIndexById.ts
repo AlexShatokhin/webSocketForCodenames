@@ -1,5 +1,5 @@
-import Room from "../../controllers/Room";
+import Room from "../../classes/Room";
 
-module.exports = (roomId : number, rooms : Room[]) => {
+export default (roomId : number, rooms : Room[]) => {
     return rooms.map(room => room.getRoomId()).indexOf(roomId);
 }

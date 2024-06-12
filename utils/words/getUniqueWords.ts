@@ -1,8 +1,9 @@
-const getRandomNumberFromRange = require('./getRandomNumberFromRange');
-const words = require('../../words');
+import getRandomNumberFromRange from "./getRandomNumberFromRange";
+import words from "../../words.js"
+
 
 export default (count : number) => {
-    const uniqueWords = new Set();
+    const uniqueWords = new Set<string>();
     const maxRange = words.length - 1;
     
     while(uniqueWords.size < count) {

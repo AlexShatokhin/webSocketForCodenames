@@ -1,8 +1,8 @@
 import { Server, Socket } from "socket.io";
 
-let rooms = require("../roomsData");
+import createRoom from "../utils/room/createRoom";
 
-const createRoom = require('../utils/room/createRoom')
+import rooms from "../roomsData";
 
 class RoomController {
     constructor(private io : Server, 

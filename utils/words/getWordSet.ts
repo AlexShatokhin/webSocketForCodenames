@@ -1,8 +1,8 @@
-const getUniqueWords = require("./getUniqueWords");
-const convertWords = require('./convertWords');
-const shuffleWords = require('./shuffleWords');
+import getUniqueWords from "./getUniqueWords";
+import convertWords from "./convertWords";
+import shuffleWords from "./shuffleWords";
 
-module.exports = (wordsCount = 9) => {
+export default (wordsCount = 9) => {
     const uniqueWords = getUniqueWords(wordsCount);
     const convertedWords = convertWords(uniqueWords)
     return shuffleWords(convertedWords);

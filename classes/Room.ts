@@ -1,15 +1,17 @@
+import Wordset from "./Wordset";
+
 const { v4: uuidv4 } = require('uuid');
 
 class Room {
     private id : number;
-    private wordset : object[];
+    public cardset : Wordset[];
     private name : string;
     private limit: number;
 
-    constructor(name: string, wordset=[], limit = 3){
+    constructor(name: string = "new", wordset : Wordset[]=[], limit : number = 3){
         this.id = uuidv4();
         this.name = name;
-        this.wordset = wordset;
+        this.cardset = wordset;
         this.limit = limit
     }
 

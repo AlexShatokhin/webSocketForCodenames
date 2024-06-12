@@ -1,9 +1,8 @@
 import { Server } from "socket.io";
-let rooms = require("../roomsData");
+import rooms from "../roomsData";
 
-const getWordSet = require("../utils/words/getWordSet");
-const getRoomIndexById = require("../utils/room/getRoomIndexById");
-
+import getWordSet from "../utils/words/getWordSet";
+import getRoomIndexById from "../utils/room/getRoomIndexById";
 class CardsController {
     constructor(private io : Server){}
 

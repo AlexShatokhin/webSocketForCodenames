@@ -1,3 +1,2 @@
-const Room = require("../../controllers/Room");
-
+import Room from "../../classes/Room";
 export default () => new Room();
