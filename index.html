@@ -16,17 +16,12 @@
     const socket = io();
     const roomsContainer = document.querySelector(".rooms");
 
-    socket.on("connected", (data, users) => {
-        roomsContainer.innerHTML = "";
-        const allUsersElement = document.querySelector("#allusers");
-        if (allUsersElement) {
-            allUsersElement.innerHTML = `Users: ${users}`;
-        }
+    socket.on("connected", (data) => {
         data.forEach((room) => {
             const button = document.createElement("button");
-            button.innerText = room;
+            button.innerText = id;
             button.onclick = () => {
-                socket.emit("join-room", room)
+                socket.emit("join-room", id)
             }
             roomsContainer.appendChild(button);
         })
@@ -35,22 +30,22 @@
     socket.on("join-to-room", (roomId) => {
         alert(`You joined to room ${roomId}`);
         document.body.innerHTML = "";
-        document.body.innerHTML = `<h1 align = "center">Room ${roomId}</h1>`;
-    })
-    socket.on("user-joined-to-room", (usersCount, usersAll) => {
-        document.querySelector(".users-info")?.remove();
-        const usersInfo = document.createElement("div");
-        usersInfo.classList.add("users-info");
-        usersInfo.innerHTML = "";
-        usersInfo.innerHTML = `
-            <h2 id = "roomusers">Users in room: ${usersCount}</h2>
-            <h3 id = "allusers">Users: ${usersAll}</h3>
+        document.body.innerHTML = `
+            <h1 align = "center">Room ${roomId}</h1>
+            <br>
+            <p>Connected users: ${usersCount}</p>
+            <br>
+            <p>Users: ${usersAll}</p>
         `;
         document.body.appendChild(usersInfo);
     })
 
     socket.on("room-full", () => {
         alert("Room is full");
+    })
+
+    socket.on('send-cards', (words) => {
+        console.log(words);
     })
 </script>
 </html>
