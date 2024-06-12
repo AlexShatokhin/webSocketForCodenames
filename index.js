@@ -21,16 +21,23 @@ app.get("/create-room", (req, res) => {
 })
 
 io.on('connection', (socket) => {
+    const totalUsers = io.engine.clientsCount;
     console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
-    socket.emit("connected", rooms);
+    socket.emit("connected", rooms, totalUsers);
 
     socket.on("join-room", (roomId) => {
+        const roomSize = io.sockets.adapter.rooms.get(roomId).size;
+
+        if(roomSize >= 3) {
+            socket.emit("room-full");
+            return;
+        }
+        
         socket.join(roomId);
         console.log(`User ${socket.id} joined room ${roomId}`);
 
-        const roomSize = io.sockets.adapter.rooms.get(roomId).size;
-        const totalUsers = io.engine.clientsCount;
-        socket.emit("joined-room", roomId, roomSize, totalUsers);
+        socket.emit("join-to-room", roomId);
+        io.in(roomId).emit("user-joined-to-room", roomSize, totalUsers);
     })
 
     socket.on("create-room", () => {
