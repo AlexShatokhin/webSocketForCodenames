@@ -8,7 +8,6 @@
 <body>
     <h1>Hello world!</h1>
     <button onclick="socket.emit('create-room')">New Room</button>
-    <div class="users-info"></div>
     <div class="rooms"></div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -17,7 +16,8 @@
     const roomsContainer = document.querySelector(".rooms");
 
     socket.on("connected", (data) => {
-        data.forEach((room) => {
+        roomsContainer.innerHTML = "";
+        data.forEach(({id}) => {
             const button = document.createElement("button");
             button.innerText = id;
             button.onclick = () => {
@@ -27,17 +27,12 @@
         })
     })
 
-    socket.on("join-to-room", (roomId) => {
-        alert(`You joined to room ${roomId}`);
+    socket.on("joined-room", (roomId) => {
         document.body.innerHTML = "";
         document.body.innerHTML = `
             <h1 align = "center">Room ${roomId}</h1>
-            <br>
-            <p>Connected users: ${usersCount}</p>
-            <br>
-            <p>Users: ${usersAll}</p>
+            <button onclick = "socket.emit('get-cards', '${roomId}')">Get card set</button>
         `;
-        document.body.appendChild(usersInfo);
     })
 
     socket.on("room-full", () => {

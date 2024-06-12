@@ -8,8 +8,9 @@ class RoomController {
         this.socket = socket;
     }
 
+    getRooms = () => rooms;
+
     createRoom = () =>{
-        console.log(this.io);
         rooms.push(createRoom());
         this.io.emit("connected", rooms);
     }
@@ -17,10 +18,7 @@ class RoomController {
     joinRoom = (roomId) => {
         this.socket.join(roomId);
         console.log(`User ${this.socket.id} joined room ${roomId}`);
-
-        const roomSize = this.io.sockets.adapter.rooms.get(roomId).size;
-        const totalUsers = this.io.engine.clientsCount;
-        this.socket.emit("joined-room", roomId, roomSize, totalUsers);
+        this.socket.emit("joined-room", roomId);
     }
 
     leaveRoom = () => {

@@ -1,3 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
+const Room = require("../../controllers/Room");
 
-module.exports = () => ({id: uuidv4(), cardset: []});
+module.exports = () => new Room();
