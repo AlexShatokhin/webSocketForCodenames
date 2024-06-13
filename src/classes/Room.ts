@@ -1,5 +1,7 @@
 import { Socket } from "socket.io";
 import Wordset from "./Wordset";
+import User from "./User";
+import { UserPublicInfoType } from "../types/UserPublicInfoType";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -8,6 +10,7 @@ class Room {
     public cardset : Wordset[];
     public name : string;
     public limit: number;
+    public users : UserPublicInfoType[] = [];
     public usersInRoom: number = 0;
 
     constructor(name: string = "new", limit : number = 3, wordset : Wordset[]=[],){
@@ -29,9 +32,10 @@ class Room {
         cardset: this.cardset
     })
 
-    joinRoom(socket : Socket){
+    joinRoom(socket : Socket, user : User){
         if(this.usersInRoom < this.limit){
             socket.join(this.id.toString());
+            this.users.push(user.getUserInfo());
             this.usersInRoom++;
             socket.emit("joined-room", this.id);
             return;
@@ -40,8 +44,9 @@ class Room {
         }
     }
 
-    leaveRoom(socket: Socket){
+    leaveRoom(socket: Socket, user: User){
         socket.leave(this.id.toString());
+        this.users = this.users.filter(userInRoom => userInRoom.id !== user.id);
         this.usersInRoom--;
         socket.emit("leave-from-room");
     }

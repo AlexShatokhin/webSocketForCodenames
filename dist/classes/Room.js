@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { v4: uuidv4 } = require('uuid');
 class Room {
     constructor(name = "new", limit = 3, wordset = []) {
+        this.users = [];
         this.usersInRoom = 0;
         this.getRoomInfo = () => ({
             id: this.id,
@@ -19,9 +20,10 @@ class Room {
     getRoomId() {
         return this.id;
     }
-    joinRoom(socket) {
+    joinRoom(socket, user) {
         if (this.usersInRoom < this.limit) {
             socket.join(this.id.toString());
+            this.users.push(user.getUserInfo());
             this.usersInRoom++;
             socket.emit("joined-room", this.id);
             return;
@@ -30,8 +32,9 @@ class Room {
             socket.emit("room-full");
         }
     }
-    leaveRoom(socket) {
+    leaveRoom(socket, user) {
         socket.leave(this.id.toString());
+        this.users = this.users.filter(userInRoom => userInRoom.id !== user.id);
         this.usersInRoom--;
         socket.emit("leave-from-room");
     }
