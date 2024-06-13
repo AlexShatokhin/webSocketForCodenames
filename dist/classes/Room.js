@@ -16,18 +16,16 @@ class Room {
         if (this.usersInRoom < this.limit) {
             socket.join(this.id.toString());
             this.usersInRoom++;
-            console.log(`User ${socket.id} joined room ${this.id}`);
             socket.emit("joined-room", this.id);
+            return;
         }
         else {
-            console.log(`Room ${this.id} is full!`);
             socket.emit("room-full");
         }
     }
     leaveRoom(socket) {
         socket.leave(this.id.toString());
         this.usersInRoom--;
-        console.log(`User leaved from room ${this.id}`);
         socket.emit("leave-from-room");
     }
 }

@@ -7,8 +7,6 @@ import { createServer } from "http";
 import CardsController from "./controllers/CardsController";
 import RoomController from "./controllers/RoomController";
 
-import rooms from "./roomsData"
-
 const app : Express = express();
 const server = createServer(app);
 const io = new Server(server);
@@ -22,14 +20,13 @@ io.on('connection', (socket : Socket) => {
     const userRoomController = new RoomController(io, socket);
     const userCardsController = new CardsController(io);
 
-    console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
     socket.emit("get-rooms", userRoomController.getRooms());
 
     socket.on("create-room", userRoomController.createRoom);
     socket.on("join-room", userRoomController.joinRoom);
     socket.on("leave-room", userRoomController.leaveRoom);
 
-    socket.on("get-cards", userCardsController.getCards)
+    socket.on("get-cards", userCardsController.getCards);
 });
 
 server.listen(process.env.PORT, () => {
