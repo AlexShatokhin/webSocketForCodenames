@@ -20,9 +20,10 @@ io.on('connection', (socket) => {
     const userRoomController = new RoomController_1.default(io, socket);
     const userCardsController = new CardsController_1.default(io);
     console.log(`User connected: ${socket.id}\nActive rooms: ${roomsData_1.default.length}`);
-    socket.emit("connected", userRoomController.getRooms());
+    socket.emit("get-rooms", userRoomController.getRooms());
     socket.on("create-room", userRoomController.createRoom);
     socket.on("join-room", userRoomController.joinRoom);
+    socket.on("leave-room", userRoomController.leaveRoom);
     socket.on("get-cards", userCardsController.getCards);
 });
 server.listen(process.env.PORT, () => {

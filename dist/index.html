@@ -13,9 +13,9 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
-    const roomsContainer = document.querySelector(".rooms");
 
-    socket.on("connected", (data) => {
+    socket.on("get-rooms", (data) => {
+        const roomsContainer = document.querySelector(".rooms");
         roomsContainer.innerHTML = "";
         data.forEach(({id}) => {
             const button = document.createElement("button");
@@ -32,11 +32,19 @@
         document.body.innerHTML = `
             <h1 align = "center">Room ${roomId}</h1>
             <button onclick = "socket.emit('get-cards', '${roomId}')">Get card set</button>
+            <button onclick = "socket.emit('leave-room', '${roomId}')">Leave</button>
         `;
     })
 
     socket.on("room-full", () => {
         alert("Room is full");
+    })
+
+    socket.on("leave-from-room", () => {
+        document.body.innerHTML = `
+            <h1>Hello world!</h1>
+            <button onclick="socket.emit('create-room')">New Room</button>
+            <div class="rooms"></div>`
     })
 
     socket.on('send-cards', (words) => {

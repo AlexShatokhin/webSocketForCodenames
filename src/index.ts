@@ -23,10 +23,11 @@ io.on('connection', (socket : Socket) => {
     const userCardsController = new CardsController(io);
 
     console.log(`User connected: ${socket.id}\nActive rooms: ${rooms.length}`);
-    socket.emit("connected", userRoomController.getRooms());
+    socket.emit("get-rooms", userRoomController.getRooms());
 
-    socket.on("create-room", userRoomController.createRoom)
-    socket.on("join-room", userRoomController.joinRoom)
+    socket.on("create-room", userRoomController.createRoom);
+    socket.on("join-room", userRoomController.joinRoom);
+    socket.on("leave-room", userRoomController.leaveRoom);
 
     socket.on("get-cards", userCardsController.getCards)
 });
