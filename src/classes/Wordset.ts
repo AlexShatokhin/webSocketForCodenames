@@ -1,9 +1,9 @@
-type teamNameType = "black" | "red" | "blue" | "neutral";
+type wordType = "black" | "red" | "blue" | "neutral";
 
 
 class Wordset{
     constructor(private word : string, 
-                private teamName : teamNameType, 
+                private teamName : wordType, 
                 private isClicked : boolean = false ){}
 }
 

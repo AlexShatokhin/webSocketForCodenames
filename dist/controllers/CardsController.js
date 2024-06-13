@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const roomsData_1 = __importDefault(require("../roomsData"));
+const roomsData_1 = __importDefault(require("../data/roomsData"));
 const getWordSet_1 = __importDefault(require("../utils/words/getWordSet"));
 const getRoomIndexById_1 = __importDefault(require("../utils/room/getRoomIndexById"));
 class CardsController {

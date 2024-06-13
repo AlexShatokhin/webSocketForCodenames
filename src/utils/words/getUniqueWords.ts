@@ -1,5 +1,5 @@
 import getRandomNumberFromRange from "./getRandomNumberFromRange";
-import words from "../../words"
+import words from "../../data/words"
 
 
 export default (count : number) => {

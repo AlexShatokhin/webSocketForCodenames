@@ -1,6 +1,5 @@
 import { Socket } from "socket.io";
 import Wordset from "./Wordset";
-import rooms from "../roomsData";
 
 const { v4: uuidv4 } = require('uuid');
 
