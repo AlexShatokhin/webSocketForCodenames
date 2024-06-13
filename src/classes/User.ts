@@ -1,11 +1,11 @@
-import Room from "./Room";
+import { roleType } from "../types/roleType";
+import { teamType } from "../types/teamType";
+import { UserPublicInfoType } from "../types/UserPublicInfoType";
 import { Socket } from "socket.io";
 
-type teamType = "red" | "blue";
-type roleType = "captain" | "player";
 
 class User {
-    public room: Room | undefined;
+    public room: number | undefined;
     public team: teamType | undefined;
     public role: roleType | undefined;
 
@@ -14,7 +14,7 @@ class User {
                 public name: string = "Anonymous"
     ){}
 
-    getUserInfo = () => ({
+    getUserInfo = () : UserPublicInfoType => ({
         id: this.id,
         name: this.name,
         room: this.room,
@@ -24,7 +24,7 @@ class User {
 
     getUserId(){return this.id}
 
-    joinRoom(room: Room){this.room = room}
+    joinRoom(room: number){this.room = room}
     joinTeam(team: teamType){this.team = team}
     joinRole(role: roleType){this.role = role}
 

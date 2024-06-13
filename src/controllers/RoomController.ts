@@ -25,8 +25,8 @@ class RoomController {
         const room : Room | undefined = getRoomByRoomId(roomId);
         const user : User | undefined = getUserByUserId(userId);
 
-        user.joinRoom(room);
-        room.joinRoom(this.socket);
+        user.joinRoom(room.id);
+        room.joinRoom(this.socket, user);
 
         this.socket.emit("joined-room", room.getRoomInfo());
         this.io.emit("get-rooms", rooms);
@@ -37,7 +37,7 @@ class RoomController {
         const user : User | undefined = getUserByUserId(userId);
 
         user.leaveRoom();
-        room.leaveRoom(this.socket);
+        room.leaveRoom(this.socket, user);
         this.io.emit("get-rooms", rooms);
     }
 

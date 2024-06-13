@@ -20,8 +20,8 @@ class RoomController {
         this.joinRoom = (roomId, userId) => {
             const room = (0, getRoomByRoomId_1.default)(roomId);
             const user = (0, getUserByUserId_1.default)(userId);
-            user.joinRoom(room);
-            room.joinRoom(this.socket);
+            user.joinRoom(room.id);
+            room.joinRoom(this.socket, user);
             this.socket.emit("joined-room", room.getRoomInfo());
             this.io.emit("get-rooms", roomsData_1.default);
         };
@@ -29,7 +29,7 @@ class RoomController {
             const room = (0, getRoomByRoomId_1.default)(roomId);
             const user = (0, getUserByUserId_1.default)(userId);
             user.leaveRoom();
-            room.leaveRoom(this.socket);
+            room.leaveRoom(this.socket, user);
             this.io.emit("get-rooms", roomsData_1.default);
         };
     }
