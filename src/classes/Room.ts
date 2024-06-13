@@ -21,6 +21,14 @@ class Room {
         return this.id;
     }
 
+    getRoomInfo = () => ({
+        id: this.id,
+        name: this.name,
+        limit: this.limit,
+        usersInRoom: this.usersInRoom,
+        cardset: this.cardset
+    })
+
     joinRoom(socket : Socket){
         if(this.usersInRoom < this.limit){
             socket.join(this.id.toString());

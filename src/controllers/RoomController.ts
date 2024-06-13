@@ -27,6 +27,8 @@ class RoomController {
 
         user.joinRoom(room);
         room.joinRoom(this.socket);
+
+        this.socket.emit("joined-room", room.getRoomInfo());
         this.io.emit("get-rooms", rooms);
     }
 
