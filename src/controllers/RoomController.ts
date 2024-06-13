@@ -6,7 +6,7 @@ import users from "../data/usersData";
 import Room from "../classes/Room";
 import User from "../classes/User";
 
-import getRoomIndexById from "../utils/room/getRoomIndexById";
+import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import getUserByUserId from "../utils/user/getUserByUserId";
 
 class RoomController {
@@ -22,8 +22,8 @@ class RoomController {
     }
 
     joinRoom = (roomId : number, userId: number) => {
-        const room : Room | undefined = rooms[getRoomIndexById(roomId, rooms)];
-        const user : User | undefined = users[getUserByUserId(userId)];
+        const room : Room | undefined = getRoomByRoomId(roomId);
+        const user : User | undefined = getUserByUserId(userId);
 
         user.joinRoom(room);
         room.joinRoom(this.socket);
@@ -31,8 +31,8 @@ class RoomController {
     }
 
     leaveRoom = (roomId : number, userId: number) => {
-        const room : Room | undefined = rooms[getRoomIndexById(roomId, rooms)];
-        const user : User | undefined = users[getUserByUserId(userId)];
+        const room : Room | undefined = getRoomByRoomId(roomId);
+        const user : User | undefined = getUserByUserId(userId);
 
         user.leaveRoom();
         room.leaveRoom(this.socket);
