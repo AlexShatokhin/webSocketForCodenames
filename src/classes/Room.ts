@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import Wordset from "./Wordset";
+import rooms from "../roomsData";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -10,7 +11,7 @@ class Room {
     public limit: number;
     public usersInRoom: number = 0;
 
-    constructor(name: string = "new", wordset : Wordset[]=[], limit : number = 3){
+    constructor(name: string = "new", limit : number = 3, wordset : Wordset[]=[],){
         this.id = uuidv4();
         this.name = name;
         this.cardset = wordset;
@@ -29,7 +30,7 @@ class Room {
             socket.emit("joined-room", this.id);
         } else {
             console.log(`Room ${this.id} is full!`);
-            socket.emit("foom-full")
+            socket.emit("room-full")
         }
     }
 

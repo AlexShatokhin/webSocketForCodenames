@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const { v4: uuidv4 } = require('uuid');
 class Room {
-    constructor(name = "new", wordset = [], limit = 3) {
+    constructor(name = "new", limit = 3, wordset = []) {
         this.usersInRoom = 0;
         this.id = uuidv4();
         this.name = name;
@@ -21,7 +21,7 @@ class Room {
         }
         else {
             console.log(`Room ${this.id} is full!`);
-            socket.emit("foom-full");
+            socket.emit("room-full");
         }
     }
     leaveRoom(socket) {

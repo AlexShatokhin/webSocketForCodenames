@@ -7,24 +7,36 @@
 </head>
 <body>
     <h1>Hello world!</h1>
-    <button onclick="socket.emit('create-room')">New Room</button>
+    <button class="new_room_button">New Room</button>
+    <input type="text" name="roomName" placeholder="Type room name here">
+    <input type="number" name="roomLimit" placeholder="Type room limit here">
     <div class="rooms"></div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
 
+    const newRoomButton = document.querySelector(".new_room_button");
+    newRoomButton.onclick = () => {
+        const roomName = document.querySelector("input[name='roomName']").value;
+        const roomLimit = document.querySelector("input[name='roomLimit']").value;
+        socket.emit("create-room", roomName, roomLimit);
+    }
+
     socket.on("get-rooms", (data) => {
         const roomsContainer = document.querySelector(".rooms");
-        roomsContainer.innerHTML = "";
-        data.forEach(({id}) => {
+        if(roomsContainer){
+            roomsContainer.innerHTML = "";
+            data.forEach(({id, name, limit, usersInRoom}) => {
             const button = document.createElement("button");
-            button.innerText = id;
+            button.innerText = `${name} (${usersInRoom}/${limit})`;
             button.onclick = () => {
                 socket.emit("join-room", id)
             }
             roomsContainer.appendChild(button);
         })
+        }
+
     })
 
     socket.on("joined-room", (roomId) => {
@@ -44,6 +56,8 @@
         document.body.innerHTML = `
             <h1>Hello world!</h1>
             <button onclick="socket.emit('create-room')">New Room</button>
+            <input type="text" name="roomName" placeholder="Type room name here">
+            <input type="number" name="roomLimit" placeholder="Type room limit here">
             <div class="rooms"></div>`
     })
 
