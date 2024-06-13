@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import rooms from "../roomsData";
+import rooms from "../data/roomsData";
 
 import getWordSet from "../utils/words/getWordSet";
 import getRoomIndexById from "../utils/room/getRoomIndexById";

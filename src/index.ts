@@ -4,6 +4,7 @@ import express, { Express, Request, Response } from "express";
 import { Socket, Server } from "socket.io";
 import { createServer } from "http";
 
+import UserController from "./controllers/UserController";
 import CardsController from "./controllers/CardsController";
 import RoomController from "./controllers/RoomController";
 
@@ -19,6 +20,7 @@ app.get('/', (req : Request, res : Response) => {
 io.on('connection', (socket : Socket) => {
     const userRoomController = new RoomController(io, socket);
     const userCardsController = new CardsController(io);
+    const userController = new UserController(socket);
 
     socket.emit("get-rooms", userRoomController.getRooms());
 
@@ -27,6 +29,8 @@ io.on('connection', (socket : Socket) => {
     socket.on("leave-room", userRoomController.leaveRoom);
 
     socket.on("get-cards", userCardsController.getCards);
+
+    socket.on("new-user", userController.newUser);
 });
 
 server.listen(process.env.PORT, () => {

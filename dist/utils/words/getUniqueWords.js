@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const getRandomNumberFromRange_1 = __importDefault(require("./getRandomNumberFromRange"));
-const words_1 = __importDefault(require("../../words"));
+const words_1 = __importDefault(require("../../data/words"));
 exports.default = (count) => {
     const uniqueWords = new Set();
     const maxRange = words_1.default.length - 1;

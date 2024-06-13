@@ -15,6 +15,13 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
+    let userData = {};
+    const userName = prompt("Enter your name");
+    socket.emit("new-user", userName);
+
+    socket.on("get-user", (data) => {
+        userData = data;
+    })
 
     const newRoomButton = document.querySelector(".new_room_button");
     newRoomButton.onclick = () => {
@@ -31,7 +38,7 @@
             const button = document.createElement("button");
             button.innerText = `${name} (${usersInRoom}/${limit})`;
             button.onclick = () => {
-                socket.emit("join-room", id)
+                socket.emit("join-room", id, userData.id)
             }
             roomsContainer.appendChild(button);
         })
@@ -44,7 +51,7 @@
         document.body.innerHTML = `
             <h1 align = "center">Room ${roomId}</h1>
             <button onclick = "socket.emit('get-cards', '${roomId}')">Get card set</button>
-            <button onclick = "socket.emit('leave-room', '${roomId}')">Leave</button>
+            <button onclick = "socket.emit('leave-room', '${roomId}', '${userData.id}')">Leave</button>
         `;
     })
 
