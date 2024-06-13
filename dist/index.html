@@ -46,12 +46,13 @@
 
     })
 
-    socket.on("joined-room", (roomId) => {
+    socket.on("joined-room", ({id, name, cardset}) => {
+        console.log(cardset);
         document.body.innerHTML = "";
         document.body.innerHTML = `
-            <h1 align = "center">Room ${roomId}</h1>
-            <button onclick = "socket.emit('get-cards', '${roomId}')">Get card set</button>
-            <button onclick = "socket.emit('leave-room', '${roomId}', '${userData.id}')">Leave</button>
+            <h1 align = "center">Room #${name}#</h1>
+            <button onclick = "socket.emit('get-cards', '${id}')">Get card set</button>
+            <button onclick = "socket.emit('leave-room', '${id}', '${userData.id}')">Leave</button>
         `;
     })
 

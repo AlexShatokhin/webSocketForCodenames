@@ -22,6 +22,7 @@ class RoomController {
             const user = (0, getUserByUserId_1.default)(userId);
             user.joinRoom(room);
             room.joinRoom(this.socket);
+            this.socket.emit("joined-room", room.getRoomInfo());
             this.io.emit("get-rooms", roomsData_1.default);
         };
         this.leaveRoom = (roomId, userId) => {
