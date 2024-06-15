@@ -4,6 +4,7 @@ import rooms from "../data/roomsData";
 
 import Room from "../classes/Room";
 import User from "../classes/User";
+import Error from "../classes/Error";
 
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import getUserByUserId from "../utils/user/getUserByUserId";
@@ -29,7 +30,7 @@ class RoomController {
         this.user = getUserByUserId(userId);
 
         if(+this.room.password !== +password){
-            this.socket.emit("wrong-password");
+            this.socket.emit("error", new Error("Password is incorrect", 401).getError());
             return;
         }
 
@@ -42,7 +43,7 @@ class RoomController {
             this.socket.emit("update-room", this.room.getRoomInfo());
             this.io.emit("get-rooms", rooms);
         } else
-            this.socket.emit("room-full")
+            this.socket.emit("error", new Error("Room is full", 403).getError());
     }
 
     leaveRoom = () => {
@@ -54,7 +55,8 @@ class RoomController {
             this.socket.emit("leave-from-room");
     
             this.io.emit("get-rooms", rooms);
-        }
+        } else
+            this.socket.emit("error", new Error("User or room not found", 404).getError());
     }
 }
 
