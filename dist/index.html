@@ -134,6 +134,10 @@
         alert("Wrong password!");
     });
 
+    socket.on("error", (data) => {
+        alert(`Error!\nCode: ${data.code}\nMessage: ${data.message}`);
+    })
+
     socket.on("leave-from-room", () => {
         document.body.innerHTML = `
             <h1>Hello world!</h1>

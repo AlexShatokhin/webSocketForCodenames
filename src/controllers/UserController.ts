@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import users from "../data/usersData";
 import User from "../classes/User";
+import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { roleType } from "../types/roleType";
 
@@ -24,7 +25,8 @@ class UserController {
             this.user.joinTeam(team);
             const userRoom = getRoomByRoomId(this.user.room as string);
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
-        }
+        } else
+            this.socket.emit("error", new Error("User not found", 404).getError());
 
     }
 
@@ -39,10 +41,10 @@ class UserController {
                             {
                                 this.user.role = "captain";
                                 this.io.in(this.user.room as string).emit("toggle-roles")
-                            } else {
-                                this.socket.emit("toggle-roles-error")
-                            }
-                        };
+                            } else
+                                this.socket.emit("error", new Error("Team already has a captain", 409).getError());
+                        } else
+                            this.socket.emit("error", new Error("User has no team", 403).getError());
                         break;
                 default: 
                     this.user.role = role; 
@@ -50,7 +52,8 @@ class UserController {
                     break;
             }
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
-        }
+        } else 
+            this.socket.emit("error", new Error("User not found", 404).getError());
     }
 
 }
