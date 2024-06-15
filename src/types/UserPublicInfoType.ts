@@ -4,7 +4,7 @@ import { roleType } from './roleType';
 export type UserPublicInfoType = {
     id: string;
     name: string;
-    room: number | undefined;
+    room: string | undefined;
     team: teamType | undefined;
     role: roleType | undefined;
 }

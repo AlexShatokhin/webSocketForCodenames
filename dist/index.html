@@ -46,18 +46,85 @@
 
     })
 
-    socket.on("joined-room", ({id, name, cardset}) => {
-        console.log(cardset);
+    socket.on("joined-room", ({id, name, cardset, users}) => {
+        console.log(users);
         document.body.innerHTML = "";
         document.body.innerHTML = `
             <h1 align = "center">Room #${name}#</h1>
             <button onclick = "socket.emit('get-cards', '${id}')">Get card set</button>
             <button onclick = "socket.emit('leave-room', '${id}', '${userData.id}')">Leave</button>
+
+            <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
+            <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
+            <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
+            <button onclick = "socket.emit('get-role', 'player')">Be a player</button>
+
+            <button onclick = "socket.emit('start-game')">Start game</button>
+
+            <div class = "red-team">
+                <h2>Red team</h2>
+                <div style = "font-style: bold" class = "captain"></div>
+                <hr>
+                <div class = "players"></div>
+            </div>
+
+            <div class = "blue-team">
+                <h2>Blue team</h2>
+                <div style = "font-style: bold" class = "captain"></div>
+                <hr>
+                <div class = "players"></div>
+            </div>
         `;
+    })
+
+    socket.on("update-room", (data) => {
+        const redTeamCaptain = document.querySelector(".red-team .captain");
+        const blueTeamCaptain = document.querySelector(".blue-team .captain");
+
+        const redTeamPlayers = document.querySelector(".red-team .players");
+        const blueTeamPlayers = document.querySelector(".blue-team .players");
+
+        redTeamCaptain.innerHTML = "";
+        blueTeamCaptain.innerHTML = "";
+        redTeamPlayers.innerHTML = "";
+        blueTeamPlayers.innerHTML = "";
+
+        data.users.forEach(({name, role, team}) => {
+            if(team === "red"){
+                if(role === "captain"){
+                    redTeamCaptain.innerHTML = name;
+                } else {
+                    const player = document.createElement("div");
+                    player.innerText = name;
+                    redTeamPlayers.appendChild(player);
+                }
+            } else if(team === "blue"){
+                if(role === "captain"){
+                    blueTeamCaptain.innerHTML = name;
+                } else {
+                    const player = document.createElement("div");
+                    player.innerText = name;
+                    blueTeamPlayers.appendChild(player);
+                }
+            }
+
+        })
     })
 
     socket.on("room-full", () => {
         alert("Room is full");
+    })
+
+    socket.on("toggle-roles-error", () => {
+        alert("Капитан в этой команде уже есть!");
+    })
+
+    socket.on("game-started", () => {
+        alert("Start game!");
+    })
+
+    socket.on("game-started-error", () => {
+        alert("Game isn`t start!");
     })
 
     socket.on("leave-from-room", () => {
