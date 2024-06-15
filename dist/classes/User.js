@@ -13,10 +13,7 @@ class User {
             role: this.role
         });
     }
-    getUserId() { return this.id; }
-    joinRoom(room) { this.room = room; }
     joinTeam(team) { this.team = team; this.role = "player"; }
-    joinRole(role) { this.role = role; }
     leaveRoom() {
         this.room = undefined;
         this.team = undefined;

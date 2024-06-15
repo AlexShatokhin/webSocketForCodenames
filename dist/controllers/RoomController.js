@@ -12,25 +12,37 @@ class RoomController {
         this.io = io;
         this.socket = socket;
         this.getRooms = () => roomsData_1.default;
-        this.createRoom = (name, limit) => {
-            const newRoom = new Room_1.default(name, limit);
+        this.createRoom = (name, password, limit) => {
+            const newRoom = new Room_1.default(name, password, limit);
             roomsData_1.default.push(newRoom);
             this.io.emit("get-rooms", roomsData_1.default);
         };
-        this.joinRoom = (roomId, userId) => {
-            const room = (0, getRoomByRoomId_1.default)(roomId);
-            const user = (0, getUserByUserId_1.default)(userId);
-            user.joinRoom(room.id);
-            room.joinRoom(this.socket, user);
-            this.socket.emit("joined-room", room.getRoomInfo());
-            this.io.emit("get-rooms", roomsData_1.default);
+        this.joinRoom = (roomId, userId, password) => {
+            this.room = (0, getRoomByRoomId_1.default)(roomId);
+            this.user = (0, getUserByUserId_1.default)(userId);
+            if (+this.room.password !== +password) {
+                this.socket.emit("wrong-password");
+                return;
+            }
+            if (!this.room.isRoomFull()) {
+                this.user.room = this.room.id;
+                this.room.joinRoom(this.user);
+                this.socket.join(this.room.id);
+                this.socket.emit("joined-room", this.room.getRoomInfo());
+                this.socket.emit("update-room", this.room.getRoomInfo());
+                this.io.emit("get-rooms", roomsData_1.default);
+            }
+            else
+                this.socket.emit("room-full");
         };
-        this.leaveRoom = (roomId, userId) => {
-            const room = (0, getRoomByRoomId_1.default)(roomId);
-            const user = (0, getUserByUserId_1.default)(userId);
-            user.leaveRoom();
-            room.leaveRoom(this.socket, user);
-            this.io.emit("get-rooms", roomsData_1.default);
+        this.leaveRoom = () => {
+            if (this.user && this.room) {
+                this.user.leaveRoom();
+                this.room.leaveRoom(this.user);
+                this.socket.leave(this.room.id);
+                this.socket.emit("leave-from-room");
+                this.io.emit("get-rooms", roomsData_1.default);
+            }
         };
     }
 }

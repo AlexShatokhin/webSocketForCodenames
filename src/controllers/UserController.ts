@@ -9,10 +9,13 @@ class UserController {
     constructor(private io: Server,
                 private socket: Socket){}
 
+    getUsers = () => users;
+
     newUser = (name: string) => {
         const newUser = new User(this.socket.id, name);
         this.user = newUser;
         users.push(newUser);
+        
         this.socket.emit("get-user", newUser.getUserInfo())
     }
 
@@ -31,7 +34,7 @@ class UserController {
             switch(role){
                 case "captain": 
                         if(this.user.team){
-                            const userTeammates = userRoom.getRoomTeam(this.user.team).map(user => user.role);
+                            const userTeammates = userRoom.getTeamInRoom(this.user.team).map(user => user.role);
                             if(userTeammates.indexOf("captain") == -1)
                             {
                                 this.user.role = "captain";
@@ -42,7 +45,7 @@ class UserController {
                         };
                         break;
                 default: 
-                    this.user.joinRole(role); 
+                    this.user.role = role; 
                     this.io.in(this.user.room as string).emit("toggle-roles")
                     break;
             }

@@ -10,19 +10,17 @@ class Room {
     public id : string;
     public cardset : Wordset[];
     public name : string;
+    public password : number;
     public limit: number;
     public users : User[] = [];
     public usersInRoom: number = 0;
 
-    constructor(name: string = "new", limit : number = 3, wordset : Wordset[]=[]){
+    constructor(name: string = "new", password: number, limit : number = 4, wordset : Wordset[]=[]){
         this.id = uuidv4();
         this.name = name;
+        this.password = password;
         this.cardset = wordset;
         this.limit = limit
-    }
-
-    getRoomId(){
-        return this.id;
     }
 
     getRoomInfo = () => ({
@@ -34,27 +32,22 @@ class Room {
         cardset: this.cardset
     })
 
-    getRoomTeam = (team: teamType) => {
+    getTeamInRoom = (team: teamType) => {
         return this.users.filter(user => user.team === team);
     }
 
-    joinRoom(socket : Socket, user : User){
-        if(this.usersInRoom < this.limit){
-            socket.join(this.id.toString());
-            this.users.push(user);
-            this.usersInRoom++;
-            socket.emit("joined-room", this.id);
-            return;
-        } else {
-            socket.emit("room-full")
-        }
+    joinRoom(user : User){
+        this.users.push(user);
+        this.usersInRoom++;
     }
 
-    leaveRoom(socket: Socket, user: User){
-        socket.leave(this.id.toString());
+    isRoomFull(){
+        return this.usersInRoom === this.limit;
+    }
+
+    leaveRoom(user: User){
         this.users = this.users.filter(userInRoom => userInRoom.id !== user.id);
         this.usersInRoom--;
-        socket.emit("leave-from-room");
     }
 }
 

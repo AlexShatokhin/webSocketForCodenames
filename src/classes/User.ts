@@ -20,11 +20,7 @@ class User {
         role: this.role
     })
 
-    getUserId(){return this.id}
-
-    joinRoom(room: string){this.room = room}
     joinTeam(team: teamType){this.team = team; this.role = "player"}
-    joinRole(role: roleType){this.role = role}
 
     leaveRoom(){
         this.room = undefined;

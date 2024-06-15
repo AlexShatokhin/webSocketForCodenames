@@ -9,9 +9,9 @@ class CardsController {
     getCards = (roomId : string) => {
         const wordset = getWordSet();
         const room = getRoomByRoomId(roomId);
-       room.cardset = wordset;
+        room.cardset = wordset;
 
-        this.io.in(roomId.toString()).emit("send-cards", wordset);
+        this.io.in(roomId).emit("send-cards", wordset);
     }
 }
 

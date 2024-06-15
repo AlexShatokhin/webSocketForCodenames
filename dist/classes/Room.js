@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const { v4: uuidv4 } = require('uuid');
 class Room {
-    constructor(name = "new", limit = 3, wordset = []) {
+    constructor(name = "new", password, limit = 4, wordset = []) {
         this.users = [];
         this.usersInRoom = 0;
         this.getRoomInfo = () => ({
@@ -13,34 +13,25 @@ class Room {
             usersInRoom: this.usersInRoom,
             cardset: this.cardset
         });
-        this.getRoomTeam = (team) => {
+        this.getTeamInRoom = (team) => {
             return this.users.filter(user => user.team === team);
         };
         this.id = uuidv4();
         this.name = name;
+        this.password = password;
         this.cardset = wordset;
         this.limit = limit;
     }
-    getRoomId() {
-        return this.id;
+    joinRoom(user) {
+        this.users.push(user);
+        this.usersInRoom++;
     }
-    joinRoom(socket, user) {
-        if (this.usersInRoom < this.limit) {
-            socket.join(this.id.toString());
-            this.users.push(user);
-            this.usersInRoom++;
-            socket.emit("joined-room", this.id);
-            return;
-        }
-        else {
-            socket.emit("room-full");
-        }
+    isRoomFull() {
+        return this.usersInRoom === this.limit;
     }
-    leaveRoom(socket, user) {
-        socket.leave(this.id.toString());
+    leaveRoom(user) {
         this.users = this.users.filter(userInRoom => userInRoom.id !== user.id);
         this.usersInRoom--;
-        socket.emit("leave-from-room");
     }
 }
 exports.default = Room;

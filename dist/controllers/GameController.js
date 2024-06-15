@@ -12,18 +12,17 @@ class GameController {
         this.startGame = () => {
             this.user = (0, getUserByUserId_1.default)(this.socket.id);
             this.room = (0, getRoomByRoomId_1.default)(this.user.room);
-            const redTeam = this.room.getRoomTeam("red");
-            const blueTeam = this.room.getRoomTeam("blue");
+            const redTeam = this.room.getTeamInRoom("red");
+            const blueTeam = this.room.getTeamInRoom("blue");
             const usersLimit = this.room.usersInRoom >= 4;
-            const redTeamCheck = redTeam.length >= 2 && redTeam.some(user => user.role === "captain");
-            const blueTeamCheck = blueTeam.length >= 2 && blueTeam.some(user => user.role === "captain");
-            if (usersLimit && redTeamCheck && blueTeamCheck) {
-                this.io.in(this.room.id).emit("game-started");
-            }
-            else {
-                this.io.in(this.room.id).emit("game-started-error");
-            }
+            const redTeamCheck = this.checkTeam(redTeam);
+            const blueTeamCheck = this.checkTeam(blueTeam);
+            this.io.in(this.room.id)
+                .emit(usersLimit && redTeamCheck && blueTeamCheck ? "game-started" : "game-started-error");
         };
+    }
+    checkTeam(team) {
+        return team.length >= 2 && team.some(user => user.role === "captain");
     }
 }
 exports.default = GameController;
