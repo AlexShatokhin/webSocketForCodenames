@@ -7,6 +7,7 @@ import { createServer } from "http";
 import UserController from "./controllers/UserController";
 import CardsController from "./controllers/CardsController";
 import RoomController from "./controllers/RoomController";
+import GameController from "./controllers/GameController";
 
 const app : Express = express();
 const server = createServer(app);
@@ -20,7 +21,8 @@ app.get('/', (req : Request, res : Response) => {
 io.on('connection', (socket : Socket) => {
     const userRoomController = new RoomController(io, socket);
     const userCardsController = new CardsController(io);
-    const userController = new UserController(socket);
+    const userController = new UserController(io, socket);
+    const gameController = new GameController(io, socket);
 
     socket.emit("get-rooms", userRoomController.getRooms());
 
@@ -31,6 +33,10 @@ io.on('connection', (socket : Socket) => {
     socket.on("get-cards", userCardsController.getCards);
 
     socket.on("new-user", userController.newUser);
+    socket.on("join-team", userController.joinTeam);
+    socket.on("get-role", userController.toggleRole);
+
+    socket.on("start-game", gameController.startGame)
 });
 
 server.listen(process.env.PORT, () => {

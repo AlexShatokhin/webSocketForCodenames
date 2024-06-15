@@ -6,7 +6,7 @@ import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 class CardsController {
     constructor(private io : Server){}
 
-    getCards = (roomId : number) => {
+    getCards = (roomId : string) => {
         const wordset = getWordSet();
         const room = getRoomByRoomId(roomId);
        room.cardset = wordset;

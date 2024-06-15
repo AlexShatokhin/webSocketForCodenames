@@ -9,9 +9,13 @@ class Room {
             id: this.id,
             name: this.name,
             limit: this.limit,
+            users: this.users,
             usersInRoom: this.usersInRoom,
             cardset: this.cardset
         });
+        this.getRoomTeam = (team) => {
+            return this.users.filter(user => user.team === team);
+        };
         this.id = uuidv4();
         this.name = name;
         this.cardset = wordset;
@@ -23,7 +27,7 @@ class Room {
     joinRoom(socket, user) {
         if (this.usersInRoom < this.limit) {
             socket.join(this.id.toString());
-            this.users.push(user.getUserInfo());
+            this.users.push(user);
             this.usersInRoom++;
             socket.emit("joined-room", this.id);
             return;

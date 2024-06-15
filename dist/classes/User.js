@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class User {
-    constructor(socket, id, name = "Anonymous") {
-        this.socket = socket;
+    constructor(id, name = "Anonymous") {
         this.id = id;
         this.name = name;
+        this.role = "player";
         this.getUserInfo = () => ({
             id: this.id,
             name: this.name,
@@ -15,12 +15,12 @@ class User {
     }
     getUserId() { return this.id; }
     joinRoom(room) { this.room = room; }
-    joinTeam(team) { this.team = team; }
+    joinTeam(team) { this.team = team; this.role = "player"; }
     joinRole(role) { this.role = role; }
     leaveRoom() {
         this.room = undefined;
         this.team = undefined;
-        this.role = undefined;
+        this.role = "player";
     }
 }
 exports.default = User;

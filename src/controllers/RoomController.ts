@@ -21,7 +21,7 @@ class RoomController {
         this.io.emit("get-rooms", rooms);
     }
 
-    joinRoom = (roomId : number, userId: number) => {
+    joinRoom = (roomId : string, userId: string) => {
         const room : Room | undefined = getRoomByRoomId(roomId);
         const user : User | undefined = getUserByUserId(userId);
 
@@ -32,7 +32,7 @@ class RoomController {
         this.io.emit("get-rooms", rooms);
     }
 
-    leaveRoom = (roomId : number, userId: number) => {
+    leaveRoom = (roomId : string, userId: string) => {
         const room : Room | undefined = getRoomByRoomId(roomId);
         const user : User | undefined = getUserByUserId(userId);
 
