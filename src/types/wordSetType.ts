@@ -1,0 +1,1 @@
+export type wordSetType = "ru" | "en" | "ua";

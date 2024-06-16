@@ -17,7 +17,7 @@ class UserController {
         this.user = newUser;
         users.push(newUser);
         
-        this.socket.emit("get-user", newUser.getUserInfo())
+        this.socket.emit("get-user-info", newUser.getUserInfo())
     }
 
     joinTeam = (team : "red" | "blue") => {

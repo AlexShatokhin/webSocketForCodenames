@@ -11,22 +11,19 @@ class Room {
     public cardset : Wordset[];
     public name : string;
     public password : number;
-    public limit: number;
     public users : User[] = [];
     public usersInRoom: number = 0;
 
-    constructor(name: string = "new", password: number, limit : number = 4, wordset : Wordset[]=[]){
+    constructor(name: string = "new", password: number, wordset : Wordset[]=[]){
         this.id = uuidv4();
         this.name = name;
         this.password = password;
         this.cardset = wordset;
-        this.limit = limit
     }
 
     getRoomInfo = () => ({
         id: this.id,
         name: this.name,
-        limit: this.limit,
         users: this.users,
         usersInRoom: this.usersInRoom,
         cardset: this.cardset
@@ -39,10 +36,6 @@ class Room {
     joinRoom(user : User){
         this.users.push(user);
         this.usersInRoom++;
-    }
-
-    isRoomFull(){
-        return this.usersInRoom === this.limit;
     }
 
     leaveRoom(user: User){

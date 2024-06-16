@@ -13,8 +13,8 @@ class RoomController {
         this.io = io;
         this.socket = socket;
         this.getRooms = () => roomsData_1.default;
-        this.createRoom = (name, password, limit) => {
-            const newRoom = new Room_1.default(name, password, limit);
+        this.createRoom = (name, password) => {
+            const newRoom = new Room_1.default(name, password);
             roomsData_1.default.push(newRoom);
             this.io.emit("get-rooms", roomsData_1.default);
         };
@@ -25,16 +25,11 @@ class RoomController {
                 this.socket.emit("error", new Error_1.default("Password is incorrect", 401).getError());
                 return;
             }
-            if (!this.room.isRoomFull()) {
-                this.user.room = this.room.id;
-                this.room.joinRoom(this.user);
-                this.socket.join(this.room.id);
-                this.socket.emit("joined-room", this.room.getRoomInfo());
-                this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", roomsData_1.default);
-            }
-            else
-                this.socket.emit("error", new Error_1.default("Room is full", 403).getError());
+            this.user.room = this.room.id;
+            this.room.joinRoom(this.user);
+            this.socket.join(this.room.id);
+            this.socket.emit("update-room", this.room.getRoomInfo());
+            this.io.emit("get-rooms", roomsData_1.default);
         };
         this.leaveRoom = () => {
             if (this.user && this.room) {

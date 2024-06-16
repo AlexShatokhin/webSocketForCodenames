@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Error_1 = __importDefault(require("../classes/Error"));
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
 class GameController {
@@ -17,8 +18,10 @@ class GameController {
             const usersLimit = this.room.usersInRoom >= 4;
             const redTeamCheck = this.checkTeam(redTeam);
             const blueTeamCheck = this.checkTeam(blueTeam);
-            this.io.in(this.room.id)
-                .emit(usersLimit && redTeamCheck && blueTeamCheck ? "game-started" : "game-started-error");
+            if (usersLimit && redTeamCheck && blueTeamCheck)
+                this.io.in(this.room.id).emit("game-started");
+            else
+                this.io.in(this.room.id).emit("error", new Error_1.default("Не все пользователи выбрали команду или команды не полные", 403));
         };
     }
     checkTeam(team) {

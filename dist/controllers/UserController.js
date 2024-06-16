@@ -16,7 +16,7 @@ class UserController {
             const newUser = new User_1.default(this.socket.id, name);
             this.user = newUser;
             usersData_1.default.push(newUser);
-            this.socket.emit("get-user", newUser.getUserInfo());
+            this.socket.emit("get-user-info", newUser.getUserInfo());
         };
         this.joinTeam = (team) => {
             if (this.user) {

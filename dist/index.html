@@ -10,8 +10,8 @@
     <button class="new_room_button">New Room</button>
     <input type="text" name="roomName" placeholder="Type room name here">
     <input type="number" name="roomPassword" placeholder="Type room password here">
-    <input type="number" name="roomLimit" placeholder="Type room limit here">
     <div class="rooms"></div>
+
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -20,7 +20,7 @@
     const userName = prompt("Enter your name");
     socket.emit("new-user", userName);
 
-    socket.on("get-user", (data) => {
+    socket.on("get-user-info", (data) => {
         userData = data;
     })
 
@@ -28,17 +28,16 @@
     newRoomButton.onclick = () => {
         const roomName = document.querySelector("input[name='roomName']").value;
         const roomPassword = document.querySelector("input[name='roomPassword']").value;
-        const roomLimit = document.querySelector("input[name='roomLimit']").value;
-        socket.emit("create-room", roomName, roomPassword, roomLimit);
+        socket.emit("create-room", roomName, roomPassword);
     }
 
     socket.on("get-rooms", (data) => {
         const roomsContainer = document.querySelector(".rooms");
         if(roomsContainer){
             roomsContainer.innerHTML = "";
-            data.forEach(({id, name, limit, usersInRoom}) => {
+            data.forEach(({id, name, usersInRoom}) => {
             const button = document.createElement("button");
-            button.innerText = `${name} (${usersInRoom}/${limit})`;
+            button.innerText = `${name} (${usersInRoom})`;
             button.onclick = () => {
                 const password = +prompt("Enter room password");
                 socket.emit("join-room", id, userData.id, password)
@@ -46,16 +45,23 @@
             roomsContainer.appendChild(button);
         })
         }
-
     })
 
-    socket.on("joined-room", ({id, name, cardset, users}) => {
-        console.log(users);
+    socket.on("update-room", (data) => {
+        console.log(data);
         document.body.innerHTML = "";
         document.body.innerHTML = `
             <h1 align = "center">Room #${name}#</h1>
-            <button onclick = "socket.emit('get-cards', '${id}')">Get card set</button>
-            <button onclick = "socket.emit('leave-room', '${id}', '${userData.id}')">Leave</button>
+
+
+            <select onchange="getType(this)" id = "cardset" name = "cardset">
+                <option value = "ru">Russian</option>
+                <option value = "en">English</option>
+                <option value = "ua">Ukranian</option>
+            </select>
+
+            <button onclick = "socket.emit('get-cards', '${data.id}', 'ru')">Get card set</button>
+            <button onclick = "socket.emit('leave-room', '${data.id}', '${userData.id}')">Leave</button>
 
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
@@ -78,9 +84,7 @@
                 <div class = "players"></div>
             </div>
         `;
-    })
 
-    socket.on("update-room", (data) => {
         const redTeamCaptain = document.querySelector(".red-team .captain");
         const blueTeamCaptain = document.querySelector(".blue-team .captain");
 
@@ -114,24 +118,12 @@
         })
     })
 
-    socket.on("room-full", () => {
-        alert("Room is full");
-    })
-
-    socket.on("toggle-roles-error", () => {
-        alert("Капитан в этой команде уже есть!");
-    })
-
     socket.on("game-started", () => {
         alert("Start game!");
     })
 
     socket.on("game-started-error", () => {
         alert("Game isn`t start!");
-    });
-
-    socket.on("wrong-password", () => {
-        alert("Wrong password!");
     });
 
     socket.on("error", (data) => {
@@ -144,7 +136,6 @@
             <button onclick="socket.emit('create-room')">New Room</button>
             <input type="text" name="roomName" placeholder="Type room name here">
             <input type="number" name="roomPassword" placeholder="Type room password here">
-            <input type="number" name="roomLimit" placeholder="Type room limit here">
             <div class="rooms"></div>`
     })
 

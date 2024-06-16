@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import Room from "../classes/Room";
 import User from "../classes/User";
+import Error from "../classes/Error";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 
@@ -23,8 +24,10 @@ class GameController {
         const redTeamCheck = this.checkTeam(redTeam);
         const blueTeamCheck = this.checkTeam(blueTeam);
 
-        this.io.in(this.room.id)
-                .emit(usersLimit && redTeamCheck && blueTeamCheck ? "game-started" : "game-started-error");
+        if(usersLimit && redTeamCheck && blueTeamCheck)
+            this.io.in(this.room.id).emit("game-started")
+        else 
+            this.io.in(this.room.id).emit("error", new Error("Не все пользователи выбрали команду или команды не полные", 403))
     }
 
     checkTeam(team: User[]){

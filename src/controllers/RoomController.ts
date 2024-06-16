@@ -18,8 +18,8 @@ class RoomController {
 
     getRooms = () => rooms;
 
-    createRoom = (name: string, password: number, limit: number) =>{
-        const newRoom = new Room(name, password, limit);
+    createRoom = (name: string, password: number) =>{
+        const newRoom = new Room(name, password);
 
         rooms.push(newRoom);
         this.io.emit("get-rooms", rooms);
@@ -34,16 +34,12 @@ class RoomController {
             return;
         }
 
-        if(!this.room.isRoomFull()){
-            this.user.room = this.room.id;
-            this.room.joinRoom(this.user);
+        this.user.room = this.room.id;
+        this.room.joinRoom(this.user);
 
-            this.socket.join(this.room.id);
-            this.socket.emit("joined-room", this.room.getRoomInfo());
-            this.socket.emit("update-room", this.room.getRoomInfo());
-            this.io.emit("get-rooms", rooms);
-        } else
-            this.socket.emit("error", new Error("Room is full", 403).getError());
+        this.socket.join(this.room.id);
+        this.socket.emit("update-room", this.room.getRoomInfo());
+        this.io.emit("get-rooms", rooms);
     }
 
     leaveRoom = () => {
