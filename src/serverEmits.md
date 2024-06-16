@@ -25,7 +25,6 @@
         "users": "[{…}, {…}]"
         "usersInRoom": "2"
     },
-    ...
   ]
   ```
 
@@ -41,15 +40,15 @@
 - `cards` (массив объектов) — массив карточек. Пример:
   ```json
   [
-        {word: 'БОРТ', teamName: 'blue', isClicked: false}
-        {word: 'ПОЧКА', teamName: 'neutral', isClicked: false}
-        {word: 'ГВОЗДЬ', teamName: 'neutral', isClicked: false}
-        {word: 'ПЕРО', teamName: 'red', isClicked: false}
-        {word: 'АМФИБИЯ', teamName: 'red', isClicked: false}
-        {word: 'БРАК', teamName: 'red', isClicked: false}
-        {word: 'ТАКТ', teamName: 'blue', isClicked: false}
-        {word: 'СОБАКА', teamName: 'blue', isClicked: false}
-        {word: 'КОСЯК', teamName: 'black', isClicked: false}
+        "{word: 'БОРТ', teamName: 'blue', isClicked: false}"
+        "{word: 'ПОЧКА', teamName: 'neutral', isClicked: false}"
+        "{word: 'ГВОЗДЬ', teamName: 'neutral', isClicked: false}"
+        "{word: 'ПЕРО', teamName: 'red', isClicked: false}"
+        "{word: 'АМФИБИЯ', teamName: 'red', isClicked: false}"
+        "{word: 'БРАК', teamName: 'red', isClicked: false}"
+        "{word: 'ТАКТ', teamName: 'blue', isClicked: false}"
+        "{word: 'СОБАКА', teamName: 'blue', isClicked: false}"
+        "{word: 'КОСЯК', teamName: 'black', isClicked: false}"
   ]
   ```
 
@@ -123,12 +122,12 @@
 - `roomInfo` (объект) — обновленная информация о комнате. Пример:
   ```json
     {
-        cardset: [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-        id: "bbb34f55-d31a-4941-8e60-142d4b745897"
-        name: "4233"
-        users: [{…}, {…}]
-        usersInRoom: 2
-    }
+        "cardset": "[{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]"
+        "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
+        "name": "4233"
+        "users": "[{…}, {…}]"
+        "usersInRoom": "2"
+    },
   ```
 
 ### `leave-from-room`
@@ -154,11 +153,11 @@
 - `userInfo` (объект) — информация о пользователе. Пример:
   ```json
     {
-        id,
-        name,
-        room,
-        team,
-        role
+        "id",
+        "name",
+        "room",
+        "team",
+        "role"
     }
   ```
 
