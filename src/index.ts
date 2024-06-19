@@ -34,7 +34,7 @@ io.on('connection', (socket : Socket) => {
 
     socket.on("new-user", userController.newUser);
     socket.on("join-team", userController.joinTeam);
-    socket.on("get-role", userController.toggleRole);
+    socket.on("get-role", userController.getCaptainRole);
 
     socket.on("start-game", gameController.startGame)
 });

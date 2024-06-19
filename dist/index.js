@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     socket.on("get-cards", userCardsController.getCards);
     socket.on("new-user", userController.newUser);
     socket.on("join-team", userController.joinTeam);
-    socket.on("get-role", userController.toggleRole);
+    socket.on("get-role", userController.getCaptainRole);
     socket.on("start-game", gameController.startGame);
 });
 server.listen(process.env.PORT, () => {

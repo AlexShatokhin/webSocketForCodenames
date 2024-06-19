@@ -30,27 +30,19 @@ class UserController {
 
     }
 
-    toggleRole = (role: roleType) => {
+    getCaptainRole = () => {
         if(this.user){
             const userRoom = getRoomByRoomId(this.user.room as string);
-            switch(role){
-                case "captain": 
-                        if(this.user.team){
-                            const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
-                            if(!isTeamHasCaptain)
-                            {
-                                this.user.role = "captain";
-                                this.io.in(this.user.room as string).emit("toggle-roles")
-                            } else
-                                this.socket.emit("error", new Error("Team already has a captain", 409));
-                        } else
-                            this.socket.emit("error", new Error("User has no team", 403));
-                        break;
-                default: 
-                    this.user.role = role; 
+            if(this.user.team){
+                const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
+                if(!isTeamHasCaptain)
+                {
+                    this.user.role = "captain";
                     this.io.in(this.user.room as string).emit("toggle-roles")
-                    break;
-            }
+                } else
+                    this.socket.emit("error", new Error("Team already has a captain", 409));
+            } else
+                this.socket.emit("error", new Error("User has no team", 403));
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
         } else 
             this.socket.emit("error", new Error("User not found", 404));
