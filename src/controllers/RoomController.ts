@@ -33,17 +33,23 @@ class RoomController {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
-        if(+this.room.password !== +password){
-            this.socket.emit("error", new Error("Password is incorrect", 401));
-            return;
+        if(this.room.contains(this.user)){
+            this.socket.join(this.room.id);
+            this.socket.emit("update-room", this.room.getRoomInfo());
+            this.io.emit("get-rooms", rooms);
+        } else {
+            if(+this.room.password !== +password){
+                this.socket.emit("error", new Error("Password is incorrect", 401));
+                return;
+            }
+    
+            this.user.room = this.room.id;
+            this.room.joinRoom(this.user);
+    
+            this.socket.join(this.room.id);
+            this.socket.emit("update-room", this.room.getRoomInfo());
+            this.io.emit("get-rooms", rooms);
         }
-
-        this.user.room = this.room.id;
-        this.room.joinRoom(this.user);
-
-        this.socket.join(this.room.id);
-        this.socket.emit("update-room", this.room.getRoomInfo());
-        this.io.emit("get-rooms", rooms);
     }
 
     leaveRoom = () => {

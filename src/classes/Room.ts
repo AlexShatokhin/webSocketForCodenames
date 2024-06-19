@@ -42,6 +42,10 @@ class Room {
         this.users = this.users.filter(userInRoom => userInRoom.id !== user.id);
         this.usersInRoom--;
     }
+
+    contains(user: User){
+        return this.users.some((userInRoom : User) => userInRoom.id === user.id)
+    }
 }
 
 export default Room

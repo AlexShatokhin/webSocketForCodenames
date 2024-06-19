@@ -17,11 +17,16 @@
 <script>
     const socket = io();
     let userData = {};
-    const userName = prompt("Enter your name");
-    socket.emit("new-user", userName);
+
+
+    socket.on("add-new-user", () => {
+        const userName = prompt("Enter your name");
+        socket.emit("new-user", userName);
+    })
 
     socket.on("get-user-info", (data) => {
         userData = data;
+        console.log(userData)
     })
 
     const newRoomButton = document.querySelector(".new_room_button");
@@ -51,7 +56,7 @@
         console.log(data);
         document.body.innerHTML = "";
         document.body.innerHTML = `
-            <h1 align = "center">Room #${name}#</h1>
+            <h1 align = "center">Room #${data.name}#</h1>
 
 
             <select onchange="getType(this)" id = "cardset" name = "cardset">

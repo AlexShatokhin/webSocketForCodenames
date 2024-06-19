@@ -3,7 +3,6 @@ import users from "../data/usersData";
 import User from "../classes/User";
 import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
-import { roleType } from "../types/roleType";
 
 class UserController {
     private user : User | undefined;
@@ -12,8 +11,8 @@ class UserController {
 
     getUsers = () => users;
 
-    newUser = (name: string) => {
-        const newUser = new User(this.socket.id, name);
+    newUser = (name: string, sessionID : string) => {
+        const newUser = new User(sessionID, name);
         this.user = newUser;
         users.push(newUser);
         

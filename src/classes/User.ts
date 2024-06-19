@@ -4,13 +4,13 @@ import { UserPublicInfoType } from "../types/UserPublicInfoType";
 
 
 class User {
+
     public room: string | undefined;
     public team: teamType | undefined;
     public role: roleType = "player";
 
     constructor(public id: string,
-                public name: string = "Anonymous"
-    ){}
+                public name: string = "Anonymous"){}
 
     getUserInfo = () : UserPublicInfoType => ({
         id: this.id,

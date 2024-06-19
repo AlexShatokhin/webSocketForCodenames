@@ -12,8 +12,8 @@ class UserController {
         this.io = io;
         this.socket = socket;
         this.getUsers = () => usersData_1.default;
-        this.newUser = (name) => {
-            const newUser = new User_1.default(this.socket.id, name);
+        this.newUser = (name, sessionID) => {
+            const newUser = new User_1.default(sessionID, name);
             this.user = newUser;
             usersData_1.default.push(newUser);
             this.socket.emit("get-user-info", newUser.getUserInfo());

@@ -27,15 +27,22 @@ class RoomController {
         this.joinRoom = (roomId, userId, password) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
-            if (+this.room.password !== +password) {
-                this.socket.emit("error", new Error_1.default("Password is incorrect", 401));
-                return;
+            if (this.room.contains(this.user)) {
+                this.socket.join(this.room.id);
+                this.socket.emit("update-room", this.room.getRoomInfo());
+                this.io.emit("get-rooms", roomsData_1.default);
             }
-            this.user.room = this.room.id;
-            this.room.joinRoom(this.user);
-            this.socket.join(this.room.id);
-            this.socket.emit("update-room", this.room.getRoomInfo());
-            this.io.emit("get-rooms", roomsData_1.default);
+            else {
+                if (+this.room.password !== +password) {
+                    this.socket.emit("error", new Error_1.default("Password is incorrect", 401));
+                    return;
+                }
+                this.user.room = this.room.id;
+                this.room.joinRoom(this.user);
+                this.socket.join(this.room.id);
+                this.socket.emit("update-room", this.room.getRoomInfo());
+                this.io.emit("get-rooms", roomsData_1.default);
+            }
         };
         this.leaveRoom = () => {
             if (this.user && this.room) {
