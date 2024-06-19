@@ -20,9 +20,13 @@ class RoomController {
 
     createRoom = (name: string, password: number) =>{
         const newRoom = new Room(name, password);
-
-        rooms.push(newRoom);
-        this.io.emit("get-rooms", rooms);
+        const isRoomWithThisNameExists = rooms.some((room : Room) => room.name === name);
+        if(isRoomWithThisNameExists){
+            this.socket.emit("error", new Error("Room with this name already exists", 409))
+        } else {
+            rooms.push(newRoom);
+            this.io.emit("get-rooms", rooms);
+        }
     }
 
     joinRoom = (roomId : string, userId: string, password: number) => {
@@ -30,7 +34,7 @@ class RoomController {
         this.user = getUserByUserId(userId);
 
         if(+this.room.password !== +password){
-            this.socket.emit("error", new Error("Password is incorrect", 401).getError());
+            this.socket.emit("error", new Error("Password is incorrect", 401));
             return;
         }
 
@@ -52,7 +56,7 @@ class RoomController {
     
             this.io.emit("get-rooms", rooms);
         } else
-            this.socket.emit("error", new Error("User or room not found", 404).getError());
+            this.socket.emit("error", new Error("User or room not found", 404));
     }
 }
 

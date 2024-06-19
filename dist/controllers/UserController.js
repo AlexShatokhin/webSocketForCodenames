@@ -25,7 +25,7 @@ class UserController {
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
             }
             else
-                this.socket.emit("error", new Error_1.default("User not found", 404).getError());
+                this.socket.emit("error", new Error_1.default("User not found", 404));
         };
         this.toggleRole = (role) => {
             if (this.user) {
@@ -33,16 +33,16 @@ class UserController {
                 switch (role) {
                     case "captain":
                         if (this.user.team) {
-                            const userTeammates = userRoom.getTeamInRoom(this.user.team).map(user => user.role);
-                            if (userTeammates.indexOf("captain") == -1) {
+                            const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
+                            if (!isTeamHasCaptain) {
                                 this.user.role = "captain";
                                 this.io.in(this.user.room).emit("toggle-roles");
                             }
                             else
-                                this.socket.emit("error", new Error_1.default("Team already has a captain", 409).getError());
+                                this.socket.emit("error", new Error_1.default("Team already has a captain", 409));
                         }
                         else
-                            this.socket.emit("error", new Error_1.default("User has no team", 403).getError());
+                            this.socket.emit("error", new Error_1.default("User has no team", 403));
                         break;
                     default:
                         this.user.role = role;
@@ -52,7 +52,7 @@ class UserController {
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
             }
             else
-                this.socket.emit("error", new Error_1.default("User not found", 404).getError());
+                this.socket.emit("error", new Error_1.default("User not found", 404));
         };
     }
 }
