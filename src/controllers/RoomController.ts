@@ -50,6 +50,10 @@ class RoomController {
             this.socket.emit("update-room", this.room.getRoomInfo());
             this.io.emit("get-rooms", rooms);
         }
+
+        if(this.room.isGameStarted){
+            this.socket.emit("update-cards", this.room.cardset)
+        }
     }
 
     leaveRoom = () => {

@@ -73,7 +73,7 @@
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
             <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
 
-            <button onclick = "socket.emit('start-game', '${data.id}')">Start game</button>
+            <button id = "startGame">Start game</button>
 
             <div class = "red-team">
                 <h2>Red team</h2>
@@ -101,6 +101,12 @@
         redTeamPlayers.innerHTML = "";
         blueTeamPlayers.innerHTML = "";
 
+        document.getElementById('startGame').addEventListener('click', function() {
+            const dataId = data.id; 
+            const cardsJson = JSON.stringify(cards);
+            socket.emit('start-game', dataId, cardsJson);
+        });
+
         data.users.forEach(({name, role, team}) => {
             if(team === "red"){
                 if(role === "captain"){
@@ -124,7 +130,7 @@
     })
 
     socket.on("game-started", () => {
-        console.log(cards);
+        createCardsFromData(cards);
     })
 
     socket.on("error", (data) => {
@@ -139,5 +145,60 @@
             <input type="number" name="roomPassword" placeholder="Type room password here">
             <div class="rooms"></div>`
     })
+
+    socket.on('get-cards', (words) => {
+        cards = words;
+    })
+
+    socket.on("update-cards", (words) => {
+        createCardsFromData(words);
+    })
+
+  function createCardsFromData(data) {
+    document.querySelector(".grid")?.remove();
+
+    const container = document.createElement('div');
+    container.classList.add("grid");
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    container.style.gap = '10px';
+
+    data.forEach(item => {
+
+        const card = document.createElement('div');
+        card.textContent = item.word;
+        card.style.padding = '20px';
+        card.style.textAlign = 'center';
+        card.style.color = 'white';
+        card.style.cursor = "pointer"
+        card.style.opacity = item.isClicked ? "0.5" : "1";
+
+        card.onclick = () => {
+            socket.emit("card-clicked", item, userData.id);
+        }
+
+        switch (item.teamName) {
+        case 'blue':
+            card.style.backgroundColor = 'blue';
+            break;
+        case 'red':
+            card.style.backgroundColor = 'red';
+            break;
+        case 'neutral':
+            card.style.backgroundColor = 'grey';
+            break;
+        case 'black':
+            card.style.backgroundColor = 'black';
+            break;
+        default:
+            card.style.backgroundColor = 'white';
+            card.style.color = 'black';
+        }
+
+        container.appendChild(card);
+    });
+
+        document.body.appendChild(container);
+    }
 </script>
 </html>

@@ -1,20 +1,20 @@
-import { Socket } from "socket.io";
-import Wordset from "./Wordset";
 import User from "./User";
-import { UserPublicInfoType } from "../types/UserPublicInfoType";
 import { teamType } from "../types/teamType";
+import { Word } from "../types/Word";
 
 const { v4: uuidv4 } = require('uuid');
 
 class Room {
     public id : string;
-    public cardset : Wordset[];
+    public cardset : Word[];
     public name : string;
     public password : number;
     public users : User[] = [];
     public usersInRoom: number = 0;
+    public isGameStarted : boolean = false;
 
-    constructor(name: string = "new", password: number, wordset : Wordset[]=[]){
+
+    constructor(name: string = "new", password: number, wordset : Word[]=[]){
         this.id = uuidv4();
         this.name = name;
         this.password = password;

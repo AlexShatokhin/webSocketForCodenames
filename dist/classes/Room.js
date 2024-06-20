@@ -5,6 +5,7 @@ class Room {
     constructor(name = "new", password, wordset = []) {
         this.users = [];
         this.usersInRoom = 0;
+        this.isGameStarted = false;
         this.getRoomInfo = () => ({
             id: this.id,
             name: this.name,

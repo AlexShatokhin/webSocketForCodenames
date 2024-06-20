@@ -39,6 +39,7 @@ io.on('connection', (socket) => {
     socket.on("join-team", userController.joinTeam);
     socket.on("get-role", userController.getCaptainRole);
     socket.on("start-game", gameController.startGame);
+    socket.on("card-clicked", gameController.clickCardHandler);
     socket.on("disconnect", () => {
         socket.disconnect();
     });

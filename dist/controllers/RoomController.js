@@ -43,6 +43,9 @@ class RoomController {
                 this.socket.emit("update-room", this.room.getRoomInfo());
                 this.io.emit("get-rooms", roomsData_1.default);
             }
+            if (this.room.isGameStarted) {
+                this.socket.emit("update-cards", this.room.cardset);
+            }
         };
         this.leaveRoom = () => {
             if (this.user && this.room) {
