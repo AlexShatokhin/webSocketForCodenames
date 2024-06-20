@@ -13,7 +13,7 @@ class CardsController {
         const room = getRoomByRoomId(roomId);
         room.cardset = wordset;
 
-        this.io.in(roomId).emit("send-cards", wordset);
+        this.io.in(roomId).emit("get-cards", wordset);
     }
 }
 

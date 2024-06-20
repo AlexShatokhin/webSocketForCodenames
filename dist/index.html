@@ -17,6 +17,7 @@
 <script>
     const socket = io();
     let userData = {};
+    let cards = [];
 
 
     socket.on("add-new-user", () => {
@@ -72,7 +73,7 @@
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
             <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
 
-            <button onclick = "socket.emit('start-game')">Start game</button>
+            <button onclick = "socket.emit('start-game', '${data.id}')">Start game</button>
 
             <div class = "red-team">
                 <h2>Red team</h2>
@@ -123,12 +124,8 @@
     })
 
     socket.on("game-started", () => {
-        alert("Start game!");
+        console.log(cards);
     })
-
-    socket.on("game-started-error", () => {
-        alert("Game isn`t start!");
-    });
 
     socket.on("error", (data) => {
         alert(`Error!\nCode: ${data.code}\nMessage: ${data.message}`);
@@ -141,10 +138,6 @@
             <input type="text" name="roomName" placeholder="Type room name here">
             <input type="number" name="roomPassword" placeholder="Type room password here">
             <div class="rooms"></div>`
-    })
-
-    socket.on('send-cards', (words) => {
-        console.log(words);
     })
 </script>
 </html>

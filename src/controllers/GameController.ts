@@ -7,29 +7,29 @@ import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 
 class GameController {
     public user : User | undefined;
-    private room : Room | undefined;
+    public room : Room | undefined;
+    private isGameStarted : boolean = false;
 
     constructor(private io : Server,
                 private socket : Socket){}
 
-    startGame = () => {
-        this.user = getUserByUserId(this.socket.id);
-        if(this.user){
-            this.room = getRoomByRoomId(this.user.room as string);
+    startGame = (roomId : string) => {
+        this.room = getRoomByRoomId(roomId);
 
-            const redTeam = this.room.getTeamInRoom("red");
-            const blueTeam = this.room.getTeamInRoom("blue");
+        const redTeam = this.room.getTeamInRoom("red");
+        const blueTeam = this.room.getTeamInRoom("blue");
+
+        const usersLimit = this.room.usersInRoom >= 4;
+        const redTeamCheck = this.checkTeam(redTeam);
+        const blueTeamCheck = this.checkTeam(blueTeam);
+
+        if(true){
+            this.isGameStarted = true;
+            this.io.in(this.room.id).emit("game-started");
+        }
+        else 
+            new Error(this.socket, "Не все пользователи выбрали команду или команды не полные", 403);
     
-            const usersLimit = this.room.usersInRoom >= 4;
-            const redTeamCheck = this.checkTeam(redTeam);
-            const blueTeamCheck = this.checkTeam(blueTeam);
-    
-            if(usersLimit && redTeamCheck && blueTeamCheck)
-                this.io.in(this.room.id).emit("game-started")
-            else 
-                new Error(this.socket, "Не все пользователи выбрали команду или команды не полные", 403);
-    
-        } else new Error(this.socket, "User not found", 404);
     }
 
     checkTeam(team: User[]){
