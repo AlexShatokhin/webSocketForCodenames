@@ -25,7 +25,7 @@ class UserController {
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
             }
             else
-                this.socket.emit("error", new Error_1.default("User not found", 404));
+                new Error_1.default(this.socket, "User not found", 404);
         };
         this.getCaptainRole = () => {
             if (this.user) {
@@ -37,14 +37,14 @@ class UserController {
                         this.io.in(this.user.room).emit("toggle-roles");
                     }
                     else
-                        this.socket.emit("error", new Error_1.default("Team already has a captain", 409));
+                        new Error_1.default(this.socket, "Team already has a captain", 409);
                 }
                 else
-                    this.socket.emit("error", new Error_1.default("User has no team", 403));
+                    new Error_1.default(this.socket, "User has no team", 403);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
             }
             else
-                this.socket.emit("error", new Error_1.default("User not found", 404));
+                new Error_1.default(this.socket, "User not found", 404);
         };
     }
 }

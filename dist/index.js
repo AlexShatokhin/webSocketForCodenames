@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
         socket.disconnect();
     });
 });
-server.listen(process.env.PORT, () => {
-    console.log('server running at http://localhost:' + process.env.PORT);
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+    console.log('server running at http://localhost:' + port);
 });

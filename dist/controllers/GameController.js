@@ -12,16 +12,20 @@ class GameController {
         this.socket = socket;
         this.startGame = () => {
             this.user = (0, getUserByUserId_1.default)(this.socket.id);
-            this.room = (0, getRoomByRoomId_1.default)(this.user.room);
-            const redTeam = this.room.getTeamInRoom("red");
-            const blueTeam = this.room.getTeamInRoom("blue");
-            const usersLimit = this.room.usersInRoom >= 4;
-            const redTeamCheck = this.checkTeam(redTeam);
-            const blueTeamCheck = this.checkTeam(blueTeam);
-            if (usersLimit && redTeamCheck && blueTeamCheck)
-                this.io.in(this.room.id).emit("game-started");
+            if (this.user) {
+                this.room = (0, getRoomByRoomId_1.default)(this.user.room);
+                const redTeam = this.room.getTeamInRoom("red");
+                const blueTeam = this.room.getTeamInRoom("blue");
+                const usersLimit = this.room.usersInRoom >= 4;
+                const redTeamCheck = this.checkTeam(redTeam);
+                const blueTeamCheck = this.checkTeam(blueTeam);
+                if (usersLimit && redTeamCheck && blueTeamCheck)
+                    this.io.in(this.room.id).emit("game-started");
+                else
+                    new Error_1.default(this.socket, "Не все пользователи выбрали команду или команды не полные", 403);
+            }
             else
-                this.io.in(this.room.id).emit("error", new Error_1.default("Не все пользователи выбрали команду или команды не полные", 403));
+                new Error_1.default(this.socket, "User not found", 404);
         };
     }
     checkTeam(team) {

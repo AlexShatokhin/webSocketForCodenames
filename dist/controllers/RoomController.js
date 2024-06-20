@@ -17,7 +17,7 @@ class RoomController {
             const newRoom = new Room_1.default(name, password);
             const isRoomWithThisNameExists = roomsData_1.default.some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
-                this.socket.emit("error", new Error_1.default("Room with this name already exists", 409));
+                new Error_1.default(this.socket, "Room with this name already exists", 409);
             }
             else {
                 roomsData_1.default.push(newRoom);
@@ -34,7 +34,7 @@ class RoomController {
             }
             else {
                 if (+this.room.password !== +password) {
-                    this.socket.emit("error", new Error_1.default("Password is incorrect", 401));
+                    new Error_1.default(this.socket, "Password is incorrect", 401);
                     return;
                 }
                 this.user.room = this.room.id;
@@ -53,7 +53,7 @@ class RoomController {
                 this.io.emit("get-rooms", roomsData_1.default);
             }
             else
-                this.socket.emit("error", new Error_1.default("User or room not found", 404));
+                new Error_1.default(this.socket, "User or room not found", 404);
         };
     }
 }

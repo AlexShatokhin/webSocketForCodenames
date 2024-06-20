@@ -26,7 +26,7 @@ class UserController {
             const userRoom = getRoomByRoomId(this.user.room as string);
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
         } else
-            this.socket.emit("error", new Error("User not found", 404));
+            new Error(this.socket, "User not found", 404);
 
     }
 
@@ -40,12 +40,12 @@ class UserController {
                     this.user.role = "captain";
                     this.io.in(this.user.room as string).emit("toggle-roles")
                 } else
-                    this.socket.emit("error", new Error("Team already has a captain", 409));
+                    new Error(this.socket, "Team already has a captain", 409);
             } else
-                this.socket.emit("error", new Error("User has no team", 403));
+                new Error(this.socket, "User has no team", 403);
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
         } else 
-            this.socket.emit("error", new Error("User not found", 404));
+            new Error(this.socket, "User not found", 404);
     }
 
 
