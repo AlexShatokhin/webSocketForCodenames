@@ -11,7 +11,7 @@ import getUserByUserId from "../utils/user/getUserByUserId";
 
 class RoomController {
     private room : Room | undefined;
-    private user : User | undefined;
+    public user : User | undefined;
 
     constructor(private io : Server, 
                 private socket : Socket){}

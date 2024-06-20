@@ -6,7 +6,7 @@ import getUserByUserId from "../utils/user/getUserByUserId";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 
 class GameController {
-    private user : User | undefined;
+    public user : User | undefined;
     private room : Room | undefined;
 
     constructor(private io : Server,

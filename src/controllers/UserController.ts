@@ -3,9 +3,10 @@ import users from "../data/usersData";
 import User from "../classes/User";
 import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
+import getUserByUserId from "../utils/user/getUserByUserId";
 
 class UserController {
-    private user : User | undefined;
+    public user : User | undefined;
     constructor(private io: Server,
                 private socket: Socket){}
 
@@ -46,6 +47,7 @@ class UserController {
         } else 
             this.socket.emit("error", new Error("User not found", 404));
     }
+
 
 }
 

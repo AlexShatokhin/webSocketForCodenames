@@ -5,11 +5,7 @@ import session from "express-session"
 import { Server, Socket } from "socket.io";
 import { createServer } from "http";
 
-import UserController from "./controllers/UserController";
-import CardsController from "./controllers/CardsController";
-import RoomController from "./controllers/RoomController";
-import GameController from "./controllers/GameController";
-import getUserByUserId from "./utils/user/getUserByUserId";
+import Controllers from "./controllers/Controllers";
 
 const app : Express = express();
 const server = createServer(app);
@@ -34,14 +30,9 @@ app.get('/', (req : Request, res : Response) => {
 io.on('connection', (socket : Socket) => {
 	const request = socket.request as Request;
 
-	const userRoomController = new RoomController(io, socket);
-	const userCardsController = new CardsController(io);
-	const userController = new UserController(io, socket);
-	const gameController = new GameController(io, socket);
-
-	if(getUserByUserId(request.sessionID) !== undefined){
-		socket.emit("get-user-info", getUserByUserId(request.sessionID).getUserInfo())
-	} else socket.emit("add-new-user");
+	const controllers = new Controllers(io, socket);
+	const {userController, userCardsController, userRoomController, gameController} = controllers
+	controllers.checkUserSession(request);
 
 	socket.emit("get-rooms", userRoomController.getRooms());
 
