@@ -1,4 +1,5 @@
 import Wordset from "../../classes/Wordset";
+import { Word } from "../../types/Word";
 export default (words : string[]) => {
     const wordsCountInTeam = Math.ceil((words.length-1) / 3);
     let wordsCountInRedTeam = 0;
@@ -6,19 +7,23 @@ export default (words : string[]) => {
 
     return words.map((word, index) => {
         if(index === 0)
-            return new Wordset(word, "black");
+            return getWord(word, "black");
 
         if(wordsCountInRedTeam < wordsCountInTeam){
             wordsCountInRedTeam++;
-            return new Wordset(word, "red");
+            return getWord(word, "red");
         }
 
         if(wordsCountInBlueTeam < wordsCountInTeam){
             wordsCountInBlueTeam++;
-            return new Wordset(word, "blue");
+            return getWord(word, "blue");
         }
 
-        return new Wordset(word, "neutral");
+        return getWord(word, "neutral");
 
     })
+}
+
+function getWord(wordText : string, team : "black" | "red" | "blue" | "neutral") : Word{
+    return {word: wordText, teamName: team, isClicked: false}
 }

@@ -24,7 +24,8 @@ class UserController {
         if(this.user){
             this.user.joinTeam(team);
             const userRoom = getRoomByRoomId(this.user.room as string);
-            this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
+            this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
+            this.socket.emit("get-user-info", this.user.getUserInfo())
         } else
             new Error(this.socket, "User not found", 404);
 
@@ -43,7 +44,9 @@ class UserController {
                     new Error(this.socket, "Team already has a captain", 409);
             } else
                 new Error(this.socket, "User has no team", 403);
-            this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo())
+
+            this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
+            this.socket.emit("get-user-info", this.user.getUserInfo())
         } else 
             new Error(this.socket, "User not found", 404);
     }

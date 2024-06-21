@@ -27,7 +27,6 @@
 
     socket.on("get-user-info", (data) => {
         userData = data;
-        console.log(userData)
     })
 
     const newRoomButton = document.querySelector(".new_room_button");
@@ -74,6 +73,7 @@
             <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
 
             <button id = "startGame">Start game</button>
+            <button onclick = "socket.emit('finish')">Finish game</button>
 
             <div class = "red-team">
                 <h2>Red team</h2>
@@ -154,6 +154,11 @@
         createCardsFromData(words);
     })
 
+    socket.on("finish-game", (team) => {
+        alert("Game over!\nWinner team: " + team);
+        document.querySelector(".grid")?.remove();
+    })
+
   function createCardsFromData(data) {
     document.querySelector(".grid")?.remove();
 
@@ -176,24 +181,29 @@
         card.onclick = () => {
             socket.emit("card-clicked", item, userData.id);
         }
-
-        switch (item.teamName) {
-        case 'blue':
-            card.style.backgroundColor = 'blue';
-            break;
-        case 'red':
-            card.style.backgroundColor = 'red';
-            break;
-        case 'neutral':
-            card.style.backgroundColor = 'grey';
-            break;
-        case 'black':
-            card.style.backgroundColor = 'black';
-            break;
-        default:
+        if(userData.role === "captain"){
+            switch (item.teamName) {
+                case 'blue':
+                    card.style.backgroundColor = 'blue';
+                    break;
+                case 'red':
+                    card.style.backgroundColor = 'red';
+                    break;
+                case 'neutral':
+                    card.style.backgroundColor = 'grey';
+                    break;
+                case 'black':
+                    card.style.backgroundColor = 'black';
+                    break;
+                default:
+                    card.style.backgroundColor = 'white';
+                    card.style.color = 'black';
+                }
+        } else {
             card.style.backgroundColor = 'white';
             card.style.color = 'black';
         }
+
 
         container.appendChild(card);
     });

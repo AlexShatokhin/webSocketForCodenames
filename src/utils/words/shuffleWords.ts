@@ -1,7 +1,8 @@
 import Wordset from "../../classes/Wordset";
+import { Word } from "../../types/Word";
 import getRandomNumberFromRange from "./getRandomNumberFromRange";
 
-export default (words : Wordset[]) => {
+export default (words : Word[]) => {
     const shuffleResult = [...words];
     const maxRange = shuffleResult.length - 1;
 

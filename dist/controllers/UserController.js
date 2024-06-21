@@ -23,6 +23,7 @@ class UserController {
                 this.user.joinTeam(team);
                 const userRoom = (0, getRoomByRoomId_1.default)(this.user.room);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
+                this.socket.emit("get-user-info", this.user.getUserInfo());
             }
             else
                 new Error_1.default(this.socket, "User not found", 404);
@@ -42,6 +43,7 @@ class UserController {
                 else
                     new Error_1.default(this.socket, "User has no team", 403);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
+                this.socket.emit("get-user-info", this.user.getUserInfo());
             }
             else
                 new Error_1.default(this.socket, "User not found", 404);
