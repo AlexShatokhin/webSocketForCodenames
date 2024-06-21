@@ -3,7 +3,6 @@ import users from "../data/usersData";
 import User from "../classes/User";
 import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
-import getUserByUserId from "../utils/user/getUserByUserId";
 
 class UserController {
     public user : User | undefined;
@@ -39,6 +38,7 @@ class UserController {
                 if(!isTeamHasCaptain)
                 {
                     this.user.role = "captain";
+                    this.user.isReady = false;
                     this.io.in(this.user.room as string).emit("toggle-roles")
                 } else
                     new Error(this.socket, "Team already has a captain", 409);
@@ -51,6 +51,12 @@ class UserController {
             new Error(this.socket, "User not found", 404);
     }
 
+    toggleReadyStatus = () => {
+        if(this.user){
+            this.user.isReady = !this.user.isReady;
+            this.socket.emit("get-user-info", this.user.getUserInfo())
+        }
+    }
 
 }
 

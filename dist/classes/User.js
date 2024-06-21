@@ -5,19 +5,22 @@ class User {
         this.id = id;
         this.name = name;
         this.role = "player";
+        this.isReady = false;
         this.getUserInfo = () => ({
             id: this.id,
             name: this.name,
             room: this.room,
             team: this.team,
-            role: this.role
+            role: this.role,
+            isReady: this.isReady
         });
     }
-    joinTeam(team) { this.team = team; this.role = "player"; }
+    joinTeam(team) { this.team = team; this.role = "player"; this.isReady = false; }
     leaveRoom() {
         this.room = undefined;
         this.team = undefined;
         this.role = "player";
+        this.isReady = false;
     }
 }
 exports.default = User;

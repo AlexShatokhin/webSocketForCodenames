@@ -9,7 +9,6 @@ class CardsController {
     constructor(io) {
         this.io = io;
         this.getCards = (roomId, wordsetType) => {
-            console.log(wordsetType);
             const wordset = (0, getWordSet_1.default)(9, wordsetType);
             const room = (0, getRoomByRoomId_1.default)(roomId);
             room.cardset = wordset;

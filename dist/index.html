@@ -27,6 +27,7 @@
 
     socket.on("get-user-info", (data) => {
         userData = data;
+        console.log(userData);
     })
 
     const newRoomButton = document.querySelector(".new_room_button");
@@ -71,8 +72,9 @@
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
             <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
+            <button onclick = "socket.emit('ready-state')">Ready/Unready</button>
 
-            <button id = "startGame">Start game</button>
+            <button style = "margin-left: 50px" id = "startGame">Start game</button>
             <button onclick = "socket.emit('finish')">Finish game</button>
 
             <div class = "red-team">
@@ -179,7 +181,7 @@
         card.style.opacity = item.isClicked ? "0.5" : "1";
 
         card.onclick = () => {
-            socket.emit("card-clicked", item, userData.id);
+            socket.emit("card-clicked", item);
         }
         if(userData.role === "captain"){
             switch (item.teamName) {
@@ -203,8 +205,6 @@
             card.style.backgroundColor = 'white';
             card.style.color = 'black';
         }
-
-
         container.appendChild(card);
     });
 

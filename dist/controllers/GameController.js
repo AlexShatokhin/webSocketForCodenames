@@ -20,6 +20,7 @@ class GameController {
             const usersLimit = this.room.usersInRoom >= 4;
             const redTeamCheck = this.checkTeam(redTeam);
             const blueTeamCheck = this.checkTeam(blueTeam);
+            const allUsersReadyCheck = this.room.users.every((player) => player.isReady);
             if (true) {
                 this.room.isGameStarted = true;
                 this.io.in(this.room.id).emit("game-started");
@@ -34,7 +35,7 @@ class GameController {
                 this.io.in(this.room.id).emit("finish-game", winnerTeam);
             }
         };
-        this.clickCardHandler = (word, userId) => {
+        this.clickCardHandler = (word) => {
             var _a, _b;
             if ((_a = this.room) === null || _a === void 0 ? void 0 : _a.isGameStarted) {
                 this.cards = this.cards.map((card) => {
@@ -48,7 +49,6 @@ class GameController {
                 this.getTeamCardsCount();
                 for (let team in this.remainingWordsCount) {
                     if (team !== "neutral") {
-                        console.log(team, this.remainingWordsCount[team]);
                         if (this.remainingWordsCount[team] === 0) {
                             this.finishGame(team);
                         }

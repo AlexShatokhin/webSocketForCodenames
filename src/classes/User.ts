@@ -8,6 +8,7 @@ class User {
     public room: string | undefined;
     public team: teamType | undefined;
     public role: roleType = "player";
+    public isReady : boolean = false;
 
     constructor(public id: string,
                 public name: string = "Anonymous"){}
@@ -17,15 +18,17 @@ class User {
         name: this.name,
         room: this.room,
         team: this.team,
-        role: this.role
+        role: this.role,
+        isReady: this.isReady
     })
 
-    joinTeam(team: teamType){this.team = team; this.role = "player"}
+    joinTeam(team: teamType){this.team = team; this.role = "player"; this.isReady = false}
 
     leaveRoom(){
         this.room = undefined;
         this.team = undefined;
         this.role = "player";
+        this.isReady = false;
     }
 }
 

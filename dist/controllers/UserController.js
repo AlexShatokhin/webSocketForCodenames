@@ -35,6 +35,7 @@ class UserController {
                     const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
                     if (!isTeamHasCaptain) {
                         this.user.role = "captain";
+                        this.user.isReady = false;
                         this.io.in(this.user.room).emit("toggle-roles");
                     }
                     else
@@ -47,6 +48,12 @@ class UserController {
             }
             else
                 new Error_1.default(this.socket, "User not found", 404);
+        };
+        this.toggleReadyStatus = () => {
+            if (this.user) {
+                this.user.isReady = !this.user.isReady;
+                this.socket.emit("get-user-info", this.user.getUserInfo());
+            }
         };
     }
 }
