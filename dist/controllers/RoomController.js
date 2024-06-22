@@ -16,7 +16,7 @@ class RoomController {
             return roomsData_1.default.map((room) => ({
                 id: room.id,
                 name: room.name,
-                usersInRoom: room.id,
+                usersInRoom: room.usersInRoom,
                 cardset: null,
                 users: null
             }));

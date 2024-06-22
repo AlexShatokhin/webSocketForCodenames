@@ -20,7 +20,7 @@ class RoomController {
         return rooms.map((room : Room) => ({
             id: room.id,
             name: room.name,
-            usersInRoom: room.id,
+            usersInRoom: room.usersInRoom,
             cardset: null,
             users: null
         }))

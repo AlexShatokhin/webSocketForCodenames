@@ -39,6 +39,7 @@
 
     socket.on("get-rooms", (data) => {
         const roomsContainer = document.querySelector(".rooms");
+        console.log(data);
         if(roomsContainer){
             roomsContainer.innerHTML = "";
             data.forEach(({id, name, usersInRoom}) => {
@@ -142,10 +143,18 @@
     socket.on("leave-from-room", () => {
         document.body.innerHTML = `
             <h1>Hello world!</h1>
-            <button onclick="socket.emit('create-room')">New Room</button>
+            <button class="new_room_button">New Room</button>
             <input type="text" name="roomName" placeholder="Type room name here">
             <input type="number" name="roomPassword" placeholder="Type room password here">
-            <div class="rooms"></div>`
+            <div class="rooms"></div>`;
+
+        document.querySelector(".new_room_button")?.removeEventListener("click", () => {});        
+        const newRoomButton = document.querySelector(".new_room_button");
+        newRoomButton.onclick = () => {
+            const roomName = document.querySelector("input[name='roomName']").value;
+            const roomPassword = document.querySelector("input[name='roomPassword']").value;
+            socket.emit("create-room", roomName, roomPassword);
+        }
     })
 
     socket.on('get-cards', (words) => {
