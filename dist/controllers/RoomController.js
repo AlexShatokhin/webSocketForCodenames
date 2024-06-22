@@ -29,7 +29,7 @@ class RoomController {
             }
             else {
                 roomsData_1.default.push(newRoom);
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
         };
         this.joinRoom = (roomId, userId, password) => {
@@ -38,7 +38,7 @@ class RoomController {
             if (this.room.contains(this.user)) {
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             else {
                 if (+this.room.password !== +password) {
@@ -49,7 +49,7 @@ class RoomController {
                 this.room.joinRoom(this.user);
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             if (this.room.isGameStarted) {
                 this.socket.emit("update-cards", this.room.cardset);
