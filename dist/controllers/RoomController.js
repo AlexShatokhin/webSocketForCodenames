@@ -61,7 +61,7 @@ class RoomController {
                 this.room.leaveRoom(this.user);
                 this.socket.leave(this.room.id);
                 this.socket.emit("leave-from-room");
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             else
                 new Error_1.default(this.socket, "User or room not found", 404);
