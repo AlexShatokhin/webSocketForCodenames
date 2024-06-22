@@ -12,7 +12,15 @@ class RoomController {
     constructor(io, socket) {
         this.io = io;
         this.socket = socket;
-        this.getRooms = () => roomsData_1.default;
+        this.getRooms = () => {
+            return roomsData_1.default.map((room) => ({
+                id: room.id,
+                name: room.name,
+                usersInRoom: room.id,
+                cardset: null,
+                users: null
+            }));
+        };
         this.createRoom = (name, password) => {
             const newRoom = new Room_1.default(name, password);
             const isRoomWithThisNameExists = roomsData_1.default.some((room) => room.name === name);

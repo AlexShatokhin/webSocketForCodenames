@@ -16,7 +16,15 @@ class RoomController {
     constructor(private io : Server, 
                 private socket : Socket){}
 
-    getRooms = () => rooms;
+    getRooms = () => {
+        return rooms.map((room : Room) => ({
+            id: room.id,
+            name: room.name,
+            usersInRoom: room.id,
+            cardset: null,
+            users: null
+        }))
+    };
 
     createRoom = (name: string, password: number) =>{
         const newRoom = new Room(name, password);
