@@ -5,8 +5,8 @@ import { UserPublicInfoType } from "../types/UserPublicInfoType";
 
 class User {
 
-    public room: string | undefined;
-    public team: teamType | undefined;
+    public room: string | null = null;
+    public team: teamType | null = null;
     public role: roleType = "player";
     public isReady : boolean = false;
 
@@ -25,8 +25,8 @@ class User {
     joinTeam(team: teamType){this.team = team; this.role = "player"; this.isReady = false}
 
     leaveRoom(){
-        this.room = undefined;
-        this.team = undefined;
+        this.room = null;
+        this.team = null;
         this.role = "player";
         this.isReady = false;
     }

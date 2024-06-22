@@ -5,7 +5,7 @@ export type UserPublicInfoType = {
     id: string;
     name: string;
     isReady: boolean;
-    room: string | undefined;
-    team: teamType | undefined;
-    role: roleType | undefined;
+    room: string | null;
+    team: teamType | null;
+    role: roleType | null;
 }
