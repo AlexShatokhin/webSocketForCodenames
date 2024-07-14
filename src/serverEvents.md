@@ -1,4 +1,4 @@
----
+
 
 # Socket.io Events
 
@@ -94,4 +94,3 @@ Start the game.
 **When it works:**
 When the game starts.
 
----
