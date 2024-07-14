@@ -1,4 +1,4 @@
----
+
 
 # Socket.io Server Emits
 
@@ -170,4 +170,3 @@ When user roles are switched.
 **Return data:**
 No.
 
----
