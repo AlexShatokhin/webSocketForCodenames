@@ -26,7 +26,7 @@ class GameController {
                 this.io.in(this.room.id).emit("game-started");
             }
             else
-                new Error_1.default(this.socket, "Не все пользователи выбрали команду или команды не полные", 403);
+                new Error_1.default(this.socket, "Не все пользователи выбрали команду или команды неполные", 403);
         };
         this.finishGame = (winnerTeam) => {
             var _a;

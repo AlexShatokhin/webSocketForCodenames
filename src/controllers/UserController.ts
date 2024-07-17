@@ -3,6 +3,7 @@ import users from "../data/usersData";
 import User from "../classes/User";
 import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
+import { statusType } from "../types/statusType";
 
 class UserController {
     public user : User | undefined;
@@ -11,12 +12,16 @@ class UserController {
 
     getUsers = () => users;
 
-    newUser = (name: string, sessionID : string) => {
+    newUser = (name: string, sessionID : string, callback : (a : statusType) => void) => {
         const newUser = new User(sessionID, name);
         this.user = newUser;
         users.push(newUser);
         
-        this.socket.emit("get-user-info", newUser.getUserInfo())
+        this.socket.emit("get-user-info", newUser.getUserInfo());
+        callback({
+            statusCode: 200,
+            ok: true
+        })
     }
 
     joinTeam = (team : "red" | "blue") => {
