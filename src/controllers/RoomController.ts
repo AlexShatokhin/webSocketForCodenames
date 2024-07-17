@@ -8,6 +8,7 @@ import Error from "../classes/Error";
 
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import getUserByUserId from "../utils/user/getUserByUserId";
+import { statusType } from "../types/statusType";
 
 class RoomController {
     private room : Room | undefined;
@@ -26,18 +27,26 @@ class RoomController {
         }))
     };
 
-    createRoom = (name: string, password: number) =>{
+    createRoom = (name: string, password: number, callback: (a: statusType) => void) =>{
         const newRoom = new Room(name, password);
         const isRoomWithThisNameExists = rooms.some((room : Room) => room.name === name);
         if(isRoomWithThisNameExists){
             new Error(this.socket, "Room with this name already exists", 409);
+            callback({
+                statusCode: 409,
+                ok: false
+            })
         } else {
             rooms.push(newRoom);
             this.io.emit("get-rooms", this.getRooms());
+            callback({
+                statusCode: 200,
+                ok: true
+            })
         }
     }
 
-    joinRoom = (roomId : string, userId: string, password: number) => {
+    joinRoom = (roomId : string, userId: string, password: number, callback: (a: statusType) => void) => {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
@@ -45,9 +54,14 @@ class RoomController {
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
             this.io.emit("get-rooms", this.getRooms());
+            
         } else {
             if(+this.room.password !== +password){
                 new Error(this.socket, "Password is incorrect", 401);
+                callback({
+                    statusCode: 401,
+                    ok: false
+                })
                 return;
             }
     
@@ -57,6 +71,10 @@ class RoomController {
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
             this.io.emit("get-rooms", this.getRooms());
+            callback({
+                statusCode: 200,
+                ok: true
+            })
         }
 
         if(this.room.isGameStarted){
