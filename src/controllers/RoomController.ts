@@ -16,7 +16,15 @@ class RoomController {
     constructor(private io : Server, 
                 private socket : Socket){}
 
-    getRooms = () => rooms;
+    getRooms = () => {
+        return rooms.map((room : Room) => ({
+            id: room.id,
+            name: room.name,
+            usersInRoom: room.usersInRoom,
+            cardset: null,
+            users: null
+        }))
+    };
 
     createRoom = (name: string, password: number) =>{
         const newRoom = new Room(name, password);
@@ -25,7 +33,7 @@ class RoomController {
             new Error(this.socket, "Room with this name already exists", 409);
         } else {
             rooms.push(newRoom);
-            this.io.emit("get-rooms", rooms);
+            this.io.emit("get-rooms", this.getRooms());
         }
     }
 
@@ -36,7 +44,7 @@ class RoomController {
         if(this.room.contains(this.user)){
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
-            this.io.emit("get-rooms", rooms);
+            this.io.emit("get-rooms", this.getRooms());
         } else {
             if(+this.room.password !== +password){
                 new Error(this.socket, "Password is incorrect", 401);
@@ -48,7 +56,7 @@ class RoomController {
     
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
-            this.io.emit("get-rooms", rooms);
+            this.io.emit("get-rooms", this.getRooms());
         }
 
         if(this.room.isGameStarted){
@@ -64,7 +72,7 @@ class RoomController {
             this.socket.leave(this.room.id);
             this.socket.emit("leave-from-room");
     
-            this.io.emit("get-rooms", rooms);
+            this.io.emit("get-rooms", this.getRooms());
         } else
             new Error(this.socket, "User or room not found", 404);
     }

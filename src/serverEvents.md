@@ -1,99 +1,96 @@
 
 
----
-
 # Socket.io Events
 
-## События на стороне сервера
+## Server side events
 
 ### `create-room`
 
-**Описание:**  
-Создание новой комнаты.
+**Description:**
+Creating a new room.
 
-**Когда отрабатывает:**  
-Когда клиент инициирует создание новой комнаты.
+**When it works:**
+When a client initiates the creation of a new room.
 
-**Принимаемые данные:**  
-- `name` (string) — имя создаваемой комнаты. 
-- `password` (number) — пароль создаваемой комнаты.
+**Received data:**
+- `name` (string) — the name of the room to be created.
+- `password` (number) — password for the room being created.
 
 
 ### `join-room`
 
-**Описание:**  
-Присоединение к существующей комнате.
+**Description:**
+Attaching to an existing room.
 
-**Когда отрабатывает:**  
-Когда клиент пытается присоединиться к комнате.
+**When it works:**
+When a client tries to join a room.
 
-**Принимаемые данные:**  
-- `roomId` (string) — идентификатор комнаты, к которой клиент хочет присоединиться.
-- `userId` (string) — идентификатор пользователя.
+**Received data:**
+- `roomId` (string) — the identifier of the room the client wants to join.
+- `userId` (string) — user identifier.
 
 
 ### `leave-room`
 
-**Описание:**  
-Выход из комнаты.
+**Description:**
+Exit the room.
 
-**Когда отрабатывает:**  
-Когда клиент хочет покинуть комнату.
+**When it works:**
+When the client wants to leave the room.
 
 ### `get-cards`
 
-**Описание:**  
-Получение списка карточек.
+**Description:**
+Getting a list of cards.
 
-**Когда отрабатывает:**  
-Когда клиент запрашивает список карточек.
+**When it works:**
+When a client requests a list of cards.
 
-**Принимаемые данные:**  
-- `roomId` (строка) — идентификатор комнаты.
-- `wordSetType` (ru | en | ua) — тип словаря.
+**Received data:**
+- `roomId` (string) - room identifier.
+- `wordSetType` (ru | en | ua) — dictionary type.
 
 
 ### `new-user`
 
-**Описание:**  
-Регистрация нового пользователя.
+**Description:**
+New User Registration.
 
-**Когда отрабатывает:**  
-Когда новый пользователь регистрируется.
+**When it works:**
+When a new user registers.
 
-**Принимаемые данные:**  
-- `name` (объект) — имя нового пользователя. 
+**Received data:**
+- `name` (object) - the name of the new user.
 
 ### `join-team`
 
-**Описание:**  
-Присоединение к команде.
+**Description:**
+Joining a team.
 
-**Когда отрабатывает:**  
-Когда пользователь хочет присоединиться к команде.
+**When it works:**
+When a user wants to join a team.
 
-**Принимаемые данные:**  
-- `team` (red | blue) — тип команды.
+**Received data:**
+- `team` (red | blue) — team type.
 
 
 ### `toggle-role`
 
-**Описание:**  
-Получение и переключение роли пользователя.
+**Description:**
+Getting and switching user roles.
 
-**Когда отрабатывает:**  
-Когда пользователь изменить свою роль.
+**When it works:**
+When a user changes their role.
 
-**Принимаемые данные:**  
-- `role` (captain | player) — новая роль пользователя (опционально).
+**Received data:**
+- `role` (captain | player) - new user role (optional).
 
 
 ### `start-game`
 
-**Описание:**  
-Запуск игры.
+**Description:**
+Start the game.
 
-**Когда отрабатывает:**  
-Когда инициируется запуск игры.
+**When it works:**
+When the game starts.
 
----

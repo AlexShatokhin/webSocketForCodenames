@@ -1,175 +1,172 @@
 
 
----
-
 # Socket.io Server Emits
 
-## Эмиты на стороне сервера
+## Server side issues
 
 ### `get-rooms`
 
-**Описание:**  
-Получение списка комнат.
+**Description:**
+Getting a list of rooms.
 
-**Когда отрабатывает:**  
-Когда сервер отправляет клиенту список всех доступных комнат.
+**When it works:**
+When the server sends the client a list of all available rooms.
 
-**Возвращаемые данные:**  
-- `rooms` (массив объектов) — массив данных о комнатах. Пример:
-  ```json
-  [
-    {
-        "cardset": "[{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]"
-        "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
-        "name": "4233"
-        "users": "[{…}, {…}]"
-        "usersInRoom": "2"
-    },
-  ]
-  ```
+**Return data:**
+- `rooms` (array of objects) - an array of data about rooms. Example:
+ ```json
+ [
+ {
+ "cardset": null
+ "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
+ "name": "4233"
+ "users": null
+ "usersInRoom": "2"
+ },
+ ]
+ ```
 
 ### `send-cards`
 
-**Описание:**  
-Отправка списка карточек клиенту.
+**Description:**
+Sending a list of cards to the client.
 
-**Когда отрабатывает:**  
-Когда сервер отправляет клиенту список карточек.
+**When it works:**
+When the server sends a list of cards to the client.
 
-**Возвращаемые данные:**  
-- `cards` (массив объектов) — массив карточек. Пример:
-  ```json
-  [
-        "{word: 'БОРТ', teamName: 'blue', isClicked: false}"
-        "{word: 'ПОЧКА', teamName: 'neutral', isClicked: false}"
-        "{word: 'ГВОЗДЬ', teamName: 'neutral', isClicked: false}"
-        "{word: 'ПЕРО', teamName: 'red', isClicked: false}"
-        "{word: 'АМФИБИЯ', teamName: 'red', isClicked: false}"
-        "{word: 'БРАК', teamName: 'red', isClicked: false}"
-        "{word: 'ТАКТ', teamName: 'blue', isClicked: false}"
-        "{word: 'СОБАКА', teamName: 'blue', isClicked: false}"
-        "{word: 'КОСЯК', teamName: 'black', isClicked: false}"
-  ]
-  ```
+**Return data:**
+- `cards` (array of objects) - an array of cards. Example:
+ ```json
+ [
+ "{word: 'BOARD', teamName: 'blue', isClicked: false}"
+ "{word: 'KIDNEY', teamName: 'neutral', isClicked: false}"
+ "{word: 'NAIL', teamName: 'neutral', isClicked: false}"
+ "{word: 'FEATHER', teamName: 'red', isClicked: false}"
+ "{word: 'AMPHIBIAN', teamName: 'red', isClicked: false}"
+ "{word: 'MARRIAGE', teamName: 'red', isClicked: false}"
+ "{word: 'TACT', teamName: 'blue', isClicked: false}"
+ "{word: 'DOG', teamName: 'blue', isClicked: false}"
+ "{word: 'CAPT', teamName: 'black', isClicked: false}"
+ ]
+ ```
 
 ### `game-started`
 
-**Описание:**  
-Уведомление о начале игры.
+**Description:**
+Notification about the start of the game.
 
-**Когда отрабатывает:**  
-Когда игра успешно запущена.
+**When it works:**
+When the game is successfully launched.
 
-**Возвращаемые данные:**  
-Нет.
+**Return data:**
+No.
 
 ### `error`
 
-**Описание:**  
-Отправка сообщения об ошибке.
+**Description:**
+Sending an error message.
 
-**Когда отрабатывает:**  
-Когда происходит ошибка.
+**When it works:**
+When an error occurs.
 
-**Возвращаемые данные:**  
-- `error` (объект) — объект ошибки, содержащий сообщение и код ошибки. Примеры:
-  ```json
-  {
-    "message": "Не все пользователи выбрали команду или команды не полные",
-    "code": 403
-  }
-  ```
-  ```json
-  {
-    "message": "Password is incorrect",
-    "code": 401
-  }
-  ```
-  ```json
-  {
-    "message": "User or room not found",
-    "code": 404
-  }
-  ```
-  ```json
-  {
-    "message": "User has no team",
-    "code": 403
-  }
-  ```
-  ```json
-  {
-    "message": "Team already has a captain",
-    "code": 409
-  }
-  ```
-  ```json
-  {
-    "message": "User not found",
-    "code": 404
-  }
-  ```
+**Return data:**
+- `error` (object) - an error object containing a message and error code. Examples:
+ ```json
+ {
+ "message": "Not all users have selected a command or the commands are incomplete",
+ "code": 403
+ }
+ ```
+ ```json
+ {
+ "message": "Password is incorrect",
+ "code": 401
+ }
+ ```
+ ```json
+ {
+ "message": "User or room not found",
+ "code": 404
+ }
+ ```
+ ```json
+ {
+ "message": "User has no team",
+ "code": 403
+ }
+ ```
+ ```json
+ {
+ "message": "Team already has a captain",
+ "code": 409
+ }
+ ```
+ ```json
+ {
+ "message": "User not found",
+ "code": 404
+ }
+ ```
 
 ### `update-room`
 
-**Описание:**  
-Обновление информации о комнате.
+**Description:**
+Update room information.
 
-**Когда отрабатывает:**  
-Когда информация о комнате обновляется.
+**When it works:**
+When the room information is updated.
 
-**Возвращаемые данные:**  
-- `roomInfo` (объект) — обновленная информация о комнате. Пример:
-  ```json
-    {
-        "cardset": "[{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]"
-        "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
-        "name": "4233"
-        "users": "[{…}, {…}]"
-        "usersInRoom": "2"
-    },
-  ```
+**Return data:**
+- `roomInfo` (object) - updated information about the room. Example:
+ ```json
+ {
+ "cardset": "[{...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}, {...}]"
+ "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
+ "name": "4233"
+ "users": "[{...}, {...}]"
+ "usersInRoom": "2"
+ },
+ ```
 
 ### `leave-from-room`
 
-**Описание:**  
-Уведомление о выходе из комнаты.
+**Description:**
+Notification to leave the room.
 
-**Когда отрабатывает:**  
-Когда пользователь покидает комнату.
+**When it works:**
+When the user leaves the room.
 
-**Возвращаемые данные:**  
-Нет.
+**Return data:**
+No.
 
 ### `get-user-info`
 
-**Описание:**  
-Получение информации о пользователе.
+**Description:**
+Obtaining information about the user.
 
-**Когда отрабатывает:**  
-Когда сервер отправляет клиенту информацию о пользователе.
+**When it works:**
+When the server sends user information to the client.
 
-**Возвращаемые данные:**  
-- `userInfo` (объект) — информация о пользователе. Пример:
-  ```json
-    {
-        "id",
-        "name",
-        "room",
-        "team",
-        "role"
-    }
-  ```
+**Return data:**
+- `userInfo` (object) - information about the user. Example:
+ ```json
+ {
+ "id",
+ "name",
+ "room",
+ "team"
+ "role"
+ }
+ ```
 
 ### `toggle-roles`
 
-**Описание:**  
-Переключение ролей пользователей.
+**Description:**
+Switching user roles.
 
-**Когда отрабатывает:**  
-Когда роли пользователей переключаются.
+**When it works:**
+When user roles are switched.
 
-**Возвращаемые данные:**  
-Нет.
+**Return data:**
+No.
 
----

@@ -4,6 +4,8 @@ class User {
     constructor(id, name = "Anonymous") {
         this.id = id;
         this.name = name;
+        this.room = null;
+        this.team = null;
         this.role = "player";
         this.isReady = false;
         this.getUserInfo = () => ({
@@ -17,8 +19,8 @@ class User {
     }
     joinTeam(team) { this.team = team; this.role = "player"; this.isReady = false; }
     leaveRoom() {
-        this.room = undefined;
-        this.team = undefined;
+        this.room = null;
+        this.team = null;
         this.role = "player";
         this.isReady = false;
     }

@@ -12,7 +12,15 @@ class RoomController {
     constructor(io, socket) {
         this.io = io;
         this.socket = socket;
-        this.getRooms = () => roomsData_1.default;
+        this.getRooms = () => {
+            return roomsData_1.default.map((room) => ({
+                id: room.id,
+                name: room.name,
+                usersInRoom: room.usersInRoom,
+                cardset: null,
+                users: null
+            }));
+        };
         this.createRoom = (name, password) => {
             const newRoom = new Room_1.default(name, password);
             const isRoomWithThisNameExists = roomsData_1.default.some((room) => room.name === name);
@@ -21,7 +29,7 @@ class RoomController {
             }
             else {
                 roomsData_1.default.push(newRoom);
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
         };
         this.joinRoom = (roomId, userId, password) => {
@@ -30,7 +38,7 @@ class RoomController {
             if (this.room.contains(this.user)) {
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             else {
                 if (+this.room.password !== +password) {
@@ -41,7 +49,7 @@ class RoomController {
                 this.room.joinRoom(this.user);
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             if (this.room.isGameStarted) {
                 this.socket.emit("update-cards", this.room.cardset);
@@ -53,7 +61,7 @@ class RoomController {
                 this.room.leaveRoom(this.user);
                 this.socket.leave(this.room.id);
                 this.socket.emit("leave-from-room");
-                this.io.emit("get-rooms", roomsData_1.default);
+                this.io.emit("get-rooms", this.getRooms());
             }
             else
                 new Error_1.default(this.socket, "User or room not found", 404);
