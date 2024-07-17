@@ -20,7 +20,7 @@ class Controllers {
                 this.gameController.user = user;
                 this.socket.emit("get-user-info", user.getUserInfo());
                 if (user.room)
-                    this.userRoomController.joinRoom(user.room, user.id, 0);
+                    this.userRoomController.joinRoom(user.room, user.id, 0, () => { });
             }
             else
                 this.socket.emit("add-new-user");

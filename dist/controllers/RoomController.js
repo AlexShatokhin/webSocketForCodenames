@@ -21,20 +21,35 @@ class RoomController {
                 users: null
             }));
         };
-        this.createRoom = (name, password) => {
+        this.createRoom = (name, password, callback) => {
             const newRoom = new Room_1.default(name, password);
             const isRoomWithThisNameExists = roomsData_1.default.some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
                 new Error_1.default(this.socket, "Room with this name already exists", 409);
+                callback({
+                    statusCode: 409,
+                    ok: false
+                });
             }
             else {
                 roomsData_1.default.push(newRoom);
                 this.io.emit("get-rooms", this.getRooms());
+                callback({
+                    statusCode: 200,
+                    ok: true
+                });
             }
         };
-        this.joinRoom = (roomId, userId, password) => {
+        this.joinRoom = (roomId, userId, password, callback) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
+            if (!this.room) {
+                callback({
+                    statusCode: 404,
+                    ok: false
+                });
+                return;
+            }
             if (this.room.contains(this.user)) {
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
@@ -43,6 +58,10 @@ class RoomController {
             else {
                 if (+this.room.password !== +password) {
                     new Error_1.default(this.socket, "Password is incorrect", 401);
+                    callback({
+                        statusCode: 401,
+                        ok: false
+                    });
                     return;
                 }
                 this.user.room = this.room.id;
@@ -50,21 +69,34 @@ class RoomController {
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
                 this.io.emit("get-rooms", this.getRooms());
+                callback({
+                    statusCode: 200,
+                    ok: true
+                });
             }
             if (this.room.isGameStarted) {
                 this.socket.emit("update-cards", this.room.cardset);
             }
         };
-        this.leaveRoom = () => {
+        this.leaveRoom = (callback) => {
             if (this.user && this.room) {
                 this.user.leaveRoom();
                 this.room.leaveRoom(this.user);
                 this.socket.leave(this.room.id);
                 this.socket.emit("leave-from-room");
                 this.io.emit("get-rooms", this.getRooms());
+                callback({
+                    statusCode: 200,
+                    ok: true
+                });
             }
-            else
+            else {
                 new Error_1.default(this.socket, "User or room not found", 404);
+                callback({
+                    statusCode: 401,
+                    ok: false
+                });
+            }
         };
     }
 }

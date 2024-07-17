@@ -50,6 +50,14 @@ class RoomController {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
+        if(!this.room){
+            callback({
+                statusCode: 404,
+                ok: false
+            });
+            return;
+        }
+
         if(this.room.contains(this.user)){
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
@@ -82,7 +90,7 @@ class RoomController {
         }
     }
 
-    leaveRoom = () => {
+    leaveRoom = (callback: (a: statusType) => void) => {
         if(this.user && this.room){
             this.user.leaveRoom();
             this.room.leaveRoom(this.user);
@@ -91,8 +99,18 @@ class RoomController {
             this.socket.emit("leave-from-room");
     
             this.io.emit("get-rooms", this.getRooms());
-        } else
+            callback({
+                statusCode: 200,
+                ok: true
+            })
+        } else{
             new Error(this.socket, "User or room not found", 404);
+
+            callback({
+                statusCode: 401,
+                ok: false
+            })
+        }
     }
 }
 

@@ -36,7 +36,7 @@
     newRoomButton.onclick = () => {
         const roomName = document.querySelector("input[name='roomName']").value;
         const roomPassword = document.querySelector("input[name='roomPassword']").value;
-        socket.emit("create-room", roomName, roomPassword);
+        socket.emit("create-room", roomName, roomPassword, () => {});
     }
 
     socket.on("get-rooms", (data) => {
@@ -72,7 +72,7 @@
             </select>
 
             <button onclick = "socket.emit('get-cards', '${data.id}', 'ru')">Get card set</button>
-            <button onclick = "socket.emit('leave-room', '${data.id}', '${userData.id}')">Leave</button>
+            <button onclick = "socket.emit('leave-room', () => {})">Leave</button>
 
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
@@ -157,7 +157,7 @@
         newRoomButton.onclick = () => {
             const roomName = document.querySelector("input[name='roomName']").value;
             const roomPassword = document.querySelector("input[name='roomPassword']").value;
-            socket.emit("create-room", roomName, roomPassword);
+            socket.emit("create-room", roomName, roomPassword, () => {});
         }
     })
 
