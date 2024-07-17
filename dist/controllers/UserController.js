@@ -12,21 +12,37 @@ class UserController {
         this.io = io;
         this.socket = socket;
         this.getUsers = () => usersData_1.default;
-        this.newUser = (name, sessionID) => {
+        this.newUser = (name, sessionID, callback) => {
             const newUser = new User_1.default(sessionID, name);
             this.user = newUser;
             usersData_1.default.push(newUser);
             this.socket.emit("get-user-info", newUser.getUserInfo());
+            if (callback)
+                callback({
+                    statusCode: 200,
+                    ok: true
+                });
         };
-        this.joinTeam = (team) => {
+        this.joinTeam = (team, callback) => {
             if (this.user) {
                 this.user.joinTeam(team);
                 const userRoom = (0, getRoomByRoomId_1.default)(this.user.room);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
                 this.socket.emit("get-user-info", this.user.getUserInfo());
+                if (callback)
+                    callback({
+                        statusCode: 200,
+                        ok: true
+                    });
             }
-            else
+            else {
                 new Error_1.default(this.socket, "User not found", 404);
+                if (callback)
+                    callback({
+                        statusCode: 404,
+                        ok: false
+                    });
+            }
         };
         this.getCaptainRole = () => {
             if (this.user) {

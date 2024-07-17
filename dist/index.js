@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
     socket.on("join-room", userRoomController.joinRoom);
     socket.on("leave-room", userRoomController.leaveRoom);
     socket.on("get-cards", userCardsController.getCards);
-    socket.on("new-user", (name) => userController.newUser(name, request.sessionID));
+    socket.on("new-user", (name, callback) => userController.newUser(name, request.sessionID, callback));
     socket.on("join-team", userController.joinTeam);
     socket.on("ready-state", userController.toggleReadyStatus);
     socket.on("get-role", userController.getCaptainRole);

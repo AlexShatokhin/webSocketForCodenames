@@ -22,7 +22,9 @@
 
     socket.on("add-new-user", () => {
         const userName = prompt("Enter your name");
-        socket.emit("new-user", userName);
+        socket.emit("new-user", userName, (res) => {
+            console.log(res);
+        });
     })
 
     socket.on("get-user-info", (data) => {
@@ -47,7 +49,9 @@
             button.innerText = `${name} (${usersInRoom})`;
             button.onclick = () => {
                 const password = +prompt("Enter room password");
-                socket.emit("join-room", id, userData.id, password)
+                socket.emit("join-room", id, userData.id, password, (res) => {
+                    alert(res);
+                })
             }
             roomsContainer.appendChild(button);
         })
