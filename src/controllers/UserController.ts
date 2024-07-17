@@ -24,14 +24,23 @@ class UserController {
         })
     }
 
-    joinTeam = (team : "red" | "blue") => {
+    joinTeam = (team : "red" | "blue", callback : (a : statusType) => void) => {
         if(this.user){
             this.user.joinTeam(team);
             const userRoom = getRoomByRoomId(this.user.room as string);
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
-            this.socket.emit("get-user-info", this.user.getUserInfo())
-        } else
+            this.socket.emit("get-user-info", this.user.getUserInfo());
+            callback({
+                statusCode: 200,
+                ok: true
+            })
+        } else {
             new Error(this.socket, "User not found", 404);
+            callback({
+                statusCode: 404,
+                ok: false
+            })
+        }
 
     }
 
