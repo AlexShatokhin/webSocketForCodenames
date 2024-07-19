@@ -43,6 +43,9 @@ class RoomController {
         this.joinRoom = (roomId, userId, password, callback) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
+            console.log("123");
+            console.log(callback);
+            console.log(typeof callback);
             if (!this.room) {
                 callback({
                     statusCode: 404,

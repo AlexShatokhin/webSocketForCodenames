@@ -50,6 +50,10 @@ class RoomController {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
+        console.log("123");
+        console.log(callback);
+        console.log(typeof callback);
+
         if(!this.room){
             callback({
                 statusCode: 404,
