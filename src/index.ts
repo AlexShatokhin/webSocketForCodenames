@@ -6,6 +6,7 @@ import { Server, Socket } from "socket.io";
 import { createServer } from "http";
 
 import Controllers from "./controllers/Controllers";
+import errorBoundary from "./utils/errorBounadry";
 
 const app : Express = express();
 const server = createServer(app);
@@ -36,20 +37,42 @@ io.on('connection', (socket : Socket) => {
 
 	socket.emit("get-rooms", userRoomController.getRooms());
 
-	socket.on("create-room", userRoomController.createRoom);
-	socket.on("join-room", userRoomController.joinRoom);
-	socket.on("leave-room", userRoomController.leaveRoom);
+	socket.on("create-room", 
+		(...args) => errorBoundary(userRoomController.createRoom, args)
+	);
 
-	socket.on("get-cards", userCardsController.getCards);
+	socket.on("join-room", 
+		(...args) => errorBoundary(userRoomController.joinRoom, args)
+	);
+	socket.on("leave-room", 
+		(...args) => errorBoundary(userRoomController.leaveRoom, args)
+	);
 
-	socket.on("new-user", (name, callback) => userController.newUser(name, request.sessionID, callback));
-	socket.on("join-team", userController.joinTeam);
-	socket.on("ready-state", userController.toggleReadyStatus)
-	socket.on("get-role", userController.getCaptainRole);
+	socket.on("get-cards", 
+		(...args) => errorBoundary(userCardsController.getCards, args)
+	);
+	socket.on("new-user", 
+		(name, callback) => errorBoundary(userController.newUser, [name, request.sessionID, callback])
+	);
+	socket.on("join-team", 
+		(...args) => errorBoundary(userController.joinTeam, args)
+	);
+	socket.on("ready-state", 
+		(...args) => errorBoundary(userController.toggleReadyStatus, args)
+	);
+	socket.on("get-role", 
+		(...args) => errorBoundary(userController.getCaptainRole, args)
+	);
 
-	socket.on("start-game", gameController.startGame);
-	socket.on("finish", gameController.finishGame)
-	socket.on("card-clicked", gameController.clickCardHandler)
+	socket.on("start-game", 
+		(...args) => errorBoundary(gameController.startGame, args)
+	);
+	socket.on("finish", 
+		(...args) => errorBoundary(gameController.finishGame, args)
+	);
+	socket.on("card-clicked", 
+		(...args) => errorBoundary(gameController.clickCardHandler, args)
+	);
 
 	socket.on("disconnect", () => {
 		socket.disconnect();

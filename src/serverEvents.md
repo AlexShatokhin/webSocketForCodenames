@@ -15,6 +15,7 @@ When a client initiates the creation of a new room.
 **Received data:**
 - `name` (string) — the name of the room to be created.
 - `password` (number) — password for the room being created.
+- `callback` (function) - function to return the method status
 
 
 ### `join-room`
@@ -28,9 +29,14 @@ When a client tries to join a room.
 **Received data:**
 - `roomId` (string) — the identifier of the room the client wants to join.
 - `userId` (string) — user identifier.
+- `password` (number) - room password
+- `callback` (function) - function to return the method status
 
 
 ### `leave-room`
+
+**Received data:**
+- `callback` (function) - function to return the method status
 
 **Description:**
 Exit the room.
