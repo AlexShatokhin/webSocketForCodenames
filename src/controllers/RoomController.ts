@@ -50,7 +50,7 @@ class RoomController {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
-        console.log("123");
+        console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password}`);
         console.log(callback);
         console.log(typeof callback);
 

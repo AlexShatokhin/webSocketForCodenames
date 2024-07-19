@@ -43,7 +43,7 @@ class RoomController {
         this.joinRoom = (roomId, userId, password, callback) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
-            console.log("123");
+            console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password}`);
             console.log(callback);
             console.log(typeof callback);
             if (!this.room) {
