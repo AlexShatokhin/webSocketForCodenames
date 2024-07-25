@@ -107,6 +107,12 @@ When an error occurs.
  "code": 404
  }
  ```
+  ```json
+ {
+ "message": "Room session ended",
+ "code": 408
+ }
+ ```
 
 ### `update-room`
 

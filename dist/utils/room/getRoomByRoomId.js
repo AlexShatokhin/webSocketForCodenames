@@ -1,10 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const roomsData_1 = __importDefault(require("../../data/roomsData"));
+const roomsData_1 = require("../../data/roomsData");
 exports.default = (roomId) => {
-    const roomIndex = roomsData_1.default.map(room => room.id).indexOf(roomId);
-    return roomsData_1.default[roomIndex];
+    const rooms = (0, roomsData_1.getRooms)();
+    const roomIndex = rooms.map(room => room.id).indexOf(roomId);
+    return rooms[roomIndex];
 };

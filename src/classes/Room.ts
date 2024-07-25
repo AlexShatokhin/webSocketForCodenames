@@ -12,13 +12,15 @@ class Room {
     public users : User[] = [];
     public usersInRoom: number = 0;
     public isGameStarted : boolean = false;
+    public roomLifeCycle : NodeJS.Timeout;
 
 
-    constructor(name: string = "new", password: number, wordset : Word[]=[]){
+    constructor(name: string = "new", password: number, deleteCallback : () => void, wordset : Word[]=[]){
         this.id = uuidv4();
         this.name = name;
         this.password = password;
         this.cardset = wordset;
+        this.roomLifeCycle = setTimeout(deleteCallback, 3_600_000) // 1 hour
     }
 
     getRoomInfo = () => ({
@@ -29,9 +31,7 @@ class Room {
         cardset: this.cardset
     })
 
-    getTeamInRoom = (team: teamType) => {
-        return this.users.filter(user => user.team === team);
-    }
+    getTeamInRoom = (team: teamType) => this.users.filter(user => user.team === team);
 
     joinRoom(user : User){
         this.users.push(user);
@@ -43,9 +43,9 @@ class Room {
         this.usersInRoom--;
     }
 
-    contains(user: User){
-        return this.users.some((userInRoom : User) => userInRoom.id === user.id)
-    }
+    contains = (user: User) => this.users.some((userInRoom : User) => userInRoom.id === user.id)
+
+    updateRoomLifeCycle = () => this.roomLifeCycle.refresh();
 }
 
 export default Room
