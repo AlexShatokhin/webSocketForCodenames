@@ -5,8 +5,7 @@ import UserController from "./UserController";
 import GameController from "./GameController";
 import { Request } from "express";
 import getUserByUserId from "../utils/user/getUserByUserId";
-import User from "../classes/User";
-import Room from "../classes/Room";
+
 
 class Controllers {
     public userRoomController;

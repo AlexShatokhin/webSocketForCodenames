@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const roomsData_1 = __importDefault(require("../data/roomsData"));
+const roomsData_1 = require("../data/roomsData");
+const roomsData_2 = require("../data/roomsData");
 const Room_1 = __importDefault(require("../classes/Room"));
 const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
@@ -13,7 +14,7 @@ class RoomController {
         this.io = io;
         this.socket = socket;
         this.getRooms = () => {
-            return roomsData_1.default.map((room) => ({
+            return (0, roomsData_1.getRooms)().map((room) => ({
                 id: room.id,
                 name: room.name,
                 usersInRoom: room.usersInRoom,
@@ -22,8 +23,8 @@ class RoomController {
             }));
         };
         this.createRoom = (name, password, callback) => {
-            const newRoom = new Room_1.default(name, password);
-            const isRoomWithThisNameExists = roomsData_1.default.some((room) => room.name === name);
+            const newRoom = new Room_1.default(name, password, this.deleteRoom);
+            const isRoomWithThisNameExists = (0, roomsData_1.getRooms)().some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
                 new Error_1.default(this.socket, "Room with this name already exists", 409);
                 callback({
@@ -32,7 +33,8 @@ class RoomController {
                 });
             }
             else {
-                roomsData_1.default.push(newRoom);
+                const updatedRooms = [...(0, roomsData_1.getRooms)(), newRoom];
+                (0, roomsData_2.setRooms)(updatedRooms);
                 this.io.emit("get-rooms", this.getRooms());
                 callback({
                     statusCode: 200,
@@ -43,9 +45,11 @@ class RoomController {
         this.joinRoom = (roomId, userId, password, callback) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
-            console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password}`);
+            console.log("____joinRoom logs start____");
+            console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password})`);
             console.log(callback);
             console.log(typeof callback);
+            console.log("____joinRoom logs end____");
             if (!this.room) {
                 callback({
                     statusCode: 404,
@@ -72,6 +76,7 @@ class RoomController {
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
                 this.io.emit("get-rooms", this.getRooms());
+                this.room.updateRoomLifeCycle();
                 callback({
                     statusCode: 200,
                     ok: true
@@ -99,6 +104,20 @@ class RoomController {
                     statusCode: 401,
                     ok: false
                 });
+            }
+        };
+        this.deleteRoom = () => {
+            console.log("DELETE!");
+            if (this.room) {
+                const currentRoom = this.room;
+                this.room.users.forEach((user) => {
+                    user.leaveRoom();
+                    this.socket.leave(currentRoom.id);
+                    this.socket.emit("leave-from-room");
+                });
+                (0, roomsData_2.setRooms)((0, roomsData_1.getRooms)().filter((room) => room.id !== currentRoom.id));
+                this.io.emit("get-rooms", this.getRooms());
+                new Error_1.default(this.socket, "Room session ended", 408);
             }
         };
     }

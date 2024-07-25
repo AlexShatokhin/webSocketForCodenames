@@ -32,6 +32,7 @@ class GameController {
         if(true){
             this.room.isGameStarted = true;
             this.io.in(this.room.id).emit("game-started");
+            this.room.updateRoomLifeCycle();
         }
         else 
             new Error(this.socket, "Не все пользователи выбрали команду или команды неполные", 403);

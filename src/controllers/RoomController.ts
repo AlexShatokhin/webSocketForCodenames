@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 
-import rooms from "../data/roomsData";
+import { getRooms } from "../data/roomsData";
+import { setRooms } from "../data/roomsData";
 
 import Room from "../classes/Room";
 import User from "../classes/User";
@@ -18,7 +19,7 @@ class RoomController {
                 private socket : Socket){}
 
     getRooms = () => {
-        return rooms.map((room : Room) => ({
+        return getRooms().map((room : Room) => ({
             id: room.id,
             name: room.name,
             usersInRoom: room.usersInRoom,
@@ -28,8 +29,8 @@ class RoomController {
     };
 
     createRoom = (name: string, password: number, callback: (a: statusType) => void) =>{
-        const newRoom = new Room(name, password);
-        const isRoomWithThisNameExists = rooms.some((room : Room) => room.name === name);
+        const newRoom = new Room(name, password, this.deleteRoom);
+        const isRoomWithThisNameExists = getRooms().some((room : Room) => room.name === name);
         if(isRoomWithThisNameExists){
             new Error(this.socket, "Room with this name already exists", 409);
             callback({
@@ -37,7 +38,8 @@ class RoomController {
                 ok: false
             })
         } else {
-            rooms.push(newRoom);
+            const updatedRooms = [...getRooms(), newRoom];
+            setRooms(updatedRooms);
             this.io.emit("get-rooms", this.getRooms());
             callback({
                 statusCode: 200,
@@ -50,9 +52,11 @@ class RoomController {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
-        console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password}`);
+        console.log("____joinRoom logs start____");
+        console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password})`);
         console.log(callback);
         console.log(typeof callback);
+        console.log("____joinRoom logs end____");
 
         if(!this.room){
             callback({
@@ -83,6 +87,7 @@ class RoomController {
             this.socket.join(this.room.id);
             this.socket.emit("update-room", this.room.getRoomInfo());
             this.io.emit("get-rooms", this.getRooms());
+            this.room.updateRoomLifeCycle();
             callback({
                 statusCode: 200,
                 ok: true
@@ -114,6 +119,22 @@ class RoomController {
                 statusCode: 401,
                 ok: false
             })
+        }
+    }
+
+    deleteRoom = () => {
+        console.log("DELETE!")
+        if(this.room){
+            const currentRoom = this.room;
+            this.room.users.forEach((user : User) => {
+                user.leaveRoom();
+                this.socket.leave(currentRoom.id);
+                this.socket.emit("leave-from-room");
+            });
+            setRooms(getRooms().filter((room : Room) => room.id !== currentRoom.id));
+            this.io.emit("get-rooms", this.getRooms());
+            new Error(this.socket, "Room session ended", 408);
+
         }
     }
 }

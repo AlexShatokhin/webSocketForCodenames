@@ -1,4 +1,5 @@
 import Room from "../classes/Room";
 
 let rooms :Room[] = [];
-export default rooms;
+export const getRooms = () => rooms;
+export const setRooms = (newRooms : Room[]) => rooms = newRooms;
