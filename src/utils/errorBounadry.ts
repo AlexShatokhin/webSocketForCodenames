@@ -10,6 +10,11 @@ const errorBoundary = (callback : (...args : any) => void, args : any[]) => {
             Type: ${error.name}
             Message: ${error.message}
         `);
+        if(args[args.length - 1] instanceof Function)
+            args[args.length - 1]({
+                statusCode: 500,
+                ok: false
+            });
     }
 }
 
