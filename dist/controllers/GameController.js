@@ -55,8 +55,8 @@ class GameController {
                         }
                     }
                 }
-                if (this.room.isGameStarted)
-                    this.io.in((_b = this.room) === null || _b === void 0 ? void 0 : _b.id).emit("update-cards", this.cards, this.remainingWordsCount);
+                this.room.cardset = this.cards;
+                this.io.in((_b = this.room) === null || _b === void 0 ? void 0 : _b.id).emit("update-room", this.room.getRoomInfo());
             }
             else
                 new Error_1.default(this.socket, "Room not found", 404);
