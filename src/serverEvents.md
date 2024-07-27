@@ -100,3 +100,13 @@ Start the game.
 **When it works:**
 When the game starts.
 
+
+### `card-clicked`
+**Description:**
+Updating game cards.
+
+**When it works:**
+When card clicked
+
+**Received data:**
+- `card` (cardItem) — card item. ("{word: string, teamName: string, isClicked: boolean}")

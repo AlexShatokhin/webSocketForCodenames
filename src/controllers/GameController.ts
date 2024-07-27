@@ -66,8 +66,8 @@ class GameController {
                 }
             }
             
-            if(this.room.isGameStarted)
-                this.io.in(this.room?.id as string).emit("update-cards", this.cards, this.remainingWordsCount)
+            this.room.cardset = this.cards;
+            this.io.in(this.room?.id as string).emit("update-room", this.room.getRoomInfo())
     
         } else new Error(this.socket, "Room not found", 404)
     }
