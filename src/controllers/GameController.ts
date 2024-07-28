@@ -69,7 +69,7 @@ class GameController {
             this.room.cardset = this.cards;
             this.io.in(this.room?.id as string).emit("update-room", this.room.getRoomInfo())
     
-        } else new Error(this.socket, "Room not found", 404)
+        } else new Error(this.socket, "Game was ended", 409)
     }
 
     getTeamCardsCount = () => {

@@ -59,7 +59,7 @@ class GameController {
                 this.io.in((_b = this.room) === null || _b === void 0 ? void 0 : _b.id).emit("update-room", this.room.getRoomInfo());
             }
             else
-                new Error_1.default(this.socket, "Room not found", 404);
+                new Error_1.default(this.socket, "Game was ended", 409);
         };
         this.getTeamCardsCount = () => {
             this.remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
