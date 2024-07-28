@@ -95,7 +95,7 @@ class RoomController {
         }
 
         if(this.room.isGameStarted){
-            this.socket.emit("update-cards", this.room.cardset)
+            this.socket.emit("update-room", this.room.getRoomInfo())
         }
     }
 

@@ -28,6 +28,7 @@ class Room {
         name: this.name,
         users: this.users,
         usersInRoom: this.usersInRoom,
+        isGameStarted: this.isGameStarted,
         cardset: this.cardset
     })
 

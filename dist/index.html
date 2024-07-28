@@ -165,11 +165,6 @@
     socket.on('get-cards', (words) => {
         cards = words;
     })
-
-    socket.on("update-cards", (words) => {
-        createCardsFromData(words);
-    })
-
     socket.on("finish-game", (team) => {
         alert("Game over!\nWinner team: " + team);
         document.querySelector(".grid")?.remove();
