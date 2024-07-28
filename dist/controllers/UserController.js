@@ -17,6 +17,7 @@ class UserController {
             this.user = newUser;
             usersData_1.default.push(newUser);
             this.socket.emit("get-user-info", newUser.getUserInfo());
+            this.socket.join("main");
             if (callback)
                 callback({
                     statusCode: 200,

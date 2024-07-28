@@ -28,6 +28,7 @@ class Controllers {
             this.userRoomController.user = user;
             this.userController.user = user;
             this.gameController.user = user;
+            this.socket.join("main");
             this.socket.emit("get-user-info", user.getUserInfo());
     
             if(user.room)

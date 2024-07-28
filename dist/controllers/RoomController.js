@@ -35,7 +35,7 @@ class RoomController {
             else {
                 const updatedRooms = [...(0, roomsData_1.getRooms)(), newRoom];
                 (0, roomsData_2.setRooms)(updatedRooms);
-                this.io.emit("get-rooms", this.getRooms());
+                this.io.in("main").emit("get-rooms", this.getRooms());
                 callback({
                     statusCode: 200,
                     ok: true
@@ -58,9 +58,10 @@ class RoomController {
                 return;
             }
             if (this.room.contains(this.user)) {
+                this.socket.leave("main");
                 this.socket.join(this.room.id);
                 this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", this.getRooms());
+                this.io.in("main").emit("get-rooms", this.getRooms());
             }
             else {
                 if (+this.room.password !== +password) {
@@ -73,9 +74,10 @@ class RoomController {
                 }
                 this.user.room = this.room.id;
                 this.room.joinRoom(this.user);
+                this.socket.leave("main");
                 this.socket.join(this.room.id);
-                this.socket.emit("update-room", this.room.getRoomInfo());
-                this.io.emit("get-rooms", this.getRooms());
+                this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
+                this.io.in("main").emit("get-rooms", this.getRooms());
                 this.room.updateRoomLifeCycle();
                 callback({
                     statusCode: 200,
@@ -91,8 +93,9 @@ class RoomController {
                 this.user.leaveRoom();
                 this.room.leaveRoom(this.user);
                 this.socket.leave(this.room.id);
+                this.socket.join("main");
                 this.socket.emit("leave-from-room");
-                this.io.emit("get-rooms", this.getRooms());
+                this.io.in("main").emit("get-rooms", this.getRooms());
                 callback({
                     statusCode: 200,
                     ok: true
@@ -113,10 +116,11 @@ class RoomController {
                 this.room.users.forEach((user) => {
                     user.leaveRoom();
                     this.socket.leave(currentRoom.id);
+                    this.socket.join("main");
                     this.socket.emit("leave-from-room");
                 });
                 (0, roomsData_2.setRooms)((0, roomsData_1.getRooms)().filter((room) => room.id !== currentRoom.id));
-                this.io.emit("get-rooms", this.getRooms());
+                this.io.in("main").emit("get-rooms", this.getRooms());
                 new Error_1.default(this.socket, "Room session ended", 408);
             }
         };
