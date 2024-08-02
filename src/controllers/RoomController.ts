@@ -120,6 +120,7 @@ class RoomController {
             this.socket.join("main");
             this.socket.emit("leave-from-room");
     
+            this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo())
             this.io.in("main").emit("get-rooms", this.getRooms());
             callback({
                 statusCode: 200,
