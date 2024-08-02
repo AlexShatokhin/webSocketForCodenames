@@ -51,8 +51,17 @@ class RoomController {
             console.log(typeof callback);
             console.log("____joinRoom logs end____");
             if (!this.room) {
+                new Error_1.default(this.socket, "Room not found", 404);
                 callback({
                     statusCode: 404,
+                    ok: false
+                });
+                return;
+            }
+            if (this.room.usersInRoom >= 20) {
+                new Error_1.default(this.socket, "Room is full", 403);
+                callback({
+                    statusCode: 403,
                     ok: false
                 });
                 return;

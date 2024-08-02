@@ -70,7 +70,7 @@ class GameController {
         };
     }
     checkTeam(team) {
-        return team.length >= 2 && team.some(user => user.role === "captain");
+        return team.length >= 2 && team.length <= 10 && team.some(user => user.role === "captain");
     }
 }
 exports.default = GameController;
