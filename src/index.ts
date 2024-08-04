@@ -60,7 +60,7 @@ io.on('connection', (socket : Socket) => {
 	socket.on("ready-state", 
 		(...args) => errorBoundary(userController.toggleReadyStatus, args)
 	);
-	socket.on("get-role", 
+	socket.on("toggle-role", 
 		(...args) => errorBoundary(userController.getCaptainRole, args)
 	);
 

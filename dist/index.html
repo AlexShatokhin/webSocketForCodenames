@@ -76,7 +76,7 @@
 
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
-            <button onclick = "socket.emit('get-role', 'captain')">Be a captain</button>
+            <button onclick = "socket.emit('toggle-role', 'captain')">Be a captain</button>
             <button onclick = "socket.emit('ready-state')">Ready/Unready</button>
 
             <button style = "margin-left: 50px" id = "startGame">Start game</button>

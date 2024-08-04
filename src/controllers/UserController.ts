@@ -4,6 +4,7 @@ import User from "../classes/User";
 import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { statusType } from "../types/statusType";
+import { roleType } from "../types/roleType";
 
 class UserController {
     public user : User | undefined;
@@ -48,14 +49,14 @@ class UserController {
 
     }
 
-    getCaptainRole = () => {
+    getCaptainRole = (role : roleType = "player") => {
         if(this.user){
             const userRoom = getRoomByRoomId(this.user.room as string);
             if(this.user.team){
                 const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
                 if(!isTeamHasCaptain)
                 {
-                    this.user.role = "captain";
+                    this.user.role = role;
                     this.user.isReady = false;
                     this.io.in(this.user.room as string).emit("toggle-roles")
                 } else
