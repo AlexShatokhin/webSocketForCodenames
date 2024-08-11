@@ -50,13 +50,14 @@ class UserController {
                 const userRoom = (0, getRoomByRoomId_1.default)(this.user.room);
                 if (this.user.team) {
                     const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
-                    if (!isTeamHasCaptain) {
-                        this.user.role = role;
-                        this.user.isReady = false;
-                        this.io.in(this.user.room).emit("toggle-roles");
-                    }
-                    else
+                    console.log(role);
+                    if (isTeamHasCaptain && role === "captain") {
                         new Error_1.default(this.socket, "Team already has a captain", 409);
+                        return;
+                    }
+                    this.user.role = role;
+                    this.user.isReady = false;
+                    this.io.in(this.user.room).emit("toggle-roles");
                 }
                 else
                     new Error_1.default(this.socket, "User has no team", 403);
