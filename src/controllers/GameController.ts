@@ -5,6 +5,9 @@ import Error from "../classes/Error";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { Word } from "../types/Word";
+import { wordSetType } from "../types/wordSetType";
+import getWordSet from "../utils/words/getWordSet";
+import { teamType } from "../types/teamType";
 
 class GameController {
     public user : User | undefined;
@@ -15,11 +18,16 @@ class GameController {
     constructor(private io : Server,
                 private socket : Socket){}
 
-    startGame = (roomId : string, words : string) => {
-        this.room = getRoomByRoomId(roomId);
-        this.room.cardset = JSON.parse(words);
 
-        this.cards = JSON.parse(words);
+    getCards = (room : Room) => {
+        const wordset = getWordSet(9, room.roomLanguage);
+        room.cardset = wordset;
+    }
+
+    startGame = (roomId : string) => {
+        this.room = getRoomByRoomId(roomId);
+        this.room.cardset = getWordSet(9, this.room.roomLanguage);
+        this.cards = this.room.cardset;
 
         const redTeam = this.room.getTeamInRoom("red");
         const blueTeam = this.room.getTeamInRoom("blue");
@@ -31,7 +39,8 @@ class GameController {
 
         if(true){
             this.room.isGameStarted = true;
-            this.io.in(this.room.id).emit("game-started");
+            this.io.in(this.room.id).emit("game-started")
+            this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
             this.room.updateRoomLifeCycle();
         }
         else 
@@ -44,10 +53,9 @@ class GameController {
             this.room.isGameStarted = false;
             this.io.in(this.room.id).emit("finish-game", winnerTeam);
         }
-
     }
 
-    clickCardHandler = (word: Word) => {
+    clickCardHandler = (word: Word, senderTeam : teamType) => {
         if(this.room?.isGameStarted){
             this.cards = this.cards.map((card : Word) => {
                 if(card.word === word.word){
@@ -61,7 +69,10 @@ class GameController {
             for(let team in this.remainingWordsCount){
                 if(team !== "neutral"){
                     if(this.remainingWordsCount[team] === 0){
-                        this.finishGame(team);
+                        if(team === "black") 
+                            this.finishGame(senderTeam === "red" ? "blue" : "red")
+                        else
+                            this.finishGame(team);
                     }
                 }
             }

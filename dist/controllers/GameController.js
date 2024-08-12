@@ -5,16 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
+const getWordSet_1 = __importDefault(require("../utils/words/getWordSet"));
 class GameController {
     constructor(io, socket) {
         this.io = io;
         this.socket = socket;
         this.cards = [];
         this.remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
-        this.startGame = (roomId, words) => {
+        this.getCards = (room) => {
+            const wordset = (0, getWordSet_1.default)(9, room.roomLanguage);
+            room.cardset = wordset;
+        };
+        this.startGame = (roomId) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
-            this.room.cardset = JSON.parse(words);
-            this.cards = JSON.parse(words);
+            this.room.cardset = (0, getWordSet_1.default)(9, this.room.roomLanguage);
+            this.cards = this.room.cardset;
             const redTeam = this.room.getTeamInRoom("red");
             const blueTeam = this.room.getTeamInRoom("blue");
             const usersLimit = this.room.usersInRoom >= 4;
@@ -24,6 +29,7 @@ class GameController {
             if (true) {
                 this.room.isGameStarted = true;
                 this.io.in(this.room.id).emit("game-started");
+                this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
                 this.room.updateRoomLifeCycle();
             }
             else
@@ -36,7 +42,7 @@ class GameController {
                 this.io.in(this.room.id).emit("finish-game", winnerTeam);
             }
         };
-        this.clickCardHandler = (word) => {
+        this.clickCardHandler = (word, senderTeam) => {
             var _a, _b;
             if ((_a = this.room) === null || _a === void 0 ? void 0 : _a.isGameStarted) {
                 this.cards = this.cards.map((card) => {
@@ -51,7 +57,10 @@ class GameController {
                 for (let team in this.remainingWordsCount) {
                     if (team !== "neutral") {
                         if (this.remainingWordsCount[team] === 0) {
-                            this.finishGame(team);
+                            if (team === "black")
+                                this.finishGame(senderTeam === "red" ? "blue" : "red");
+                            else
+                                this.finishGame(team);
                         }
                     }
                 }
