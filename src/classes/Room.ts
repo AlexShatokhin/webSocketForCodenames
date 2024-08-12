@@ -1,6 +1,7 @@
 import User from "./User";
 import { teamType } from "../types/teamType";
 import { Word } from "../types/Word";
+import { wordSetType } from "../types/wordSetType";
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -13,13 +14,15 @@ class Room {
     public usersInRoom: number = 0;
     public isGameStarted : boolean = false;
     public roomLifeCycle : NodeJS.Timeout;
+    public roomLanguage : wordSetType = "en";
 
 
-    constructor(name: string = "new", password: number, deleteCallback : () => void, wordset : Word[]=[]){
+    constructor(name: string = "new", password: number, deleteCallback : () => void, roomLanguage : wordSetType = "en", wordset : Word[]=[]){
         this.id = uuidv4();
         this.name = name;
         this.password = password;
         this.cardset = wordset;
+        this.roomLanguage = roomLanguage;
         this.roomLifeCycle = setTimeout(deleteCallback, 3_600_000) // 1 hour
     }
 
