@@ -2,10 +2,8 @@ import { Server, Socket } from "socket.io";
 import Room from "../classes/Room";
 import User from "../classes/User";
 import Error from "../classes/Error";
-import getUserByUserId from "../utils/user/getUserByUserId";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { Word } from "../types/Word";
-import { wordSetType } from "../types/wordSetType";
 import getWordSet from "../utils/words/getWordSet";
 import { teamType } from "../types/teamType";
 
@@ -66,6 +64,7 @@ class GameController {
                 return card;
             })
             this.getTeamCardsCount();
+            console.log(senderTeam);
             for(let team in this.remainingWordsCount){
                 if(team !== "neutral"){
                     if(this.remainingWordsCount[team] === 0){

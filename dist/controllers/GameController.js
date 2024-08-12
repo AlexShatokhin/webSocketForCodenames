@@ -54,6 +54,7 @@ class GameController {
                     return card;
                 });
                 this.getTeamCardsCount();
+                console.log(senderTeam);
                 for (let team in this.remainingWordsCount) {
                     if (team !== "neutral") {
                         if (this.remainingWordsCount[team] === 0) {

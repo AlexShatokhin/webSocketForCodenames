@@ -29,13 +29,12 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     const request = socket.request;
     const controllers = new Controllers_1.default(io, socket);
-    const { userController, userCardsController, userRoomController, gameController } = controllers;
+    const { userController, userRoomController, gameController } = controllers;
     controllers.checkUserSession(request);
     socket.emit("get-rooms", userRoomController.getRooms());
     socket.on("create-room", (...args) => (0, errorBounadry_1.default)(userRoomController.createRoom, args));
     socket.on("join-room", (...args) => (0, errorBounadry_1.default)(userRoomController.joinRoom, args));
     socket.on("leave-room", (...args) => (0, errorBounadry_1.default)(userRoomController.leaveRoom, args));
-    socket.on("get-cards", (...args) => (0, errorBounadry_1.default)(userCardsController.getCards, args));
     socket.on("new-user", (name, callback) => (0, errorBounadry_1.default)(userController.newUser, [name, request.sessionID, callback]));
     socket.on("join-team", (...args) => (0, errorBounadry_1.default)(userController.joinTeam, args));
     socket.on("ready-state", (...args) => (0, errorBounadry_1.default)(userController.toggleReadyStatus, args));

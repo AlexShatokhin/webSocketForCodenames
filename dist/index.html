@@ -65,13 +65,7 @@
             <h1 align = "center">Room #${data.name}#</h1>
 
 
-            <select onchange="getType(this)" id = "cardset" name = "cardset">
-                <option value = "ru">Russian</option>
-                <option value = "en">English</option>
-                <option value = "ua">Ukranian</option>
-            </select>
 
-            <button onclick = "socket.emit('get-cards', '${data.id}', 'ru')">Get card set</button>
             <button onclick = "socket.emit('leave-room', () => {})">Leave</button>
 
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
@@ -190,7 +184,7 @@
         card.style.opacity = item.isClicked ? "0.5" : "1";
 
         card.onclick = () => {
-            socket.emit("card-clicked", item);
+            socket.emit("card-clicked", item, userData.team);
         }
         if(userData.role === "captain"){
             switch (item.teamName) {

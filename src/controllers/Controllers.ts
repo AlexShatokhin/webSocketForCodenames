@@ -1,6 +1,5 @@
 import { Server, Socket } from "socket.io";
 import RoomController from "./RoomController";
-import CardsController from "./CardsController";
 import UserController from "./UserController";
 import GameController from "./GameController";
 import { Request } from "express";
@@ -9,7 +8,6 @@ import getUserByUserId from "../utils/user/getUserByUserId";
 
 class Controllers {
     public userRoomController;
-    public userCardsController;
     public userController;
     public gameController;
 
@@ -17,7 +15,6 @@ class Controllers {
             private socket: Socket){
 
         this.userRoomController = new RoomController(io, socket);
-        this.userCardsController = new CardsController(io);
         this.userController = new UserController(io, socket);
         this.gameController = new GameController(io, socket);
     }

@@ -32,7 +32,7 @@ io.on('connection', (socket : Socket) => {
 	const request = socket.request as Request;
 
 	const controllers = new Controllers(io, socket);
-	const {userController, userCardsController, userRoomController, gameController} = controllers
+	const {userController, userRoomController, gameController} = controllers
 	controllers.checkUserSession(request);
 
 	socket.emit("get-rooms", userRoomController.getRooms());
@@ -48,9 +48,6 @@ io.on('connection', (socket : Socket) => {
 		(...args) => errorBoundary(userRoomController.leaveRoom, args)
 	);
 
-	socket.on("get-cards", 
-		(...args) => errorBoundary(userCardsController.getCards, args)
-	);
 	socket.on("new-user", 
 		(name, callback) => errorBoundary(userController.newUser, [name, request.sessionID, callback])
 	);
