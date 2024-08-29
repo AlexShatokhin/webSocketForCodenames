@@ -26,7 +26,7 @@ When the server sends the client a list of all available rooms.
  ]
  ```
 
-### `send-cards`
+<!-- ### `send-cards`
 
 **Description:**
 Sending a list of cards to the client.
@@ -48,7 +48,7 @@ When the server sends a list of cards to the client.
  "{word: 'DOG', teamName: 'blue', isClicked: false}"
  "{word: 'CAPT', teamName: 'black', isClicked: false}"
  ]
- ```
+ ``` -->
 
 ### `game-started`
 

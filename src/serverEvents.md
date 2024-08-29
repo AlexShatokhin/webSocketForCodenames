@@ -44,7 +44,7 @@ Exit the room.
 **When it works:**
 When the client wants to leave the room.
 
-### `get-cards`
+<!-- ### `get-cards`
 
 **Description:**
 Getting a list of cards.
@@ -54,7 +54,7 @@ When a client requests a list of cards.
 
 **Received data:**
 - `roomId` (string) - room identifier.
-- `wordSetType` (ru | en | ua) — dictionary type.
+- `wordSetType` (ru | en | ua) — dictionary type. -->
 
 
 ### `new-user`
