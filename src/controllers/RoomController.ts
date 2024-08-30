@@ -10,6 +10,7 @@ import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import { statusType } from "../types/statusType";
+import { wordSetType } from "../types/wordSetType";
 
 class RoomController {
     private room : Room | undefined;
@@ -28,8 +29,11 @@ class RoomController {
         }))
     };
 
-    createRoom = (name: string, password: number, callback: (a: statusType) => void) =>{
-        const newRoom = new Room(name, password, this.deleteRoom);
+    createRoom = (name: string, password: number, roomLang: wordSetType, callback: (a: statusType) => void) =>{
+        if(roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
+            roomLang = "en";
+        console.log(roomLang)
+        const newRoom = new Room(name, password, this.deleteRoom, roomLang);
         const isRoomWithThisNameExists = getRooms().some((room : Room) => room.name === name);
         if(isRoomWithThisNameExists){
             new Error(this.socket, "Room with this name already exists", 409);

@@ -15,6 +15,7 @@ When a client initiates the creation of a new room.
 **Received data:**
 - `name` (string) — the name of the room to be created.
 - `password` (number) — password for the room being created.
+- `language` (ru | en | ua) - language of the cards in room
 - `callback` (function) - function to return the method status
 
 

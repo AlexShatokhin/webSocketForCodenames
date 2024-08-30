@@ -22,8 +22,11 @@ class RoomController {
                 users: null
             }));
         };
-        this.createRoom = (name, password, callback) => {
-            const newRoom = new Room_1.default(name, password, this.deleteRoom);
+        this.createRoom = (name, password, roomLang, callback) => {
+            if (roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
+                roomLang = "en";
+            console.log(roomLang);
+            const newRoom = new Room_1.default(name, password, this.deleteRoom, roomLang);
             const isRoomWithThisNameExists = (0, roomsData_1.getRooms)().some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
                 new Error_1.default(this.socket, "Room with this name already exists", 409);
