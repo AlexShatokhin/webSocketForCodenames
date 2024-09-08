@@ -38,7 +38,7 @@
         const roomName = document.querySelector("input[name='roomName']").value;
         const roomPassword = document.querySelector("input[name='roomPassword']").value;
         const roomLang = document.querySelector("input[name='roomLang']").value;
-        socket.emit("create-room", roomName, roomPassword, roomLang, () => {});
+        socket.emit("create-room", roomName, roomPassword, roomLang, userData.id, () => {});
     }
 
     socket.on("get-rooms", (data) => {
@@ -156,7 +156,7 @@
             const roomName = document.querySelector("input[name='roomName']").value;
             const roomPassword = document.querySelector("input[name='roomPassword']").value;
             const roomLang = document.querySelector("input[name='roomLang']").value;
-            socket.emit("create-room", roomName, roomPassword, roomLang, () => {});
+            socket.emit("create-room", roomName, roomPassword, roomLang, userData.id, () => {});
         }
     })
 

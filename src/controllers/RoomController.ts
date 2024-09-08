@@ -29,10 +29,9 @@ class RoomController {
         }))
     };
 
-    createRoom = (name: string, password: number, roomLang: wordSetType, callback: (a: statusType) => void) =>{
+    createRoom = (name: string, password: number, roomLang: wordSetType, userId : string, callback: (a: statusType) => void) =>{
         if(roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
             roomLang = "en";
-        console.log(roomLang)
         const newRoom = new Room(name, password, this.deleteRoom, roomLang);
         const isRoomWithThisNameExists = getRooms().some((room : Room) => room.name === name);
         if(isRoomWithThisNameExists){
@@ -44,6 +43,7 @@ class RoomController {
         } else {
             const updatedRooms = [...getRooms(), newRoom];
             setRooms(updatedRooms);
+            this.joinRoom(newRoom.id, userId, newRoom.password, callback)
             this.io.in("main").emit("get-rooms", this.getRooms());
             callback({
                 statusCode: 200,
@@ -55,12 +55,6 @@ class RoomController {
     joinRoom = (roomId : string, userId: string, password: number, callback: (a: statusType) => void) => {
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
-
-        console.log("____joinRoom logs start____");
-        console.log(`roomId: ${roomId}(${typeof roomId})\nuserId: ${userId}(${typeof userId}\npassword: ${password}(${typeof password})`);
-        console.log(callback);
-        console.log(typeof callback);
-        console.log("____joinRoom logs end____");
 
         if(!this.room){
             new Error(this.socket, "Room not found", 404);

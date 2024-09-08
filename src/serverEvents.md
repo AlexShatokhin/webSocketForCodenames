@@ -16,6 +16,7 @@ When a client initiates the creation of a new room.
 - `name` (string) — the name of the room to be created.
 - `password` (number) — password for the room being created.
 - `language` (ru | en | ua) - language of the cards in room
+- `userId` (string) — user identifier.
 - `callback` (function) - function to return the method status
 
 
