@@ -17,8 +17,9 @@ When the server sends the client a list of all available rooms.
  ```json
  [
  {
- "cardset": null
- "id": "bbb34f55-d31a-4941-8e60-142d4b745897"
+ "cardset": null,
+ "id": "bbb34f55-d31a-4941-8e60-142d4b745897",
+ "creator": "TqvHrupPTzzcqx5JNVJdZMhBb3yTAoCw",
  "name": "4233"
  "users": null
  "usersInRoom": "2"
@@ -160,8 +161,9 @@ When the server sends user information to the client.
  "id",
  "name",
  "room",
- "team"
- "role"
+ "team",
+ "role",
+ "isCreator"
  }
  ```
 

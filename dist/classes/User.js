@@ -7,22 +7,21 @@ class User {
         this.room = null;
         this.team = null;
         this.role = "player";
-        this.isReady = false;
+        this.isCreator = false;
         this.getUserInfo = () => ({
             id: this.id,
             name: this.name,
             room: this.room,
             team: this.team,
             role: this.role,
-            isReady: this.isReady
+            isCreator: this.isCreator
         });
     }
-    joinTeam(team) { this.team = team; this.role = "player"; this.isReady = false; }
+    joinTeam(team) { this.team = team; this.role = "player"; }
     leaveRoom() {
         this.room = null;
         this.team = null;
         this.role = "player";
-        this.isReady = false;
     }
 }
 exports.default = User;

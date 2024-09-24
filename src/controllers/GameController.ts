@@ -33,7 +33,6 @@ class GameController {
         const usersLimit = this.room.usersInRoom >= 4;
         const redTeamCheck = this.checkTeam(redTeam);
         const blueTeamCheck = this.checkTeam(blueTeam);
-        const allUsersReadyCheck = this.room.users.every((player : User) => player.isReady);
 
         if(true){
             this.room.isGameStarted = true;

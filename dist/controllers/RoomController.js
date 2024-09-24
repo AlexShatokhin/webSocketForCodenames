@@ -25,7 +25,7 @@ class RoomController {
         this.createRoom = (name, password, roomLang, userId, callback) => {
             if (roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
                 roomLang = "en";
-            const newRoom = new Room_1.default(name, password, this.deleteRoom, roomLang);
+            const newRoom = new Room_1.default(name, password, this.deleteRoom, roomLang, userId);
             const isRoomWithThisNameExists = (0, roomsData_1.getRooms)().some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
                 new Error_1.default(this.socket, "Room with this name already exists", 409);
@@ -35,6 +35,8 @@ class RoomController {
                 });
             }
             else {
+                this.user = (0, getUserByUserId_1.default)(userId);
+                this.user.isCreator = true;
                 const updatedRooms = [...(0, roomsData_1.getRooms)(), newRoom];
                 (0, roomsData_2.setRooms)(updatedRooms);
                 this.joinRoom(newRoom.id, userId, newRoom.password, callback);
@@ -99,6 +101,10 @@ class RoomController {
             if (this.user && this.room) {
                 this.user.leaveRoom();
                 this.room.leaveRoom(this.user);
+                if (this.user.isCreator) {
+                    this.user.isCreator = false;
+                    this.room.users[0].isCreator = true;
+                }
                 this.socket.leave(this.room.id);
                 this.socket.join("main");
                 this.socket.emit("leave-from-room");
@@ -121,6 +127,7 @@ class RoomController {
             console.log("DELETE!");
             if (this.room) {
                 const currentRoom = this.room;
+                this.user.isCreator = false;
                 this.room.users.forEach((user) => {
                     user.leaveRoom();
                     this.socket.leave(currentRoom.id);

@@ -8,7 +8,7 @@ class User {
     public room: string | null = null;
     public team: teamType | null = null;
     public role: roleType = "player";
-    public isReady : boolean = false;
+    public isCreator: boolean = false;
 
     constructor(public id: string,
                 public name: string = "Anonymous"){}
@@ -19,16 +19,15 @@ class User {
         room: this.room,
         team: this.team,
         role: this.role,
-        isReady: this.isReady
+        isCreator: this.isCreator
     })
 
-    joinTeam(team: teamType){this.team = team; this.role = "player"; this.isReady = false}
+    joinTeam(team: teamType){this.team = team; this.role = "player"}
 
     leaveRoom(){
         this.room = null;
         this.team = null;
         this.role = "player";
-        this.isReady = false;
     }
 }
 

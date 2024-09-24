@@ -62,7 +62,6 @@ class UserController {
 
 
                 this.user.role = role;
-                this.user.isReady = false;
                 this.io.in(this.user.room as string).emit("toggle-roles")
                     
             } else
@@ -76,7 +75,6 @@ class UserController {
 
     toggleReadyStatus = () => {
         if(this.user){
-            this.user.isReady = !this.user.isReady;
             this.socket.emit("get-user-info", this.user.getUserInfo())
         }
     }

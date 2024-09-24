@@ -2,13 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const { v4: uuidv4 } = require('uuid');
 class Room {
-    constructor(name = "new", password, deleteCallback, roomLanguage = "en", wordset = []) {
+    constructor(name = "new", password, deleteCallback, roomLanguage = "en", creatorId) {
+        this.cardset = [];
         this.users = [];
         this.usersInRoom = 0;
         this.isGameStarted = false;
         this.roomLanguage = "en";
         this.getRoomInfo = () => ({
             id: this.id,
+            creator: this.creator,
             name: this.name,
             users: this.users,
             usersInRoom: this.usersInRoom,
@@ -21,9 +23,9 @@ class Room {
         this.id = uuidv4();
         this.name = name;
         this.password = password;
-        this.cardset = wordset;
         this.roomLanguage = roomLanguage;
         this.roomLifeCycle = setTimeout(deleteCallback, 3600000);
+        this.creator = creatorId;
     }
     joinRoom(user) {
         this.users.push(user);
