@@ -40,9 +40,16 @@ class GameController {
             this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
             this.room.updateRoomLifeCycle();
         }
-        else 
-            new Error(this.socket, "Не все пользователи выбрали команду или команды неполные", 403);
-    
+        else {
+            if(!usersLimit){
+                new Error(this.socket, "В комнате слишком мало игроков", 403);
+                return;
+            }
+            if(!redTeamCheck)
+                new Error(this.socket, "Команда красных неполная!", 403);
+            if(!blueTeamCheck)
+                new Error(this.socket, "Команда синих неполная!", 403);
+        }    
     }
 
     finishGame = (winnerTeam : string) => {
