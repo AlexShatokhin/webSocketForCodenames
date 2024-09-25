@@ -24,6 +24,7 @@ class RoomController {
             id: room.id,
             name: room.name,
             usersInRoom: room.usersInRoom,
+            creator: room.creator,
             cardset: null,
             users: null
         }))
