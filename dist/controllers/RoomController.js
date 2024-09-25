@@ -18,6 +18,7 @@ class RoomController {
                 id: room.id,
                 name: room.name,
                 usersInRoom: room.usersInRoom,
+                creator: room.creator,
                 cardset: null,
                 users: null
             }));
@@ -103,7 +104,12 @@ class RoomController {
                 this.room.leaveRoom(this.user);
                 if (this.user.isCreator) {
                     this.user.isCreator = false;
-                    this.room.users[0].isCreator = true;
+                    if (this.room.users.length > 0) {
+                        this.room.users[0].isCreator = true;
+                        this.room.creator = this.room.users[0].id;
+                    }
+                    else
+                        this.room.creator = "";
                 }
                 this.socket.leave(this.room.id);
                 this.socket.join("main");

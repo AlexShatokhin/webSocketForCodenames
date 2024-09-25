@@ -120,8 +120,11 @@ class RoomController {
     
             if(this.user.isCreator){
                 this.user.isCreator = false;
-                this.room.users[0].isCreator = true;
-                this.room.creator = this.room.users[0].id
+                if(this.room.users.length > 0){
+                    this.room.users[0].isCreator = true;
+                    this.room.creator = this.room.users[0].id
+                } else this.room.creator = "";
+
             }
 
             this.socket.leave(this.room.id);
