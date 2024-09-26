@@ -1,4 +1,3 @@
-import Wordset from "../../classes/Wordset";
 import { Word } from "../../types/Word";
 export default (words : string[]) => {
     const wordsCountInTeam = Math.ceil((words.length-1) / 3);

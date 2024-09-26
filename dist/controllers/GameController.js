@@ -13,7 +13,7 @@ class GameController {
         this.cards = [];
         this.remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
         this.getCards = (room) => {
-            const wordset = (0, getWordSet_1.default)(9, room.roomLanguage);
+            const wordset = (0, getWordSet_1.default)(25, room.roomLanguage);
             room.cardset = wordset;
         };
         this.startGame = (roomId) => {

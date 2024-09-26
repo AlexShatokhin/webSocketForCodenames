@@ -18,7 +18,7 @@ class GameController {
 
 
     getCards = (room : Room) => {
-        const wordset = getWordSet(9, room.roomLanguage);
+        const wordset = getWordSet(25, room.roomLanguage);
         room.cardset = wordset;
     }
 
