@@ -12,13 +12,9 @@ class GameController {
         this.socket = socket;
         this.cards = [];
         this.remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
-        this.getCards = (room) => {
-            const wordset = (0, getWordSet_1.default)(25, room.roomLanguage);
-            room.cardset = wordset;
-        };
         this.startGame = (roomId) => {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
-            this.room.cardset = (0, getWordSet_1.default)(9, this.room.roomLanguage);
+            this.room.cardset = (0, getWordSet_1.default)(25, this.room.roomLanguage);
             this.cards = this.room.cardset;
             const redTeam = this.room.getTeamInRoom("red");
             const blueTeam = this.room.getTeamInRoom("blue");

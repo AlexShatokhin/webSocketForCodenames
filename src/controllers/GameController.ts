@@ -17,14 +17,9 @@ class GameController {
                 private socket : Socket){}
 
 
-    getCards = (room : Room) => {
-        const wordset = getWordSet(25, room.roomLanguage);
-        room.cardset = wordset;
-    }
-
     startGame = (roomId : string) => {
         this.room = getRoomByRoomId(roomId);
-        this.room.cardset = getWordSet(9, this.room.roomLanguage);
+        this.room.cardset = getWordSet(25, this.room.roomLanguage);
         this.cards = this.room.cardset;
 
         const redTeam = this.room.getTeamInRoom("red");
