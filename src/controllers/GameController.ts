@@ -59,10 +59,10 @@ class GameController {
         }
     }
 
-    clickCardHandler = (word: Word, senderTeam : teamType) => {
+    clickCardHandler = (word: string, senderTeam : teamType) => {
         if(this.room?.isGameStarted){
             this.cards = this.cards.map((card : Word) => {
-                if(card.word === word.word){
+                if(card.word === word){
                     const updatedWord = {...card};
                     updatedWord.isClicked = true;
                     return updatedWord;
