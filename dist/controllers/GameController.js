@@ -53,7 +53,7 @@ class GameController {
             var _a, _b;
             if ((_a = this.room) === null || _a === void 0 ? void 0 : _a.isGameStarted) {
                 this.cards = this.cards.map((card) => {
-                    if (card.word === word.word) {
+                    if (card.word === word) {
                         const updatedWord = Object.assign({}, card);
                         updatedWord.isClicked = true;
                         return updatedWord;
