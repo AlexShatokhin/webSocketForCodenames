@@ -35,6 +35,11 @@ io.on('connection', (socket : Socket) => {
 	const {userController, userRoomController, gameController} = controllers
 	controllers.checkUserSession(request);
 
+	socket.onAny((event : Event, ...args) => {
+		console.log("Event: ", event);
+		console.log(args);
+	})
+
 	socket.emit("get-rooms", userRoomController.getRooms());
 
 	socket.on("create-room", 

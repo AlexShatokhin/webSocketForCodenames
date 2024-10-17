@@ -31,6 +31,10 @@ io.on('connection', (socket) => {
     const controllers = new Controllers_1.default(io, socket);
     const { userController, userRoomController, gameController } = controllers;
     controllers.checkUserSession(request);
+    socket.onAny((event, ...args) => {
+        console.log("Event: ", event);
+        console.log(args);
+    });
     socket.emit("get-rooms", userRoomController.getRooms());
     socket.on("create-room", (...args) => (0, errorBounadry_1.default)(userRoomController.createRoom, args));
     socket.on("join-room", (...args) => (0, errorBounadry_1.default)(userRoomController.joinRoom, args));
