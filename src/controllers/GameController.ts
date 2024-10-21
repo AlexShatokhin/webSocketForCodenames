@@ -31,6 +31,7 @@ class GameController {
 
         if(true){
             this.room.isGameStarted = true;
+            this.room.users.forEach(user => console.log(user));
             this.io.in(this.room.id).emit("game-started")
             this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
             this.room.updateRoomLifeCycle();
@@ -54,7 +55,9 @@ class GameController {
         }
     }
 
-    clickCardHandler = (word: string, senderTeam : teamType) => {
+    clickCardHandler = (word: string, senderUser : User) => {
+        this.room = getRoomByRoomId(senderUser.room as string);
+
         if(this.room?.isGameStarted){
             this.cards = this.cards.map((card : Word) => {
                 if(card.word === word){
@@ -65,12 +68,11 @@ class GameController {
                 return card;
             })
             this.getTeamCardsCount();
-            console.log(senderTeam);
             for(let team in this.remainingWordsCount){
                 if(team !== "neutral"){
                     if(this.remainingWordsCount[team] === 0){
                         if(team === "black") 
-                            this.finishGame(senderTeam === "red" ? "blue" : "red")
+                            this.finishGame(senderUser.team === "red" ? "blue" : "red")
                         else
                             this.finishGame(team);
                     }

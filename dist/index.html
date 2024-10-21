@@ -188,7 +188,7 @@
         card.style.opacity = item.isClicked ? "0.5" : "1";
 
         card.onclick = () => {
-            socket.emit("card-clicked", item.word, userData.team);
+            socket.emit("card-clicked", item.word, userData);
         }
         if(userData.role === "captain"){
             switch (item.teamName) {
