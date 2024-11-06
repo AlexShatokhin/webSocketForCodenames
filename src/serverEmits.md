@@ -177,4 +177,3 @@ When user roles are switched.
 
 **Return data:**
 No.
-

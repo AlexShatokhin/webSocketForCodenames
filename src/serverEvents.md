@@ -111,4 +111,5 @@ Updating game cards.
 When card clicked
 
 **Received data:**
-- `card` (cardItem) — card item. ("{word: string, teamName: string, isClicked: boolean}")
+- `word` (string) — word item. 
+- `userID` (string) — the ID of the user who clicked on the card. 

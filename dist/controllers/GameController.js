@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
 const getWordSet_1 = __importDefault(require("../utils/words/getWordSet"));
+const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
+const roomsData_1 = require("../data/roomsData");
 class GameController {
     constructor(io, socket) {
         this.io = io;
@@ -46,11 +48,11 @@ class GameController {
                 this.io.in(this.room.id).emit("finish-game", winnerTeam);
             }
         };
-        this.clickCardHandler = (word, senderUser) => {
-            var _a, _b;
-            this.room = (0, getRoomByRoomId_1.default)(senderUser.room);
-            if ((_a = this.room) === null || _a === void 0 ? void 0 : _a.isGameStarted) {
-                this.cards = this.cards.map((card) => {
+        this.clickCardHandler = (word, senderUserID) => {
+            const senderUser = (0, getUserByUserId_1.default)(senderUserID);
+            const updatedRoom = (0, getRoomByRoomId_1.default)(senderUser.room);
+            if (updatedRoom === null || updatedRoom === void 0 ? void 0 : updatedRoom.isGameStarted) {
+                updatedRoom.cardset = updatedRoom.cardset.map((card) => {
                     if (card.word === word) {
                         const updatedWord = Object.assign({}, card);
                         updatedWord.isClicked = true;
@@ -58,10 +60,11 @@ class GameController {
                     }
                     return card;
                 });
-                this.getTeamCardsCount();
-                for (let team in this.remainingWordsCount) {
+                const remainingWordsCount = this.getTeamCardsCount(updatedRoom.cardset);
+                console.log(remainingWordsCount);
+                for (let team in remainingWordsCount) {
                     if (team !== "neutral") {
-                        if (this.remainingWordsCount[team] === 0) {
+                        if (remainingWordsCount[team] === 0) {
                             if (team === "black")
                                 this.finishGame(senderUser.team === "red" ? "blue" : "red");
                             else
@@ -69,18 +72,20 @@ class GameController {
                         }
                     }
                 }
-                this.room.cardset = this.cards;
-                this.io.in((_b = this.room) === null || _b === void 0 ? void 0 : _b.id).emit("update-room", this.room.getRoomInfo());
+                (0, roomsData_1.changeRooms)(updatedRoom);
+                this.io.in(updatedRoom === null || updatedRoom === void 0 ? void 0 : updatedRoom.id).emit("update-room", updatedRoom.getRoomInfo());
             }
             else
                 new Error_1.default(this.socket, "Game was ended", 409);
         };
-        this.getTeamCardsCount = () => {
-            this.remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
-            if (this.cards.length)
-                this.cards
+        this.getTeamCardsCount = (cards) => {
+            console.log(cards);
+            const remainingWordsCount = { red: 0, blue: 0, neutral: 0, black: 0 };
+            if (cards.length)
+                cards
                     .filter((card) => !card.isClicked)
-                    .forEach((card) => this.remainingWordsCount[card.teamName]++);
+                    .forEach((card) => remainingWordsCount[card.teamName]++);
+            return remainingWordsCount;
         };
     }
     checkTeam(team) {
