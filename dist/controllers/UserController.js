@@ -3,19 +3,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const usersData_1 = __importDefault(require("../data/usersData"));
+const usersData_1 = require("./../data/usersData");
+const usersData_2 = __importDefault(require("../data/usersData"));
 const User_1 = __importDefault(require("../classes/User"));
 const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
+const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 class UserController {
     constructor(io, socket) {
         this.io = io;
         this.socket = socket;
-        this.getUsers = () => usersData_1.default;
+        this.getUsers = () => usersData_2.default;
         this.newUser = (name, sessionID, callback) => {
             const newUser = new User_1.default(sessionID, name);
             this.user = newUser;
-            usersData_1.default.push(newUser);
+            usersData_2.default.push(newUser);
             this.socket.emit("get-user-info", newUser.getUserInfo());
             this.socket.join("main");
             if (callback)
@@ -45,23 +47,26 @@ class UserController {
                     });
             }
         };
-        this.getCaptainRole = (role = "player") => {
-            if (this.user) {
-                const userRoom = (0, getRoomByRoomId_1.default)(this.user.room);
-                if (this.user.team) {
-                    const isTeamHasCaptain = userRoom.getTeamInRoom(this.user.team).some(user => user.role === "captain");
+        this.getCaptainRole = (userID, role = "captain") => {
+            const user = (0, getUserByUserId_1.default)(userID);
+            console.log(userID);
+            if (user) {
+                const userRoom = (0, getRoomByRoomId_1.default)(user.room);
+                if (user.team) {
+                    const teamCaptain = userRoom.getTeamInRoom(user.team).find(user => user.role === "captain");
                     console.log(role);
-                    if (isTeamHasCaptain && role === "captain") {
-                        new Error_1.default(this.socket, "Team already has a captain", 409);
-                        return;
+                    if (teamCaptain && role === "captain") {
+                        teamCaptain.role = "player";
+                        (0, usersData_1.editUser)(teamCaptain);
                     }
-                    this.user.role = role;
-                    this.io.in(this.user.room).emit("toggle-roles");
+                    user.role = role;
+                    (0, usersData_1.editUser)(user);
+                    this.io.in(user.room).emit("toggle-roles");
                 }
                 else
                     new Error_1.default(this.socket, "User has no team", 403);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
-                this.socket.emit("get-user-info", this.user.getUserInfo());
+                this.socket.emit("get-user-info", user.getUserInfo());
             }
             else
                 new Error_1.default(this.socket, "User not found", 404);
