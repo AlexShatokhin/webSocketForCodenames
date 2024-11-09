@@ -50,10 +50,10 @@ class GameController {
         }    
     }
 
-    finishGame = (winnerTeam : string) => {
-        if(this.room?.isGameStarted){
-            this.room.isGameStarted = false;
-            this.io.in(this.room.id).emit("finish-game", winnerTeam);
+    finishGame = (room : Room, winnerTeam : string) => {
+        if(room.isGameStarted){
+            room.isGameStarted = false;
+            this.io.in(room.id).emit("finish-game", winnerTeam);
         }
     }
 
@@ -76,9 +76,9 @@ class GameController {
                 if(team !== "neutral"){
                     if(remainingWordsCount[team] === 0){
                         if(team === "black") 
-                            this.finishGame(senderUser.team === "red" ? "blue" : "red")
+                            this.finishGame(updatedRoom, senderUser.team === "red" ? "blue" : "red")
                         else
-                            this.finishGame(team);
+                            this.finishGame(updatedRoom, team);
                     }
                 }
             }

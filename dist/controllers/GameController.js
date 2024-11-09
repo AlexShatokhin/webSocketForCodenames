@@ -41,11 +41,10 @@ class GameController {
                     new Error_1.default(this.socket, "Команда синих неполная!", 403);
             }
         };
-        this.finishGame = (winnerTeam) => {
-            var _a;
-            if ((_a = this.room) === null || _a === void 0 ? void 0 : _a.isGameStarted) {
-                this.room.isGameStarted = false;
-                this.io.in(this.room.id).emit("finish-game", winnerTeam);
+        this.finishGame = (room, winnerTeam) => {
+            if (room.isGameStarted) {
+                room.isGameStarted = false;
+                this.io.in(room.id).emit("finish-game", winnerTeam);
             }
         };
         this.clickCardHandler = (word, senderUserID) => {
@@ -66,9 +65,9 @@ class GameController {
                     if (team !== "neutral") {
                         if (remainingWordsCount[team] === 0) {
                             if (team === "black")
-                                this.finishGame(senderUser.team === "red" ? "blue" : "red");
+                                this.finishGame(updatedRoom, senderUser.team === "red" ? "blue" : "red");
                             else
-                                this.finishGame(team);
+                                this.finishGame(updatedRoom, team);
                         }
                     }
                 }
