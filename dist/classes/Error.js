@@ -2,16 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Error {
     constructor(socket, message, code) {
-        this.socket = socket;
-        this.message = message;
-        this.code = code;
-        this.timestamp = Date.now();
-        this.getError = () => ({
-            message: this.message,
-            code: this.code,
-            timestamp: this.timestamp
+        this.getError = (message, code, timestamp) => ({
+            message: message,
+            code: code,
+            timestamp: timestamp
         });
-        this.socket.emit("error", this.getError());
+        const timestamp = new Date().getTime();
+        socket.emit("error", this.getError(message, code, timestamp));
     }
 }
 exports.default = Error;
