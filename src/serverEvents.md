@@ -91,6 +91,7 @@ Getting and switching user roles.
 When a user changes their role.
 
 **Received data:**
+- `userID` (string) — the ID of the user who want to toggle role. 
 - `role` (captain | player) - new user role (optional).
 
 

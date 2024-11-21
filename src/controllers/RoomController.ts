@@ -25,6 +25,7 @@ class RoomController {
             name: room.name,
             usersInRoom: room.usersInRoom,
             creator: room.creator,
+            isGameStarted: room.isGameStarted,
             cardset: null,
             users: null
         }))

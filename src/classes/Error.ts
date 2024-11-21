@@ -1,14 +1,15 @@
 import { Socket } from "socket.io";
 class Error {
-    private timestamp: number = Date.now();
-    constructor(private socket : Socket, private message: string, private code: number){
-        this.socket.emit("error", this.getError());
+
+    constructor(socket : Socket, message: string, code: number){
+        const timestamp = new Date().getTime();
+        socket.emit("error", this.getError(message, code, timestamp));
     }
 
-    getError = () => ({
-        message: this.message,
-        code: this.code,
-        timestamp: this.timestamp
+    getError = (message: string, code : number, timestamp: number) => ({
+        message: message,
+        code: code,
+        timestamp: timestamp
     })
 }
 
