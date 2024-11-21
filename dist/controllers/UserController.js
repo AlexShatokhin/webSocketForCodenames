@@ -56,8 +56,8 @@ class UserController {
                     const teamCaptain = userRoom.getTeamInRoom(user.team).find(user => user.role === "captain");
                     console.log(role);
                     if (teamCaptain && role === "captain") {
-                        teamCaptain.role = "player";
-                        (0, usersData_1.editUser)(teamCaptain);
+                        new Error_1.default(this.socket, "Team already has a captain", 409);
+                        return;
                     }
                     user.role = role;
                     (0, usersData_1.editUser)(user);
