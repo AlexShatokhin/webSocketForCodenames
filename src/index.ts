@@ -7,6 +7,7 @@ import { createServer } from "http";
 
 import Controllers from "./controllers/Controllers";
 import errorBoundary from "./utils/errorBounadry";
+import getConvertedRooms from "./utils/room/getConvertedRooms";
 
 const app : Express = express();
 const server = createServer(app);
@@ -40,7 +41,7 @@ io.on('connection', (socket : Socket) => {
 		console.log(args);
 	})
 
-	socket.emit("get-rooms", userRoomController.getRooms());
+	socket.emit("get-rooms", getConvertedRooms());
 
 	socket.on("create-room", 
 		(...args) => errorBoundary(userRoomController.createRoom, args)
