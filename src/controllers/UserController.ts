@@ -29,6 +29,13 @@ class UserController {
             })
     }
 
+    changeUserName = (newName: string, userID: string) => {
+        const user = getUserByUserId(userID);
+        user.name = newName;
+        editUser(user);
+        this.socket.emit("get-user-info", user.getUserInfo());
+    }
+
     joinTeam = (team : "red" | "blue", callback : (a : statusType) => void) => {
         if(this.user){
             this.user.joinTeam(team);

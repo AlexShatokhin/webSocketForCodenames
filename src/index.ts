@@ -57,6 +57,9 @@ io.on('connection', (socket : Socket) => {
 	socket.on("new-user", 
 		(name, callback) => errorBoundary(userController.newUser, [name, request.sessionID, callback])
 	);
+	socket.on("change-name", 
+		(...args) => errorBoundary(userController.changeUserName, args)
+	);
 	socket.on("join-team", 
 		(...args) => errorBoundary(userController.joinTeam, args)
 	);

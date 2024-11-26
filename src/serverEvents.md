@@ -68,7 +68,17 @@ New User Registration.
 When a new user registers.
 
 **Received data:**
-- `name` (object) - the name of the new user.
+- `name` (string) - the name of the new user.
+
+### `change-nmae`
+
+**Description:**
+Changing the user name
+
+
+**Received data:**
+- `newName` (string) - the name of the new user.
+- `userID` (string) - user's id
 
 ### `join-team`
 

@@ -41,6 +41,7 @@ io.on('connection', (socket) => {
     socket.on("join-room", (...args) => (0, errorBounadry_1.default)(userRoomController.joinRoom, args));
     socket.on("leave-room", (...args) => (0, errorBounadry_1.default)(userRoomController.leaveRoom, args));
     socket.on("new-user", (name, callback) => (0, errorBounadry_1.default)(userController.newUser, [name, request.sessionID, callback]));
+    socket.on("change-name", (...args) => (0, errorBounadry_1.default)(userController.changeUserName, args));
     socket.on("join-team", (...args) => (0, errorBounadry_1.default)(userController.joinTeam, args));
     socket.on("ready-state", (...args) => (0, errorBounadry_1.default)(userController.toggleReadyStatus, args));
     socket.on("toggle-role", (...args) => (0, errorBounadry_1.default)(userController.getCaptainRole, args));

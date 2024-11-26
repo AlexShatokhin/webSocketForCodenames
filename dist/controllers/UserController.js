@@ -26,6 +26,12 @@ class UserController {
                     ok: true
                 });
         };
+        this.changeUserName = (newName, userID) => {
+            const user = (0, getUserByUserId_1.default)(userID);
+            user.name = newName;
+            (0, usersData_1.editUser)(user);
+            this.socket.emit("get-user-info", user.getUserInfo());
+        };
         this.joinTeam = (team, callback) => {
             if (this.user) {
                 this.user.joinTeam(team);
