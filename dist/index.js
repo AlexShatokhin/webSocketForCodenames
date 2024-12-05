@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
         console.log("Event: ", event);
         console.log(args);
     });
-    socket.emit("get-rooms", (0, getConvertedRooms_1.default)());
+    io.emit("get-rooms", (0, getConvertedRooms_1.default)());
     socket.on("create-room", (...args) => (0, errorBounadry_1.default)(userRoomController.createRoom, args));
     socket.on("join-room", (...args) => (0, errorBounadry_1.default)(userRoomController.joinRoom, args));
     socket.on("leave-room", (...args) => (0, errorBounadry_1.default)(userRoomController.leaveRoom, args));

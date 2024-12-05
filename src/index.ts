@@ -41,7 +41,7 @@ io.on('connection', (socket : Socket) => {
 		console.log(args);
 	})
 
-	socket.emit("get-rooms", getConvertedRooms());
+	io.emit("get-rooms", getConvertedRooms());
 
 	socket.on("create-room", 
 		(...args) => errorBoundary(userRoomController.createRoom, args)
