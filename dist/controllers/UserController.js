@@ -26,11 +26,17 @@ class UserController {
                     ok: true
                 });
         };
-        this.changeUserName = (newName, userID) => {
+        this.changeUserName = (newName, userID, callback) => {
             const user = (0, getUserByUserId_1.default)(userID);
             user.name = newName;
             (0, usersData_1.editUser)(user);
             this.socket.emit("get-user-info", user.getUserInfo());
+            if (callback) {
+                callback({
+                    statusCode: 200,
+                    ok: true
+                });
+            }
         };
         this.joinTeam = (team, callback) => {
             if (this.user) {

@@ -29,11 +29,18 @@ class UserController {
             })
     }
 
-    changeUserName = (newName: string, userID: string) => {
+    changeUserName = (newName: string, userID: string, callback: (a: statusType) => void) => {
         const user = getUserByUserId(userID);
         user.name = newName;
         editUser(user);
         this.socket.emit("get-user-info", user.getUserInfo());
+
+        if(callback){
+            callback({
+                statusCode: 200,
+                ok: true
+            })
+        }
     }
 
     joinTeam = (team : "red" | "blue", callback : (a : statusType) => void) => {
