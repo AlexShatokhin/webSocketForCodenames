@@ -16,7 +16,6 @@ When a client initiates the creation of a new room.
 - `name` (string) — the name of the room to be created.
 - `password` (number) — password for the room being created.
 - `language` (ru | en | ua) - language of the cards in room
-- `userId` (string) — user identifier.
 - `callback` (function) - function to return the method status
 
 
@@ -30,7 +29,6 @@ When a client tries to join a room.
 
 **Received data:**
 - `roomId` (string) — the identifier of the room the client wants to join.
-- `userId` (string) — user identifier.
 - `password` (number) - room password
 - `callback` (function) - function to return the method status
 
@@ -78,7 +76,6 @@ Changing the user name
 
 **Received data:**
 - `newName` (string) - the name of the new user.
-- `userID` (string) - user's id
 
 ### `join-team`
 
@@ -101,7 +98,6 @@ Getting and switching user roles.
 When a user changes their role.
 
 **Received data:**
-- `userID` (string) — the ID of the user who want to toggle role. 
 - `role` (captain | player) - new user role (optional).
 
 
@@ -123,4 +119,3 @@ When card clicked
 
 **Received data:**
 - `word` (string) — word item. 
-- `userID` (string) — the ID of the user who clicked on the card. 
