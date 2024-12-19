@@ -8,6 +8,7 @@ import getWordSet from "../utils/words/getWordSet";
 import { teamType } from "../types/teamType";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import { changeRooms, setRooms } from "../data/roomsData";
+import { Request } from "express";
 
 class GameController {
     public user : User | undefined;
@@ -57,8 +58,10 @@ class GameController {
         }
     }
 
-    clickCardHandler = (word: string, senderUserID : string) => {
-        const senderUser = getUserByUserId(senderUserID);
+    clickCardHandler = (word: string) => {
+        const request = this.socket.request as Request;
+        const userId = request.sessionID;
+        const senderUser = getUserByUserId(userId);
         const updatedRoom = getRoomByRoomId(senderUser.room as string);
 
         if(updatedRoom?.isGameStarted){

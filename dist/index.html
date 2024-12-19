@@ -41,13 +41,13 @@
         const roomName = document.querySelector("input[name='roomName']").value;
         const roomPassword = document.querySelector("input[name='roomPassword']").value;
         const roomLang = document.querySelector("input[name='roomLang']").value;
-        socket.emit("create-room", roomName, roomPassword, roomLang, userData.id, () => {});
+        socket.emit("create-room", roomName, roomPassword, roomLang, () => {});
     }
 
     const newNameButton = document.querySelector(".new-name__button");
     newNameButton.onclick = () => {
         const newName = document.querySelector("input[name='userName']").value;
-        socket.emit("change-name", newName, userData.id);
+        socket.emit("change-name", newName);
     }
 
     socket.on("get-rooms", (data) => {
@@ -60,7 +60,7 @@
             button.innerText = `${name} (${usersInRoom})`;
             button.onclick = () => {
                 const password = +prompt("Enter room password");
-                socket.emit("join-room", id, userData.id, password, (res) => {
+                socket.emit("join-room", id, password, (res) => {
                     alert(res);
                 })
             }
@@ -80,7 +80,7 @@
             <button onclick = "socket.emit('leave-room', () => {})">Leave</button>
             <button onclick = "socket.emit('join-team', 'red')">Join to red team</button>
             <button onclick = "socket.emit('join-team', 'blue')">Join to blue team</button>
-            <button onclick = "socket.emit('toggle-role', '${userData.id}')">Be a captain</button>
+            <button onclick = "socket.emit('toggle-role')">Be a captain</button>
             <button onclick = "socket.emit('ready-state')">Ready/Unready</button>
 
             <button style = "margin-left: 50px" id = "startGame">Start game</button>
@@ -167,12 +167,12 @@
             const roomName = document.querySelector("input[name='roomName']").value;
             const roomPassword = document.querySelector("input[name='roomPassword']").value;
             const roomLang = document.querySelector("input[name='roomLang']").value;
-            socket.emit("create-room", roomName, roomPassword, roomLang, userData.id, () => {});
+            socket.emit("create-room", roomName, roomPassword, roomLang, () => {});
         }
         const newNameButton = document.querySelector(".new-name__button");
         newNameButton.onclick = () => {
             const newName = document.querySelector("input[name='userName']").value;
-            socket.emit("change-name", newName, userData.id);
+            socket.emit("change-name", newName);
         }
 
     })
@@ -205,7 +205,7 @@
         card.style.opacity = item.isClicked ? "0.5" : "1";
 
         card.onclick = () => {
-            socket.emit("card-clicked", item.word, userData.id);
+            socket.emit("card-clicked", item.word);
         }
         if(userData.role === "captain"){
             switch (item.teamName) {

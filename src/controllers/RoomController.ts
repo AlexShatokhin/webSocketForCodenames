@@ -11,6 +11,7 @@ import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import { statusType } from "../types/statusType";
 import { wordSetType } from "../types/wordSetType";
+import { Request } from "express";
 
 class RoomController {
     private room : Room | undefined;
@@ -23,6 +24,7 @@ class RoomController {
         return getRooms().map((room : Room) => ({
             id: room.id,
             name: room.name,
+            roomLang: room.roomLanguage,
             usersInRoom: room.usersInRoom,
             creator: room.creator,
             isGameStarted: room.isGameStarted,
@@ -31,10 +33,12 @@ class RoomController {
         }))
     };
 
-    createRoom = (name: string, password: number, roomLang: wordSetType, userId : string, callback: (a: statusType) => void) =>{
-        if(roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
+    createRoom = (name: string, password: number, roomLang: wordSetType, callback: (a: statusType) => void) =>{
+        if(roomLang !== "en" && roomLang !== "ru" && roomLang !== "uk")
             roomLang = "en";
 
+        const request = this.socket.request as Request;
+        const userId = request.sessionID;
         const newRoom = new Room(name, password, this.deleteRoom, roomLang, userId);
         const isRoomWithThisNameExists = getRooms().some((room : Room) => room.name === name);
         if(isRoomWithThisNameExists){
@@ -48,7 +52,7 @@ class RoomController {
             this.user.isCreator = true;
             const updatedRooms = [...getRooms(), newRoom];
             setRooms(updatedRooms);
-            this.joinRoom(newRoom.id, userId, newRoom.password, callback)
+            this.joinRoom(newRoom.id, newRoom.password, callback)
             this.io.in("main").emit("get-rooms", this.getRooms());
             callback({
                 statusCode: 200,
@@ -57,7 +61,10 @@ class RoomController {
         }
     }
 
-    joinRoom = (roomId : string, userId: string, password: number, callback: (a: statusType) => void) => {
+    joinRoom = (roomId : string,  password: number, callback: (a: statusType) => void) => {
+        const request = this.socket.request as Request;
+        const userId = request.sessionID;
+
         this.room = getRoomByRoomId(roomId);
         this.user = getUserByUserId(userId);
 
@@ -149,7 +156,6 @@ class RoomController {
     }
 
     deleteRoom = () => {
-        console.log("DELETE!")
         if(this.room){
             const currentRoom = this.room;
             this.user!.isCreator = false;

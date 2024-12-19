@@ -21,6 +21,7 @@ class Room {
         this.contains = (user) => this.users.some((userInRoom) => userInRoom.id === user.id);
         this.updateRoomLifeCycle = () => this.roomLifeCycle.refresh();
         this.id = uuidv4();
+        this.roomLanguage = roomLanguage;
         this.name = name;
         this.password = password;
         this.roomLanguage = roomLanguage;

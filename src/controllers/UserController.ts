@@ -7,6 +7,7 @@ import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { statusType } from "../types/statusType";
 import { roleType } from "../types/roleType";
 import getUserByUserId from "../utils/user/getUserByUserId";
+import { Request } from 'express';
 
 class UserController {
     public user : User | undefined;
@@ -29,8 +30,9 @@ class UserController {
             })
     }
 
-    changeUserName = (newName: string, userID: string, callback: (a: statusType) => void) => {
-        const user = getUserByUserId(userID);
+    changeUserName = (newName: string, callback: (a: statusType) => void) => {
+        const request = this.socket.request as Request;
+        const user = getUserByUserId(request.sessionID);
         user.name = newName;
         editUser(user);
         this.socket.emit("get-user-info", user.getUserInfo());
@@ -65,9 +67,9 @@ class UserController {
 
     }
 
-    getCaptainRole = (userID : string, role : roleType = "captain") => {
-        const user = getUserByUserId(userID);
-        console.log(userID)
+    getCaptainRole = (role : roleType = "captain") => {
+        const request = this.socket.request as Request;
+        const user = getUserByUserId(request.sessionID);
         if(user){
             const userRoom = getRoomByRoomId(user.room as string);
             if(user.team){

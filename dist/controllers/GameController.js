@@ -47,8 +47,10 @@ class GameController {
                 this.io.in(room.id).emit("finish-game", winnerTeam);
             }
         };
-        this.clickCardHandler = (word, senderUserID) => {
-            const senderUser = (0, getUserByUserId_1.default)(senderUserID);
+        this.clickCardHandler = (word) => {
+            const request = this.socket.request;
+            const userId = request.sessionID;
+            const senderUser = (0, getUserByUserId_1.default)(userId);
             const updatedRoom = (0, getRoomByRoomId_1.default)(senderUser.room);
             if (updatedRoom === null || updatedRoom === void 0 ? void 0 : updatedRoom.isGameStarted) {
                 updatedRoom.cardset = updatedRoom.cardset.map((card) => {

@@ -26,8 +26,9 @@ class UserController {
                     ok: true
                 });
         };
-        this.changeUserName = (newName, userID, callback) => {
-            const user = (0, getUserByUserId_1.default)(userID);
+        this.changeUserName = (newName, callback) => {
+            const request = this.socket.request;
+            const user = (0, getUserByUserId_1.default)(request.sessionID);
             user.name = newName;
             (0, usersData_1.editUser)(user);
             this.socket.emit("get-user-info", user.getUserInfo());
@@ -59,9 +60,9 @@ class UserController {
                     });
             }
         };
-        this.getCaptainRole = (userID, role = "captain") => {
-            const user = (0, getUserByUserId_1.default)(userID);
-            console.log(userID);
+        this.getCaptainRole = (role = "captain") => {
+            const request = this.socket.request;
+            const user = (0, getUserByUserId_1.default)(request.sessionID);
             if (user) {
                 const userRoom = (0, getRoomByRoomId_1.default)(user.room);
                 if (user.team) {

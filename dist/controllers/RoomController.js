@@ -17,6 +17,7 @@ class RoomController {
             return (0, roomsData_1.getRooms)().map((room) => ({
                 id: room.id,
                 name: room.name,
+                roomLang: room.roomLanguage,
                 usersInRoom: room.usersInRoom,
                 creator: room.creator,
                 isGameStarted: room.isGameStarted,
@@ -24,9 +25,11 @@ class RoomController {
                 users: null
             }));
         };
-        this.createRoom = (name, password, roomLang, userId, callback) => {
-            if (roomLang !== "en" && roomLang !== "ru" && roomLang !== "ua")
+        this.createRoom = (name, password, roomLang, callback) => {
+            if (roomLang !== "en" && roomLang !== "ru" && roomLang !== "uk")
                 roomLang = "en";
+            const request = this.socket.request;
+            const userId = request.sessionID;
             const newRoom = new Room_1.default(name, password, this.deleteRoom, roomLang, userId);
             const isRoomWithThisNameExists = (0, roomsData_1.getRooms)().some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
@@ -41,7 +44,7 @@ class RoomController {
                 this.user.isCreator = true;
                 const updatedRooms = [...(0, roomsData_1.getRooms)(), newRoom];
                 (0, roomsData_2.setRooms)(updatedRooms);
-                this.joinRoom(newRoom.id, userId, newRoom.password, callback);
+                this.joinRoom(newRoom.id, newRoom.password, callback);
                 this.io.in("main").emit("get-rooms", this.getRooms());
                 callback({
                     statusCode: 200,
@@ -49,7 +52,9 @@ class RoomController {
                 });
             }
         };
-        this.joinRoom = (roomId, userId, password, callback) => {
+        this.joinRoom = (roomId, password, callback) => {
+            const request = this.socket.request;
+            const userId = request.sessionID;
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
             if (!this.room) {
@@ -131,7 +136,6 @@ class RoomController {
             }
         };
         this.deleteRoom = () => {
-            console.log("DELETE!");
             if (this.room) {
                 const currentRoom = this.room;
                 this.user.isCreator = false;

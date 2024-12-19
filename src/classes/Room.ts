@@ -20,6 +20,7 @@ class Room {
 
     constructor(name: string = "new", password: number, deleteCallback : () => void, roomLanguage : wordSetType = "en", creatorId: string){
         this.id = uuidv4();
+        this.roomLanguage = roomLanguage;
         this.name = name;
         this.password = password;
         this.roomLanguage = roomLanguage;

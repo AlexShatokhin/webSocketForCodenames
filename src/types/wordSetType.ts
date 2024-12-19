@@ -1,1 +1,1 @@
-export type wordSetType = "ru" | "en" | "ua";
+export type wordSetType = "ru" | "en" | "uk";
