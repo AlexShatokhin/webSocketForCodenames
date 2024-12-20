@@ -3,11 +3,12 @@ require('dotenv').config();
 import express, { Express, Request, Response } from "express";
 import session from "express-session"
 import { Server, Socket } from "socket.io";
-import { createServer } from "http";
+import { createServer, get } from "http";
 
 import Controllers from "./controllers/Controllers";
 import errorBoundary from "./utils/errorBounadry";
 import getConvertedRooms from "./utils/room/getConvertedRooms";
+import { getRooms } from "./data/roomsData";
 
 const app : Express = express();
 const server = createServer(app);

@@ -9,22 +9,12 @@ const Room_1 = __importDefault(require("../classes/Room"));
 const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
+const getConvertedRooms_1 = __importDefault(require("../utils/room/getConvertedRooms"));
 class RoomController {
     constructor(io, socket) {
         this.io = io;
         this.socket = socket;
-        this.getRooms = () => {
-            return (0, roomsData_1.getRooms)().map((room) => ({
-                id: room.id,
-                name: room.name,
-                roomLang: room.roomLanguage,
-                usersInRoom: room.usersInRoom,
-                creator: room.creator,
-                isGameStarted: room.isGameStarted,
-                cardset: null,
-                users: null
-            }));
-        };
+        this.getRooms = () => (0, getConvertedRooms_1.default)();
         this.createRoom = (name, password, roomLang, callback) => {
             if (roomLang !== "en" && roomLang !== "ru" && roomLang !== "uk")
                 roomLang = "en";

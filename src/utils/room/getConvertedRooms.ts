@@ -5,6 +5,7 @@ const getConvertedRooms = () =>
     getRooms().map((room : Room) => ({
         id: room.id,
         name: room.name,
+        language: room.roomLanguage,
         usersInRoom: room.usersInRoom,
         creator: room.creator,
         isGameStarted: room.isGameStarted,

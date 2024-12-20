@@ -12,6 +12,7 @@ import getUserByUserId from "../utils/user/getUserByUserId";
 import { statusType } from "../types/statusType";
 import { wordSetType } from "../types/wordSetType";
 import { Request } from "express";
+import getConvertedRooms from "../utils/room/getConvertedRooms";
 
 class RoomController {
     private room : Room | undefined;
@@ -20,18 +21,7 @@ class RoomController {
     constructor(private io : Server, 
                 private socket : Socket){}
 
-    getRooms = () => {
-        return getRooms().map((room : Room) => ({
-            id: room.id,
-            name: room.name,
-            roomLang: room.roomLanguage,
-            usersInRoom: room.usersInRoom,
-            creator: room.creator,
-            isGameStarted: room.isGameStarted,
-            cardset: null,
-            users: null
-        }))
-    };
+    getRooms = () => getConvertedRooms();
 
     createRoom = (name: string, password: number, roomLang: wordSetType, callback: (a: statusType) => void) =>{
         if(roomLang !== "en" && roomLang !== "ru" && roomLang !== "uk")

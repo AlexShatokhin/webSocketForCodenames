@@ -20,8 +20,9 @@ When the server sends the client a list of all available rooms.
  "cardset": null,
  "id": "bbb34f55-d31a-4941-8e60-142d4b745897",
  "creator": "TqvHrupPTzzcqx5JNVJdZMhBb3yTAoCw",
- "name": "4233"
- "users": null
+ "name": "4233",
+  "language": "en" | "ru" | "uk", 
+ "users": null,
  "usersInRoom": "2"
  },
  ]
