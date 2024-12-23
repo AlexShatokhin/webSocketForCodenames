@@ -11,6 +11,7 @@ class Room {
         this.getRoomInfo = () => ({
             id: this.id,
             creator: this.creator,
+            language: this.roomLanguage,
             name: this.name,
             users: this.users,
             usersInRoom: this.usersInRoom,
