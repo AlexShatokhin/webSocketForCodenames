@@ -84,7 +84,7 @@
             <button onclick = "socket.emit('ready-state')">Ready/Unready</button>
 
             <button style = "margin-left: 50px" id = "startGame">Start game</button>
-            <button onclick = "socket.emit('finish')">Finish game</button>
+            <button onclick = "socket.emit('finish', '${data.id}');">Finish game</button>
 
             <div class = "red-team">
                 <h2>Red team</h2>
@@ -100,6 +100,10 @@
                 <div class = "players"></div>
             </div>
         `;
+
+        function finishGame() {
+            socket.emit('finish', "", "");
+        }
 
         const redTeamCaptain = document.querySelector(".red-team .captain");
         const blueTeamCaptain = document.querySelector(".blue-team .captain");

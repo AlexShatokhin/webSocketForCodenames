@@ -119,3 +119,16 @@ When card clicked
 
 **Received data:**
 - `word` (string) — word item. 
+
+
+
+### `start-game`
+
+**Description:**
+Finish the game.
+
+**When it works:**
+When the game ends.
+
+**Received data:**
+- `roomID` (string) — finished room id. 

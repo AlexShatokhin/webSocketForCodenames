@@ -9,6 +9,7 @@ import { teamType } from "../types/teamType";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import { changeRooms, setRooms } from "../data/roomsData";
 import { Request } from "express";
+import getConvertedRooms from "../utils/room/getConvertedRooms";
 
 class GameController {
     public user : User | undefined;
@@ -34,6 +35,8 @@ class GameController {
 
         if(true){
             this.room.isGameStarted = true;
+            changeRooms(this.room);
+            this.io.in("main").emit("get-rooms", getConvertedRooms());
             this.room.users.forEach(user => console.log(user));
             this.io.in(this.room.id).emit("game-started")
             this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
@@ -51,10 +54,14 @@ class GameController {
         }    
     }
 
-    finishGame = (room : Room, winnerTeam : string) => {
-        if(room.isGameStarted){
-            room.isGameStarted = false;
-            this.io.in(room.id).emit("finish-game", winnerTeam);
+    finishGame = (roomID : string, winnerTeam : string) => {
+        const updatedRoom = getRoomByRoomId(roomID);
+
+        if(updatedRoom.isGameStarted){
+            updatedRoom.isGameStarted = false;
+            changeRooms(updatedRoom);
+            this.io.in("main").emit("get-rooms", getConvertedRooms());
+            this.io.in(updatedRoom.id).emit("finish-game", winnerTeam);
         }
     }
 
@@ -79,9 +86,9 @@ class GameController {
                 if(team !== "neutral"){
                     if(remainingWordsCount[team] === 0){
                         if(team === "black") 
-                            this.finishGame(updatedRoom, senderUser.team === "red" ? "blue" : "red")
+                            this.finishGame(updatedRoom.id, senderUser.team === "red" ? "blue" : "red")
                         else
-                            this.finishGame(updatedRoom, team);
+                            this.finishGame(updatedRoom.id, team);
                     }
                 }
             }

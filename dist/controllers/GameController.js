@@ -8,6 +8,7 @@ const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId
 const getWordSet_1 = __importDefault(require("../utils/words/getWordSet"));
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 const roomsData_1 = require("../data/roomsData");
+const getConvertedRooms_1 = __importDefault(require("../utils/room/getConvertedRooms"));
 class GameController {
     constructor(io, socket) {
         this.io = io;
@@ -25,6 +26,8 @@ class GameController {
             const blueTeamCheck = this.checkTeam(blueTeam);
             if (true) {
                 this.room.isGameStarted = true;
+                (0, roomsData_1.changeRooms)(this.room);
+                this.io.in("main").emit("get-rooms", (0, getConvertedRooms_1.default)());
                 this.room.users.forEach(user => console.log(user));
                 this.io.in(this.room.id).emit("game-started");
                 this.io.in(this.room.id).emit("update-room", this.room.getRoomInfo());
@@ -41,10 +44,13 @@ class GameController {
                     new Error_1.default(this.socket, "Команда синих неполная!", 403);
             }
         };
-        this.finishGame = (room, winnerTeam) => {
-            if (room.isGameStarted) {
-                room.isGameStarted = false;
-                this.io.in(room.id).emit("finish-game", winnerTeam);
+        this.finishGame = (roomID, winnerTeam) => {
+            const updatedRoom = (0, getRoomByRoomId_1.default)(roomID);
+            if (updatedRoom.isGameStarted) {
+                updatedRoom.isGameStarted = false;
+                (0, roomsData_1.changeRooms)(updatedRoom);
+                this.io.in("main").emit("get-rooms", (0, getConvertedRooms_1.default)());
+                this.io.in(updatedRoom.id).emit("finish-game", winnerTeam);
             }
         };
         this.clickCardHandler = (word) => {
@@ -67,9 +73,9 @@ class GameController {
                     if (team !== "neutral") {
                         if (remainingWordsCount[team] === 0) {
                             if (team === "black")
-                                this.finishGame(updatedRoom, senderUser.team === "red" ? "blue" : "red");
+                                this.finishGame(updatedRoom.id, senderUser.team === "red" ? "blue" : "red");
                             else
-                                this.finishGame(updatedRoom, team);
+                                this.finishGame(updatedRoom.id, team);
                         }
                     }
                 }
