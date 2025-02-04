@@ -19,13 +19,13 @@ class Room {
     public creator : string;
 
 
-    constructor(name: string = "new", password: number, deleteCallback : () => void, roomLanguage : wordSetType = "en", creatorId: string){
+    constructor(name: string = "new", password: number, deleteCallback : (roomId: string) => void, roomLanguage : wordSetType = "en", creatorId: string){
         this.id = uuidv4();
         this.roomLanguage = roomLanguage;
         this.name = name;
         this.password = password;
         this.roomLanguage = roomLanguage;
-        this.roomLifeCycle = setTimeout(deleteCallback, 60000) // 1 hour
+        this.roomLifeCycle = setTimeout(() => deleteCallback(this.id), 60000) // 1 hour
         this.creator = creatorId;
     }
 

@@ -145,11 +145,11 @@ class RoomController {
         }
     }
 
-    deleteRoom = () => {
-        if(this.room){
-            const currentRoom = this.room;
+    deleteRoom = (roomID : string) => {
+        if(roomID){
+            const currentRoom = getRoomByRoomId(roomID);
             this.user!.isCreator = false;
-            this.room.users.forEach((user : User) => {
+            currentRoom.users.forEach((user : User) => {
                 user.leaveRoom();
                 this.socket.leave(currentRoom.id);
                 this.socket.join("main");

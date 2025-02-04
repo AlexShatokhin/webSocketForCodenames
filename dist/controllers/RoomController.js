@@ -125,11 +125,11 @@ class RoomController {
                 });
             }
         };
-        this.deleteRoom = () => {
-            if (this.room) {
-                const currentRoom = this.room;
+        this.deleteRoom = (roomID) => {
+            if (roomID) {
+                const currentRoom = (0, getRoomByRoomId_1.default)(roomID);
                 this.user.isCreator = false;
-                this.room.users.forEach((user) => {
+                currentRoom.users.forEach((user) => {
                     user.leaveRoom();
                     this.socket.leave(currentRoom.id);
                     this.socket.join("main");
