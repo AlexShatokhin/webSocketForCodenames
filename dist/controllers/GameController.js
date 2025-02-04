@@ -50,9 +50,8 @@ class GameController {
                 updatedRoom.isGameStarted = false;
                 updatedRoom.isGameFinished = true;
                 (0, roomsData_1.changeRooms)(updatedRoom);
-                this.io.in("main").emit("get-rooms", (0, getConvertedRooms_1.default)());
+                this.io.in("main").in(updatedRoom.id).emit("get-rooms", (0, getConvertedRooms_1.default)());
                 this.io.in(updatedRoom.id).emit("finish-game", winnerTeam);
-                updatedRoom;
             }
         };
         this.clickCardHandler = (word) => {
