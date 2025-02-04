@@ -59,9 +59,11 @@ class GameController {
 
         if(updatedRoom.isGameStarted){
             updatedRoom.isGameStarted = false;
+            updatedRoom.isGameFinished = true;
             changeRooms(updatedRoom);
             this.io.in("main").emit("get-rooms", getConvertedRooms());
             this.io.in(updatedRoom.id).emit("finish-game", winnerTeam);
+            updatedRoom
         }
     }
 

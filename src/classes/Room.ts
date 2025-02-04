@@ -13,6 +13,7 @@ class Room {
     public users : User[] = [];
     public usersInRoom: number = 0;
     public isGameStarted : boolean = false;
+    public isGameFinished : boolean = false; 
     public roomLifeCycle : NodeJS.Timeout;
     public roomLanguage : wordSetType = "en";
     public creator : string;
@@ -36,6 +37,7 @@ class Room {
         users: this.users,
         usersInRoom: this.usersInRoom,
         isGameStarted: this.isGameStarted,
+        isGameFinished: this.isGameFinished,
         cardset: this.cardset
     })
 
