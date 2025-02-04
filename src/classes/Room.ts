@@ -25,7 +25,7 @@ class Room {
         this.name = name;
         this.password = password;
         this.roomLanguage = roomLanguage;
-        this.roomLifeCycle = setTimeout(deleteCallback, 3_600_000) // 1 hour
+        this.roomLifeCycle = setTimeout(deleteCallback, 60000) // 1 hour
         this.creator = creatorId;
     }
 
