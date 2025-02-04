@@ -9,6 +9,7 @@ const getConvertedRooms = () =>
         usersInRoom: room.usersInRoom,
         creator: room.creator,
         isGameStarted: room.isGameStarted,
+        isGameFinished: room.isGameFinished,
         cardset: null,
         users: null
     }))

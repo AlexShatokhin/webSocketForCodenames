@@ -28,7 +28,7 @@ class Room {
         this.name = name;
         this.password = password;
         this.roomLanguage = roomLanguage;
-        this.roomLifeCycle = setTimeout(() => deleteCallback(this.id), 60000);
+        this.roomLifeCycle = setTimeout(() => deleteCallback(this.id), 3600000);
         this.creator = creatorId;
     }
     joinRoom(user) {
