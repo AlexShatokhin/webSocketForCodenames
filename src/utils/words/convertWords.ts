@@ -13,7 +13,7 @@ export default (words : string[]) => {
             return getWord(word, "red");
         }
 
-        if(wordsCountInBlueTeam < wordsCountInTeam){
+        if(wordsCountInBlueTeam < wordsCountInTeam+1){
             wordsCountInBlueTeam++;
             return getWord(word, "blue");
         }

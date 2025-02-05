@@ -11,7 +11,7 @@ exports.default = (words) => {
             wordsCountInRedTeam++;
             return getWord(word, "red");
         }
-        if (wordsCountInBlueTeam < wordsCountInTeam) {
+        if (wordsCountInBlueTeam < wordsCountInTeam + 1) {
             wordsCountInBlueTeam++;
             return getWord(word, "blue");
         }
