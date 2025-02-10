@@ -4,6 +4,14 @@
 
 ## Server side events
 
+### `set-lang`
+
+**Description:**
+Changing the language of the server errors.
+
+**Received data:**
+- `language` ("ru" | "en" | "uk") — language identifier.
+
 ### `create-room`
 
 **Description:**

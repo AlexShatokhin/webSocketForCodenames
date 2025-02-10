@@ -3,12 +3,14 @@ require('dotenv').config();
 import express, { Express, Request, Response } from "express";
 import session from "express-session"
 import { Server, Socket } from "socket.io";
-import { createServer, get } from "http";
+import { createServer } from "http";
 
 import Controllers from "./controllers/Controllers";
 import errorBoundary from "./utils/errorBounadry";
 import getConvertedRooms from "./utils/room/getConvertedRooms";
-import { getRooms } from "./data/roomsData";
+
+import serverConfig from "./data/serverConfig";
+import { wordSetType } from "./types/wordSetType";
 
 const app : Express = express();
 const server = createServer(app);
@@ -43,6 +45,10 @@ io.on('connection', (socket : Socket) => {
 	})
 
 	io.emit("get-rooms", getConvertedRooms());
+
+	socket.on("set-lang", 
+		(language: wordSetType) => errorBoundary(() => serverConfig.serverLanguage = language, language)
+	)
 
 	socket.on("create-room", 
 		(...args) => errorBoundary(userRoomController.createRoom, args)

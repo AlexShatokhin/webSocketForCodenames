@@ -9,6 +9,8 @@ const getWordSet_1 = __importDefault(require("../utils/words/getWordSet"));
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 const roomsData_1 = require("../data/roomsData");
 const getConvertedRooms_1 = __importDefault(require("../utils/room/getConvertedRooms"));
+const errors_1 = __importDefault(require("../data/errors"));
+const serverConfig_1 = __importDefault(require("../data/serverConfig"));
 class GameController {
     constructor(io, socket) {
         this.io = io;
@@ -24,7 +26,7 @@ class GameController {
             const usersLimit = this.room.usersInRoom >= 4;
             const redTeamCheck = this.checkTeam(redTeam);
             const blueTeamCheck = this.checkTeam(blueTeam);
-            if (true) {
+            if (usersLimit && redTeamCheck && blueTeamCheck) {
                 this.room.isGameStarted = true;
                 (0, roomsData_1.changeRooms)(this.room);
                 this.io.in("main").emit("get-rooms", (0, getConvertedRooms_1.default)());
@@ -35,13 +37,13 @@ class GameController {
             }
             else {
                 if (!usersLimit) {
-                    new Error_1.default(this.socket, "В комнате слишком мало игроков", 403);
+                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["There are too few players in the room"], 403);
                     return;
                 }
                 if (!redTeamCheck)
-                    new Error_1.default(this.socket, "Команда красных неполная!", 403);
+                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Red team is incomplete"], 403);
                 if (!blueTeamCheck)
-                    new Error_1.default(this.socket, "Команда синих неполная!", 403);
+                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Blue team is incomplete"], 403);
             }
         };
         this.finishGame = (roomID, winnerTeam) => {
@@ -84,7 +86,7 @@ class GameController {
                 this.io.in(updatedRoom === null || updatedRoom === void 0 ? void 0 : updatedRoom.id).emit("update-room", updatedRoom.getRoomInfo());
             }
             else
-                new Error_1.default(this.socket, "Game was ended", 409);
+                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Game was ended"], 409);
         };
         this.getTeamCardsCount = (cards) => {
             console.log(cards);

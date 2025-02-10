@@ -11,6 +11,7 @@ const http_1 = require("http");
 const Controllers_1 = __importDefault(require("./controllers/Controllers"));
 const errorBounadry_1 = __importDefault(require("./utils/errorBounadry"));
 const getConvertedRooms_1 = __importDefault(require("./utils/room/getConvertedRooms"));
+const serverConfig_1 = __importDefault(require("./data/serverConfig"));
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server);
@@ -37,6 +38,7 @@ io.on('connection', (socket) => {
         console.log(args);
     });
     io.emit("get-rooms", (0, getConvertedRooms_1.default)());
+    socket.on("set-lang", (language) => (0, errorBounadry_1.default)(() => serverConfig_1.default.serverLanguage = language, language));
     socket.on("create-room", (...args) => (0, errorBounadry_1.default)(userRoomController.createRoom, args));
     socket.on("join-room", (...args) => (0, errorBounadry_1.default)(userRoomController.joinRoom, args));
     socket.on("leave-room", (...args) => (0, errorBounadry_1.default)(userRoomController.leaveRoom, args));

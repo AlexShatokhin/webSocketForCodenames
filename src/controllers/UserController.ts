@@ -8,6 +8,8 @@ import { statusType } from "../types/statusType";
 import { roleType } from "../types/roleType";
 import getUserByUserId from "../utils/user/getUserByUserId";
 import { Request } from 'express';
+import errors from '../data/errors';
+import serverConfig from '../data/serverConfig';
 
 class UserController {
     public user : User | undefined;
@@ -57,7 +59,7 @@ class UserController {
                     ok: true
                 })
         } else {
-            new Error(this.socket, "User not found", 404);
+            new Error(this.socket, errors[serverConfig.serverLanguage]["User not found"], 404);
             if(callback)
                 callback({
                     statusCode: 404,
@@ -78,7 +80,7 @@ class UserController {
                 if(teamCaptain && role === "captain"){
                     // teamCaptain.role = "player";
                     // editUser(teamCaptain);
-                    new Error(this.socket, "Team already has a captain", 409);
+                    new Error(this.socket, errors[serverConfig.serverLanguage]["Team already has a captain"], 409);
                     return;
                 }
 
@@ -87,12 +89,12 @@ class UserController {
                 this.io.in(user.room as string).emit("toggle-roles")
                     
             } else
-                new Error(this.socket, "User has no team", 403);
+                new Error(this.socket, errors[serverConfig.serverLanguage]["User is not in the team"], 403);
 
             this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
             this.socket.emit("get-user-info", user.getUserInfo())
         } else 
-            new Error(this.socket, "User not found", 404);
+            new Error(this.socket, errors[serverConfig.serverLanguage]["User not found"], 404);
     }
 
     toggleReadyStatus = () => {

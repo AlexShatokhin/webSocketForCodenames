@@ -5,11 +5,13 @@ import Error from "../classes/Error";
 import getRoomByRoomId from "../utils/room/getRoomByRoomId";
 import { Word } from "../types/Word";
 import getWordSet from "../utils/words/getWordSet";
-import { teamType } from "../types/teamType";
 import getUserByUserId from "../utils/user/getUserByUserId";
-import { changeRooms, setRooms } from "../data/roomsData";
+import { changeRooms } from "../data/roomsData";
 import { Request } from "express";
 import getConvertedRooms from "../utils/room/getConvertedRooms";
+
+import errors from "../data/errors";
+import serverConfig from "../data/serverConfig";
 
 class GameController {
     public user : User | undefined;
@@ -33,7 +35,7 @@ class GameController {
         const redTeamCheck = this.checkTeam(redTeam);
         const blueTeamCheck = this.checkTeam(blueTeam);
 
-        if(true){
+        if(usersLimit && redTeamCheck && blueTeamCheck){
             this.room.isGameStarted = true;
             changeRooms(this.room);
             this.io.in("main").emit("get-rooms", getConvertedRooms());
@@ -44,13 +46,13 @@ class GameController {
         }
         else {
             if(!usersLimit){
-                new Error(this.socket, "В комнате слишком мало игроков", 403);
+                new Error(this.socket, errors[serverConfig.serverLanguage]["There are too few players in the room"], 403);
                 return;
             }
             if(!redTeamCheck)
-                new Error(this.socket, "Команда красных неполная!", 403);
+                new Error(this.socket, errors[serverConfig.serverLanguage]["Red team is incomplete"], 403);
             if(!blueTeamCheck)
-                new Error(this.socket, "Команда синих неполная!", 403);
+                new Error(this.socket, errors[serverConfig.serverLanguage]["Blue team is incomplete"], 403);
         }    
     }
 
@@ -97,7 +99,7 @@ class GameController {
             changeRooms(updatedRoom);
             this.io.in(updatedRoom?.id as string).emit("update-room", updatedRoom.getRoomInfo())
     
-        } else new Error(this.socket, "Game was ended", 409)
+        } else new Error(this.socket, errors[serverConfig.serverLanguage]["Game was ended"], 409)
     }
 
     getTeamCardsCount = (cards : Word[]) => {

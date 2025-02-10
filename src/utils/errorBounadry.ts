@@ -1,6 +1,6 @@
 
 
-const errorBoundary = (callback : (...args : any) => void, args : any[]) => {
+const errorBoundary = (callback : (...args : any) => void, args : any) => {
     try {
         callback(...args);
     } catch (error) {
