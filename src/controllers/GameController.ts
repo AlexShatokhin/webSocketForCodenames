@@ -11,7 +11,6 @@ import { Request } from "express";
 import getConvertedRooms from "../utils/room/getConvertedRooms";
 
 import errors from "../data/errors";
-import serverConfig from "../data/serverConfig";
 
 class GameController {
     public user : User | undefined;
@@ -46,13 +45,13 @@ class GameController {
         }
         else {
             if(!usersLimit){
-                new Error(this.socket, errors[serverConfig.serverLanguage]["There are too few players in the room"], 403);
+                new Error(this.socket, errors.TOO_FEW_PLAYERS);
                 return;
             }
             if(!redTeamCheck)
-                new Error(this.socket, errors[serverConfig.serverLanguage]["Red team is incomplete"], 403);
+                new Error(this.socket, errors.RED_TEAM_INCOMPLETE);
             if(!blueTeamCheck)
-                new Error(this.socket, errors[serverConfig.serverLanguage]["Blue team is incomplete"], 403);
+                new Error(this.socket, errors.BLUE_TEAM_INCOMPLETE);
         }    
     }
 
@@ -99,7 +98,7 @@ class GameController {
             changeRooms(updatedRoom);
             this.io.in(updatedRoom?.id as string).emit("update-room", updatedRoom.getRoomInfo())
     
-        } else new Error(this.socket, errors[serverConfig.serverLanguage]["Game was ended"], 409)
+        } else new Error(this.socket, errors.GAME_ENDED)
     }
 
     getTeamCardsCount = (cards : Word[]) => {

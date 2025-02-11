@@ -1,14 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Error {
-    constructor(socket, message, code) {
-        this.getError = (message, code, timestamp) => ({
+    constructor(socket, message) {
+        this.getError = (message, timestamp) => ({
             message: message,
-            code: code,
             timestamp: timestamp
         });
         const timestamp = new Date().getTime();
-        socket.emit("error", this.getError(message, code, timestamp));
+        socket.emit("error", this.getError(message, timestamp));
     }
 }
 exports.default = Error;

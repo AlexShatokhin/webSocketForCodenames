@@ -10,7 +10,6 @@ const Error_1 = __importDefault(require("../classes/Error"));
 const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId"));
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 const errors_1 = __importDefault(require("../data/errors"));
-const serverConfig_1 = __importDefault(require("../data/serverConfig"));
 class UserController {
     constructor(io, socket) {
         this.io = io;
@@ -54,7 +53,7 @@ class UserController {
                     });
             }
             else {
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["User not found"], 404);
+                new Error_1.default(this.socket, errors_1.default.USER_NOT_FOUND);
                 if (callback)
                     callback({
                         statusCode: 404,
@@ -71,7 +70,7 @@ class UserController {
                     const teamCaptain = userRoom.getTeamInRoom(user.team).find(user => user.role === "captain");
                     console.log(role);
                     if (teamCaptain && role === "captain") {
-                        new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Team already has a captain"], 409);
+                        new Error_1.default(this.socket, errors_1.default.TEAM_ALREADY_HAS_CAPTAIN);
                         return;
                     }
                     user.role = role;
@@ -79,12 +78,12 @@ class UserController {
                     this.io.in(user.room).emit("toggle-roles");
                 }
                 else
-                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["User is not in the team"], 403);
+                    new Error_1.default(this.socket, errors_1.default.USER_NOT_IN_TEAM);
                 this.io.in(userRoom.id).emit("update-room", userRoom.getRoomInfo());
                 this.socket.emit("get-user-info", user.getUserInfo());
             }
             else
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["User not found"], 404);
+                new Error_1.default(this.socket, errors_1.default.USER_NOT_FOUND);
         };
         this.toggleReadyStatus = () => {
             if (this.user) {

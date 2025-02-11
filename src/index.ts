@@ -9,9 +9,6 @@ import Controllers from "./controllers/Controllers";
 import errorBoundary from "./utils/errorBounadry";
 import getConvertedRooms from "./utils/room/getConvertedRooms";
 
-import serverConfig from "./data/serverConfig";
-import { wordSetType } from "./types/wordSetType";
-
 const app : Express = express();
 const server = createServer(app);
 const io = new Server(server);
@@ -46,9 +43,6 @@ io.on('connection', (socket : Socket) => {
 
 	io.emit("get-rooms", getConvertedRooms());
 
-	socket.on("set-lang", 
-		(language: wordSetType) => errorBoundary(() => serverConfig.serverLanguage = language, language)
-	)
 
 	socket.on("create-room", 
 		(...args) => errorBoundary(userRoomController.createRoom, args)

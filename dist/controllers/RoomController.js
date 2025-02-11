@@ -11,7 +11,6 @@ const getRoomByRoomId_1 = __importDefault(require("../utils/room/getRoomByRoomId
 const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId"));
 const getConvertedRooms_1 = __importDefault(require("../utils/room/getConvertedRooms"));
 const errors_1 = __importDefault(require("../data/errors"));
-const serverConfig_1 = __importDefault(require("../data/serverConfig"));
 class RoomController {
     constructor(io, socket) {
         this.io = io;
@@ -25,7 +24,7 @@ class RoomController {
             const newRoom = new Room_1.default(name, password, this.deleteRoom, roomLang, userId);
             const isRoomWithThisNameExists = (0, roomsData_1.getRooms)().some((room) => room.name === name);
             if (isRoomWithThisNameExists) {
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Room with this name already exists"], 409);
+                new Error_1.default(this.socket, errors_1.default.ROOM_ALREADY_EXISTS);
                 callback({
                     statusCode: 409,
                     ok: false
@@ -50,7 +49,7 @@ class RoomController {
             this.room = (0, getRoomByRoomId_1.default)(roomId);
             this.user = (0, getUserByUserId_1.default)(userId);
             if (!this.room) {
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Room not found"], 404);
+                new Error_1.default(this.socket, errors_1.default.ROOM_NOT_FOUND);
                 callback({
                     statusCode: 404,
                     ok: false
@@ -58,7 +57,7 @@ class RoomController {
                 return;
             }
             if (this.room.usersInRoom >= 20) {
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Room is full"], 403);
+                new Error_1.default(this.socket, errors_1.default.ROOM_IS_FULL);
                 callback({
                     statusCode: 403,
                     ok: false
@@ -73,7 +72,7 @@ class RoomController {
             }
             else {
                 if (+this.room.password !== +password) {
-                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Password is incorrect"], 401);
+                    new Error_1.default(this.socket, errors_1.default.INCORRECT_PASSWORD);
                     callback({
                         statusCode: 401,
                         ok: false
@@ -120,7 +119,7 @@ class RoomController {
                 });
             }
             else {
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["User or room not found"], 404);
+                new Error_1.default(this.socket, errors_1.default.USER_OR_ROOM_NOT_FOUND);
                 callback({
                     statusCode: 401,
                     ok: false
@@ -139,7 +138,7 @@ class RoomController {
                 });
                 (0, roomsData_2.setRooms)((0, roomsData_1.getRooms)().filter((room) => room.id !== currentRoom.id));
                 this.io.in("main").emit("get-rooms", this.getRooms());
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Room session ended"], 408);
+                new Error_1.default(this.socket, errors_1.default.ROOM_SESSION_ENDED);
             }
         };
     }

@@ -10,7 +10,6 @@ const getUserByUserId_1 = __importDefault(require("../utils/user/getUserByUserId
 const roomsData_1 = require("../data/roomsData");
 const getConvertedRooms_1 = __importDefault(require("../utils/room/getConvertedRooms"));
 const errors_1 = __importDefault(require("../data/errors"));
-const serverConfig_1 = __importDefault(require("../data/serverConfig"));
 class GameController {
     constructor(io, socket) {
         this.io = io;
@@ -37,13 +36,13 @@ class GameController {
             }
             else {
                 if (!usersLimit) {
-                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["There are too few players in the room"], 403);
+                    new Error_1.default(this.socket, errors_1.default.TOO_FEW_PLAYERS);
                     return;
                 }
                 if (!redTeamCheck)
-                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Red team is incomplete"], 403);
+                    new Error_1.default(this.socket, errors_1.default.RED_TEAM_INCOMPLETE);
                 if (!blueTeamCheck)
-                    new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Blue team is incomplete"], 403);
+                    new Error_1.default(this.socket, errors_1.default.BLUE_TEAM_INCOMPLETE);
             }
         };
         this.finishGame = (roomID, winnerTeam) => {
@@ -86,7 +85,7 @@ class GameController {
                 this.io.in(updatedRoom === null || updatedRoom === void 0 ? void 0 : updatedRoom.id).emit("update-room", updatedRoom.getRoomInfo());
             }
             else
-                new Error_1.default(this.socket, errors_1.default[serverConfig_1.default.serverLanguage]["Game was ended"], 409);
+                new Error_1.default(this.socket, errors_1.default.GAME_ENDED);
         };
         this.getTeamCardsCount = (cards) => {
             console.log(cards);
